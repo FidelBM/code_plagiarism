@@ -1,0 +1,59 @@
+#include <iostream>
+#include <fstream>
+#include <math.h>
+#include <cstdlib>
+
+using namespace std;
+
+int T;
+
+bool ok(int N1, int N2){
+	int n1 = 1, n2 = 1, sz, tmp1 = N1, tmp2 = N2;
+	char buffer[16];
+	
+	while(tmp1 >= 10) tmp1 /= 10, n1++;
+	while(tmp2 >= 10) tmp2 /= 10, n2++;
+	if(n1 != n2)
+		return false;
+	
+	
+	itoa (N2,buffer,10);
+	sz = strlen(buffer);
+	
+	for(int i = 0; i < sz; ++i){
+		int part1 = 0, part2 = 0;
+		for(int j = 0; j <= i; ++j)
+			part1 *= 10, part1 += buffer[j] - '0';
+		for(int j = i+1; j < sz; ++j)
+			part2 *= 10, part2 += buffer[j] - '0';
+		for(int j = 0; j <= i; ++j)
+			part2 *= 10;
+		if(N1 == (part1+part2))
+			return true;
+	}
+	
+	return false;
+}
+
+int solve(int A, int B){
+	int t = 0;
+	for(int i = A; i < B; ++i)
+		for(int j = i+1; j <= B; ++j)
+			if(ok(i, j) == true)
+				++t;
+	return t;
+}
+
+int main(){
+	ifstream in("C-small-attempt0.in");
+	ofstream out("C-small-attempt0.out");
+	in >> T;
+	for(int i = 1; i <= T; ++i){
+		int A, B;
+		in >> A >> B;
+		int ret = solve(A, B);
+		out << "Case #" << i << ": " << ret << endl;
+	}
+	
+	return 0;
+}

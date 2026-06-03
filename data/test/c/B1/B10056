@@ -1,0 +1,33 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+
+using namespace std;
+
+int main(){
+	int T;
+	cin>>T;
+	for(int tc=1;tc<=T;tc++){
+		int A,B;
+		cin>>A>>B;
+		int result=0;
+		for(int i=A;i<B;i++){
+			int k=10;for(;k<i;k*=10);k/=10;
+			vector<int> data;
+			
+			for(int j=10;j<i;j*=10){
+				int d=(i%j)*k+i/j;
+				if(find(data.begin(),data.end(),d)==data.end())
+					data.push_back(d);
+				k/=10;
+			}
+			
+			for(int j=0;j<data.size();j++)
+				if(i<data[j]&&data[j]<=B)
+					result++;
+			
+		}
+		cout<<"Case #"<<tc<<": "<<result<<endl;
+	}
+	return 0;
+}

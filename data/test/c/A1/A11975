@@ -1,0 +1,97 @@
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <list>
+#include <algorithm>
+#define INF 99999999
+using namespace std;
+struct item{
+  int cost ; 
+  int q; 
+};
+struct less_than_key
+{
+    inline bool operator() (const item& struct1, const item& struct2)
+    {
+        return (struct1.q < struct2.q);
+    }
+};
+int findsum(vector< struct item>  input[])
+{
+  int sum =0;
+    for(int i =0;i<6;i++)
+      {
+	vector<struct item> temp ; 
+	temp = input[i];
+	sum+= temp[0].cost;
+      }
+    return sum;
+}
+
+int movedata(vector< struct item>  input[],int temploc)
+{
+  vector<struct item> temp ; 
+  temp = input[temploc];
+  if(temp.size()==1)
+    return -1;
+  else
+    {
+      temp.erase(temp.begin());
+    }
+  return 0;
+}
+
+
+int findminloc(vector< struct item>  input[],int & min)
+{
+  int minloc =0;
+  int minvalue =INF;
+    for(int i =0;i<6;i++)
+      {
+	vector<struct item> temp ; 
+	temp = input[i];
+	if( temp[0].q < minvalue)
+	  {
+	    minloc = i ;
+	    minvalue = temp[0].q;
+	  }
+      }
+    min = minvalue;
+    return minloc;
+}
+
+int sortme(vector< struct item>  input[])
+{
+    for(int i =0;i<6;i++)
+      {
+	sort(input[i].begin(),input[i].end(),less_than_key());
+      }
+}
+
+int main()
+{
+  int cost ; 
+  int t; 
+  cin>>t>>cost;
+  int count =t ;
+  vector <struct item>  data[6];
+  while(t--)
+    {
+      int type,price,quality;
+      cin>>type>>price>>quality;
+      struct item temp ; 
+      temp.cost = price ;
+      temp.q = quality;
+      data[type-1].push_back(temp);
+    }
+  sortme(data);
+ int ans =0; 
+ while(findsum(data) < cost)
+   {
+     int temp = findminloc(data,ans);
+     if(movedata(data,temp)==-1)
+       break;
+   }
+ cout<<ans<<endl;
+ return 0;
+}

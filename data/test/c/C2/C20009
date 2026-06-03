@@ -1,0 +1,29 @@
+#ifndef OUTPUT_H
+#define OUTPUT_H
+
+#include <QThread>
+#include <QSemaphore>
+#include <QMutex>
+#include <QMap>
+
+class Output : public QThread
+{
+    Q_OBJECT
+public:
+    Output(int n,QString filename);
+    
+    void run(void);
+    static QSemaphore sync;
+    static QMap<int,QString> results;
+    static QMutex mutex;
+signals:
+    
+public slots:
+
+private:
+    QString filename;
+    int nbAlgo;
+    
+};
+
+#endif // OUTPUT_H

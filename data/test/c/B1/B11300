@@ -1,0 +1,82 @@
+#include <iostream>
+#include <sstream>
+#include <vector>
+#include <cstdlib>
+
+using namespace std;
+
+
+
+// not intelligent, it is just a bruteforce algorithme (quick coding)
+bool recyclable(int n, int m)
+{
+	if(n >= m)
+		return false;
+	
+	ostringstream os1;
+	os1 << n;
+	string nStr = os1.str();
+	
+	ostringstream os2;
+	os2 << m;
+	string mStr = os2.str();
+	
+	if(nStr.size() != mStr.size())
+		return false;
+	
+	// Variation de taille
+	for(int i=1 ; i<nStr.size() ; i++)
+	{
+		string strElement = nStr.substr(nStr.size()-i, i);
+		string str = nStr.substr(0, nStr.size()-i);
+		
+		// Variation de position
+		for(int j=0 ; j<nStr.size()-i ; j++)
+		{
+			string str2(str);
+			str2.insert(0, strElement);
+			
+			if(str2 == mStr)
+				return true;
+		}
+	}
+	
+	return false;
+}
+
+
+
+int findRecycle(int min, int max)
+{
+	int nbRecycled = 0;
+	
+	for(int i=min ; i<max ; i++)
+		for(int j=i+1 ; j<=max ; j++)
+			if(recyclable(i, j))
+				nbRecycled++;
+	
+	return nbRecycled;
+}
+
+
+
+int main()
+{
+	int nbCases;
+	cin >> nbCases;
+	
+	for(int i=0 ; i<nbCases ; i++)
+	{
+		int min, max;
+		cin >> min;
+		cin >> max;
+		
+		int nbr = findRecycle(min, max);
+		cout << "Case #" << (i+1) << ": " << nbr << endl;
+	}
+	
+	return 0;
+}
+
+
+

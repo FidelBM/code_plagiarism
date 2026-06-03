@@ -1,0 +1,22 @@
+/*
+ * OutputWriter.h
+ *
+ *  Created on: Mar 17, 2012
+ *      Author: dasc
+ */
+
+#ifndef OUTPUTWRITER_H_
+#define OUTPUTWRITER_H_
+
+#include <vector>
+#include "OutputData.h"
+
+class OutputWriter {
+public:
+	OutputWriter();
+	virtual ~OutputWriter();
+
+	void Write(std::vector<OutputData> &outputList);
+};
+
+#endif /* OUTPUTWRITER_H_ */

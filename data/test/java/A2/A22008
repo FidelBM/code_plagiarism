@@ -1,0 +1,63 @@
+import java.util.List;
+
+public class ProblemSample implements Problem {
+
+	private Integer solution;
+
+	private List<Integer> scores;
+
+	private int S;
+
+	private int p;
+
+	@Override
+	public void solve() {
+		solution = 0;
+		int equit = 3 * p;
+		for (Integer score : scores) {
+			if (score >= p) {
+				int diff = equit - score;
+				if (diff < 3) {
+					solution++;
+				} else if (diff < 5 && S > 0) {
+					S--;
+					solution++;
+				}
+			}
+		}
+	}
+
+	@Override
+	public Object getSolution() {
+		return solution;
+	}
+
+	public void setSolution(Integer solution) {
+		this.solution = solution;
+	}
+
+	public int getP() {
+		return p;
+	}
+
+	public void setP(int p) {
+		this.p = p;
+	}
+
+	public int getS() {
+		return S;
+	}
+
+	public void setS(int s) {
+		S = s;
+	}
+
+	public List<Integer> getScores() {
+		return scores;
+	}
+
+	public void setScores(List<Integer> scores) {
+		this.scores = scores;
+	}
+
+}

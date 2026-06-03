@@ -1,0 +1,38 @@
+#include<stdio.h>
+#include<string.h>
+#include<map>
+#include<algorithm>
+using namespace std;
+map<int, int> check;
+int main(){
+	int T;
+	freopen("C-large.in","r",stdin);
+	freopen("C-large.out","w",stdout);
+	scanf("%d",&T);
+	for(int Case = 1 ; Case <= T ; ++Case){
+		int n,m,result=0;
+		scanf("%d%d",&n,&m);
+		for(int i = n ; i <= m ; ++i){
+			char temp[10]={0};
+			sprintf(temp,"%d",i);
+			int len = strlen(temp);
+			check.clear();
+			for(int j = 0 ; j < len ; ++j){
+				char temp1=temp[0];
+				for(int k = 0 ; k < len-1 ; ++k)
+					temp[k]=temp[k+1];
+				
+				temp[len-1]=temp1;
+				int tempResult;
+				sscanf(temp,"%d",&tempResult);
+				if(i<tempResult && n<=tempResult && tempResult<=m && temp[0]!='0' && !check[tempResult] && check.count(tempResult)<0){
+						result++;
+						check[tempResult]=1;
+						
+				}
+			}
+		}
+		printf("Case #%d: %d\n",Case,result);
+	}
+	return 0;
+}

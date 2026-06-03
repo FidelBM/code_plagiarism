@@ -1,0 +1,51 @@
+#include <algorithm>
+#include <vector>
+#include <iostream>
+using namespace std;
+typedef long long ll;
+ll x,y,ans;
+const int MAXN=1000*1000*2+10;
+vector <int> A[MAXN];
+ll a[10];
+void run(int x)
+{
+	int siz=0;
+	int tmp=x;
+	while(tmp)
+	{
+		a[siz++]=tmp%10;
+		tmp/=10;
+	}
+	reverse(a,a+siz);
+	for(int i=0;i<siz;i++)
+	{
+		int ans=0;
+		for(int j=0;j<siz;j++)
+		{
+			ans*=10;
+			ans+=a[(i+j)%siz];
+		}
+		A[x].push_back(ans);
+	}
+}
+int main()
+{
+	for(int i=1;i<1000*1000*2+1;i++)
+		run(i);
+	int tsts;
+	cin >> tsts;
+	for(int kk=0;kk<tsts;kk++)
+	{
+		ans=0;
+		cin >> x >> y;
+		for(int i=x;i<=y;i++)
+			for(int j=0;j<A[i].size();j++)
+				if(A[i][j]<=y&&A[i][j]>=x&&A[i][j]>i)
+				{
+//					cerr << i << " " << A[i][j] << endl;
+					ans++;
+				}
+		cout << "Case #" << kk+1 << ": " << ans << endl;
+	}
+	return 0;
+}

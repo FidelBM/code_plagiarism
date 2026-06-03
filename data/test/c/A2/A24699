@@ -1,0 +1,9 @@
+// B.h
+
+#ifndef _B_H_
+#define _B_H_
+
+void read_file(char *szFile_in, char *szFile_out);
+
+
+#endif

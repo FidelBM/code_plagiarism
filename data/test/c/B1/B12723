@@ -1,0 +1,54 @@
+// http://code.google.com/codejam
+// Task: 
+
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+using namespace std;
+
+vector<int> split(int x) {
+    vector<int> res;
+    while (x > 0) {
+        res.push_back(x % 10);
+        x = x / 10;
+    }
+    return res;
+}
+
+
+bool test(int n, int m) {
+    vector<int> a = split(n);
+    vector<int> b = split(m);
+    if (a.size() != b.size()) return false;
+    int N = a.size();
+    for (int i = 1; i < N; ++i) {
+        bool f = true;
+        for (int j = 0; j < N && f; ++j) {
+            int k = (j+i) % N;
+            if (a[j] != b[k]) f = false;
+        }
+        if (f) return true;
+    }
+    return false;
+}
+
+
+int main () {
+    int test_num;
+    scanf("%d", &test_num);
+    for(int test_idx = 1; test_idx <= test_num; test_idx++) {
+        int A, B;
+        scanf("%d %d", &A, &B);
+
+        int res = 0;
+        for(int i = A; i < B; i++) {
+            for(int j = i+1; j <= B; j++) {
+                if (test(i, j)) res++;
+            }
+        }
+
+        printf("Case #%d: %d\n", test_idx, res);
+    }
+    return 0;
+}

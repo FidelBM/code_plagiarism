@@ -1,0 +1,21 @@
+#pragma once
+#include <string>
+#include <iostream>
+#include <sstream>
+#include <vector>
+
+using namespace std;
+
+class RecycleNumbers
+{
+public:
+	RecycleNumbers(void);
+	int getAnswer();
+	string int2str( int iNumber );
+	int str2int( string str );
+	~RecycleNumbers(void);
+public:
+	int m_iMin;
+	int m_iMax;
+};
+

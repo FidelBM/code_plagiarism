@@ -1,0 +1,354 @@
+#include "algo.h"
+#include <QString>
+#include <QDebug>
+#include <math.h>
+#define max(a,b) ((a)<(b)?(b):(a))
+#define min(a,b) ((a)>(b)?(b):(a))
+#define sign(a) ((a)>0?1:((a)<0?-1:0))
+#define theOther(a) ((a)==ORANGE?BLUE:ORANGE)
+#define DBE(s) // s
+QMutex Algo::mutex;
+int hcf(int a, int b)
+{
+    int t=0;
+    if(a == 0)
+    {
+        return b;
+    }
+    if(b == 0)
+    {
+        return a;
+    }
+    if(abs(a)<abs(b))
+    {
+        t = b;
+        b = a;
+        a = t;
+    }
+    while(b != 0) {
+        t = b;
+        b = a%b;
+        a = t;
+    }
+
+    return a;
+}
+
+void Algo::run()
+{
+    //Algo::mutex.lock();
+    Point tempPoint;
+    qDebug();
+    int score = 0;
+    //qDebug()<<(rayTrace(-2,-2)?"OK":"non");
+    //qDebug()<<"6,4: "<<this->imSpace(3,1);
+    //qDebug()<<"6,4: "<<this->imSpace(-3,-1);
+   //qDebug()<<"6,4: "<<this->imSpace(-3,-1);
+/*
+    for(int idx=-fogg+1;idx<fogg+1;idx++)
+    {
+        //int idx=3;
+        //for(int idx2=0;idx2<this->width;idx2++)
+        {
+            qDebug()
+                    <<this->imSpace(idx,-5)
+                 <<this->imSpace(idx,-4)
+                    <<this->imSpace(idx,-3)
+                 <<this->imSpace(idx,-2)
+                <<this->imSpace(idx,-1)
+               <<this->imSpace(idx,0)
+              <<this->imSpace(idx,1)
+             <<this->imSpace(idx,2)
+            <<this->imSpace(idx,3)
+           <<this->imSpace(idx,4)
+            <<this->imSpace(idx,5);
+        }
+        //qDebug()<<"";
+    }// */
+
+   /* Point mir;
+    foreach(mir,this->mirrors)
+    {
+        if(reflette(mir,this->fogg))
+        {
+            score++;
+        }
+    }*/
+//*
+    for(int idx=-fogg;idx<fogg+1;idx++)
+    {
+        for(int idx2=-fogg ; idx2<fogg+1; idx2++)
+        {
+
+            if(this->imSpace(idx,idx2) == ME && !(idx==0 && idx2==0))
+            {
+                //qDebug()<<"Me at "<<idx<<","<<idx2<<" d:"<<distance(idx,idx2);
+                if(distance(idx,idx2)<=fogg)
+                {
+                    if(rayTrace(idx,idx2))
+                    {
+                        score++;
+                    }
+                }
+            }
+        }
+    }
+// */
+    qDebug()<<this->name<<" , Score "<<score;
+    result = QString::number(score);
+    //Algo::mutex.unlock();
+}
+bool Algo::isCorner(int row,int col)
+{
+    int cm=0;
+    if(tab[row-1][col-1] == MIRROR) ++cm;
+    if(tab[row][col-1] == MIRROR) ++cm;
+    if(tab[row-1][col] == MIRROR) ++cm;
+    if(tab[row][col] == MIRROR) ++cm;
+
+    return cm==3;
+}
+double Algo::distance(Point p1,Point p2)
+{
+    return sqrt((p1.row-p2.row) * (p1.row-p2.row) + (p1.col-p2.col)*(p1.col-p2.col));
+}
+double Algo::distance(int p1,int p2)
+{
+    return sqrt((p1) * (p1) + (p2)*(p2));
+}
+bool Algo::rayTrace(int p1,int p2)
+{
+    int d = abs(hcf(p1,p2));
+    int d1=p1/d;
+    int d2=p2/d;
+    //qDebug()<<"RAY "<<p1<<","<<p2<<"  hcf : "<<d;
+    for(int i = 1; i<d; i++)
+    {
+        //qDebug()<<"t "<<(d1*i)<<","<<(d2*i);
+        if(this->imSpace(d1*i,d2*i) == ME)
+        {
+            //qDebug()<<"Found Me between "<<p1<<","<<p2<<"  and  0,0";
+            return false;
+        }
+    }
+    return true;
+}
+
+char Algo::imSpace(int row, int col)
+{
+//*
+    DBE(qDebug()<<"ImSpace "<<row<<", "<<col;)
+    if(row==0 && col==0)
+    {
+        return ME;
+    }
+
+    int currentRow=0, currentCol=0;
+    if(abs(row) == abs(col))
+    {
+        while(abs(currentRow) < abs(row))
+        {
+            currentRow += sign(row);
+            currentCol += sign(col);
+            DBE(qDebug()<<currentRow<<","<<currentCol<<"  "<<this->tab[currentRow+(int)me.row][currentCol+(int)me.col];)
+            if(this->tab[currentRow+(int)me.row][currentCol+(int)me.col]==MIRROR)
+            {
+                if(this->tab[currentRow+(int)me.row-sign(row)][currentCol+(int)me.col] == MIRROR &&
+                    this->tab[currentRow+(int)me.row][currentCol+(int)me.col-sign(col)] == MIRROR
+                        )
+                {
+                    DBE(qDebug()<<"deplace to "<<(currentRow+currentRow-row-sign(row))<<","<<(currentCol+currentCol-col-sign(col));)
+                    return imSpace(currentRow+currentRow-row-sign(row),currentCol+currentCol-col-sign(col));
+                }
+                else
+                if(this->tab[currentRow+(int)me.row-sign(row)][currentCol+(int)me.col] == MIRROR ||
+                    this->tab[currentRow+(int)me.row][currentCol+(int)me.col-sign(col)] == MIRROR
+                        )
+                {
+                    //DBE(qDebug()<<"Find"
+                    if(this->tab[currentRow+(int)me.row-sign(row)][currentCol+(int)me.col] == MIRROR)
+                    {
+                        return imSpace(row,currentCol+currentCol-col-sign(col));
+                    }
+                    if(this->tab[currentRow+(int)me.row][currentCol+(int)me.col-sign(col)] == MIRROR)
+                    {
+                        return imSpace(currentRow+currentRow-row-sign(row),col);
+                    }
+                }
+                else
+                {
+                    return MIRROR;
+                }
+            }
+        }
+        return this->tab[currentRow+(int)me.row][currentCol+(int)me.col];
+    }
+
+
+
+   double stepC = row;
+   stepC /= (2*col);
+   double stepR = col;
+   stepR /= (2*row);
+
+   DBE(qDebug()<<"stepRow "<<stepR<<"stepCol "<<stepC;)
+
+   float distanceFirstRow=1000000;
+   float distanceFirstCol=1000000;
+   int bloqueRow=0, bloqueCol=0;
+
+   for(int i = 1; i<=abs(row); ++i)
+   {
+       currentCol = (int)floor(0.5+stepR*sign(row)*(2*i-1));
+       DBE(qDebug()<<(sign(row)*i)<<","<<currentCol<<"   "<<(0.5+stepR*sign(row)*(2*i-1));)
+
+       if(this->tab[sign(row)*i+(int)me.row][currentCol+(int)me.col]==MIRROR)
+       {
+           if(0.5+stepR*sign(row)*(2*i-1) == currentCol && this->tab[sign(row)*i+(int)me.row][currentCol-1+(int)me.col]!=MIRROR)
+           {
+               if(col>0)
+               {
+                   if(this->tab[sign(row)*i-sign(row)+(int)me.row][currentCol+(int)me.col]!=MIRROR)
+                   {
+                       return MIRROR;
+                   }
+               }
+               DBE(qDebug()<<"frole "<<(sign(row)*i)<<","<<(currentCol)<<"  et  "<<(sign(row)*i)<<","<<(currentCol-1);)
+           }else
+           {
+
+               DBE(qDebug()<<"stop at : "<<(sign(row)*i)<<","<<currentCol;)
+               distanceFirstRow = distance(sign(row)*i,currentCol);
+               bloqueRow=sign(row)*i;
+               break;
+           }
+
+       }
+       if(0.5+stepR*sign(row)*(2*i-1) == currentCol && this->tab[sign(row)*i+(int)me.row][currentCol-1+(int)me.col]==MIRROR
+               )
+       {
+           if(this->tab[sign(row)*i-sign(row)+(int)me.row][currentCol-1+(int)me.col]!=MIRROR)
+            return MIRROR;
+       }
+   }
+   for(int i = 1; i<=abs(col); ++i)
+   {
+       currentRow = (int)floor(0.5+stepC*sign(col)*(2*i-1));
+       DBE(qDebug()<<currentRow<<","<<(sign(col)*i)<<"    "<<(0.5+stepC*sign(col)*(2*i-1));)
+       if(this->tab[currentRow+(int)me.row][sign(col)*i+(int)me.col]==MIRROR)
+       {
+           if(0.5+stepC*sign(col)*(2*i-1) == currentRow && this->tab[currentRow-1+(int)me.row][sign(col)*i+(int)me.col]!=MIRROR)
+           {
+               DBE(qDebug()<<"frole "<<(currentRow)<<","<<(sign(col)*i)<<"  et  "<<(currentRow-1)<<","<<(sign(col)*i);)
+
+               if(row>0)
+               {
+                   if(this->tab[currentRow+(int)me.row][sign(col)*i-sign(col)+(int)me.col]!=MIRROR)
+                   {
+                       return MIRROR;
+                   }
+               }
+           }else
+           {
+               DBE(qDebug()<<"stop at : "<<currentRow<<","<<(sign(col)*i);)
+               distanceFirstCol = distance(sign(col)*i,currentRow);
+               bloqueCol=sign(col)*i;
+               break;
+           }
+
+       }
+      /* if(0.5+stepC*sign(col)*(2*i-1) == currentRow &&this->tab[currentRow-1+(int)me.row][sign(col)*i+(int)me.col]==MIRROR
+               )
+       {
+           if(this->tab[currentRow-1+(int)me.row][sign(col)*i+(int)me.col]!=MIRROR!=MIRROR)
+            return MIRROR;
+       }*/
+   }
+   DBE(qDebug()<<"distanceFirstCol "<<distanceFirstCol<<"distanceFirstRow "<<distanceFirstRow;)
+
+   if(distanceFirstCol == 1000000 && distanceFirstRow == 1000000)
+   {
+       DBE(qDebug()<<"Direct "<<row+(int)me.row<<","<<col+(int)me.col;)
+       return this->tab[row+(int)me.row][col+(int)me.col];
+   }
+   if(distanceFirstCol>distanceFirstRow)
+   {
+       return this->imSpace(bloqueRow + bloqueRow - row - sign(row),col);
+   }
+   else
+   if(distanceFirstCol<distanceFirstRow)
+   {
+       DBE(qDebug()<<"BloqueCol : "<<bloqueCol;)
+       return this->imSpace(row,bloqueCol + bloqueCol - col - sign(col));
+   }
+   DBE(qDebug()<<"BloqueRow : "<<bloqueRow<<" BloqueCol : "<<bloqueCol;)
+    return this->imSpace(bloqueRow + bloqueRow - row - sign(row),bloqueCol + bloqueCol - col - sign(col));
+   //qDebug()<<"demande? "<<row<<", "<<col;
+   //qDebug()<<"distanceFirstCol "<<distanceFirstCol<<"distanceFirstRow "<<distanceFirstRow;
+
+return ME;
+/*/
+   row += me.row;
+    col += me.col;
+
+    //qDebug()<<" row  "<<row;
+    while(row >= this->height-1 || row<1)
+    {
+        if(row >= this->height-1)
+        {
+            row = this->height + this->height - row - 3;
+        }
+        if(row < 1)
+        {
+            row = -row + 1;
+        }
+    }
+    //qDebug()<<" become "<<row;
+    //qDebug()<<" col "<<col;
+    while(col >= this->width -1 || col<1)
+    {
+        if(col >= this->width-1)
+        {
+            col = this->width + this->width - col - 3;
+            //qDebug()<<" w "<<col;
+        }
+        if(col < 1)
+        {
+            col = -col + 1;
+        }
+    }
+    //qDebug()<<" become "<<col; */
+    return this->tab[row][col];
+}
+
+bool Algo::reflette(Point mir,int f)
+{
+    if(mir.col == me.col)
+    {
+        if((abs(mir.row - me.row)-0.5)*2>f) return false;
+
+        for(int i=min(mir.col,me.col);i<max(mir.col,me.col); ++i)
+        {
+            if(this->tab[i][(int)floor(mir.col)] == MIRROR)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    if(mir.row == me.row)
+    {
+        if((abs(mir.col - me.col)-0.5)*2>f) return false;
+
+        for(int i=min(mir.row,me.row);i<max(mir.row,me.row); ++i)
+        {
+            if(this->tab[(int)floor(mir.row)][i] == MIRROR)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    return false;
+}

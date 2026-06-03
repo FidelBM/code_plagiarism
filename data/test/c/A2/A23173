@@ -1,0 +1,142 @@
+// second.cpp : Defines the entry point for the console application.
+//
+
+#include <stdio.h>
+#include <vector>
+#include <map>
+#include <iostream>
+#include <algorithm>
+
+struct Ix 
+{
+	Ix()
+	{
+		bigger_surpr =
+		bigger_nosurpr = 
+		less_surpr = 
+		less_nosurpr = 0;
+	}
+
+	Ix(bool isBigger, bool isSurpr)
+	{
+		bigger_surpr = isBigger && isSurpr;
+		bigger_nosurpr = isBigger && !isSurpr;
+		less_surpr = !isBigger && isSurpr;
+		less_nosurpr = !isBigger && !isSurpr;
+	}
+
+	int bigger_surpr:1;
+	int bigger_nosurpr:1;
+	int less_surpr:1;
+	int less_nosurpr:1;
+
+	void Combine(Ix const& other)
+	{
+		this->bigger_surpr = this->bigger_surpr || other.bigger_surpr;
+		this->bigger_nosurpr = this->bigger_nosurpr || other.bigger_nosurpr;
+		this->less_surpr = this->less_surpr || other.less_surpr;
+		this->less_nosurpr = this->less_nosurpr || other.less_nosurpr;
+
+	}
+
+	void Count(int &optionalBiggerSurpriseCount, int &biggerCount, int &surprisesCount)
+	{
+		if((bigger_surpr || less_surpr) && !(bigger_nosurpr || less_nosurpr))
+			++surprisesCount;
+
+		//
+		if(bigger_nosurpr || (bigger_surpr && !less_nosurpr))
+			++biggerCount;
+		else if(bigger_surpr && less_nosurpr)
+			++optionalBiggerSurpriseCount;
+	}
+};
+
+Ix Calc(int score, int expectedBest)
+{
+	Ix r;
+	
+	for(int first = std::max(0, score - 20);
+		first <= std::min(score, 10); ++first)
+	{
+		for(int second = first; 
+			second <= first + 2; ++second)
+		{
+			int third = score - first - second;
+			if(third < 0 || third > 10 || 
+				third < first ||
+				third < second ||
+				(third - first) > 2 || 
+				(third - second) > 2)
+			{
+				continue;
+			}
+
+			bool isBigger = third >= expectedBest;
+			bool isSurpr = (third - first) == 2;
+
+			r.Combine(Ix(isBigger, isSurpr));
+		}
+	}
+
+	return r;
+}
+
+void CalcScoreMap(std::map<int, Ix> &map, std::vector<int> const& scores, int expectedBest)
+{
+	for(size_t i = 0; i < scores.size(); ++i)
+	{
+		int score = scores[i];
+		if(map.find(score) != map.end())
+			continue;
+
+		map[score] = Calc(score, expectedBest);
+	}
+}
+
+int MaxDancers(std::vector<int> const& scores, std::map<int, Ix> & scoreMap, int expectedSurpr)
+{
+	int optBigSurpr = 0;
+	int biggerCount = 0;
+	int surpriseCount = 0;
+
+	for(size_t i = 0; i < scores.size(); ++i)
+	{
+		int score = scores[i];
+		Ix ix = scoreMap[score];
+
+		ix.Count(optBigSurpr, biggerCount, surpriseCount);
+	}
+
+	biggerCount += std::max(0, std::min(expectedSurpr - surpriseCount, optBigSurpr));
+	return biggerCount;
+}
+
+int main(int argc, char* argv[])
+{
+	int ntests = 0;
+	std::cin >> ntests;
+
+	for(int i = 0; i < ntests; ++i)
+	{
+		std::vector<int> scores;
+
+		int N, S, p;
+		std::cin >> N >> S >> p;
+		for(int j = 0; j < N; ++j)
+		{
+			int t;
+			std::cin >> t;
+			scores.push_back(t);
+		}
+
+		std::map<int, Ix> scoreMap;
+		CalcScoreMap(scoreMap, scores, p);
+
+		std::cout << "Case #" << i + 1 << ": " << MaxDancers(scores, scoreMap, S) << std::endl;
+	}
+
+
+	return 0;
+}
+

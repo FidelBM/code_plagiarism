@@ -1,0 +1,37 @@
+#include <iostream>
+#include <cstdio>
+using namespace std;
+int main()
+{
+    int t,x,y,i,j,l;
+    string a,b,n,m;
+    char temp;
+    freopen("C-small-attempt0.in","r",stdin);
+    freopen("C-small-attempt0.out","w",stdout);
+    cin>>t;
+    for (x=1;x<=t;x++)
+    {
+        cin>>a>>b;
+        l=a.size();
+        y=0;
+        n=a;
+        while (n<b)
+        {
+            m=n;
+            for (i=0;i<l;i++)
+            {
+                temp=m[l-1];
+                for (j=l-1;j>0;j--) m[j]=m[j-1];
+                m[0]=temp;
+                if (m>n&&m<=b) y++;
+            }
+            for (i=l-1;i>=0;i--)
+            {
+                if (n[i]<'9') {n[i]++;break;}
+                else n[i]='0';
+            }
+        }
+        cout<<"Case #"<<x<<": "<<y<<endl;
+    }
+    return 0;
+}

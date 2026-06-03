@@ -1,0 +1,130 @@
+/**
+ * KSpokas: GCJ 2012 Qualification Round Problem B
+ */
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.InputStreamReader;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+
+public class qualProblemB {
+	private final static int EXPECTED_ARG_COUNT = 1;
+	private static Map<Integer, Integer> lookup = new HashMap<Integer, Integer>();
+	private static Map<Integer, Integer> surprisingLookup = new HashMap<Integer, Integer>();
+	
+	public static void main(String[] args) {
+		if (args.length != EXPECTED_ARG_COUNT) {
+			System.err.println("Error: expecting " + EXPECTED_ARG_COUNT);
+			return;
+		}
+		buildLookups();
+		
+		String fileName = args[0];
+		try {
+		    FileInputStream fstream = new FileInputStream(fileName);
+		    DataInputStream in = new DataInputStream(fstream);
+		    BufferedReader br = new BufferedReader(new InputStreamReader(in));
+		    BufferedWriter out = new BufferedWriter(new FileWriter(fileName + ".out"));
+		    
+		    Integer testCaseCount = Integer.parseInt(br.readLine());
+		    
+		    for (int i = 0; i < testCaseCount; i++) {
+		    	String strLine = br.readLine();
+		    	
+		    	StringBuilder sb = new StringBuilder("Case #");
+		    	sb.append(i + 1).append(": ");
+		    	sb.append(calculate(strLine));
+		    	out.write(sb.toString());
+		    	out.newLine();
+		    }
+		    in.close();
+		    out.close();
+	    } catch (Exception e) {
+	    	System.err.println("Error: " + e.getMessage());
+	    }
+	}
+	
+	private static int calculate(String input) {
+		int maxValue = 0;
+		
+		String[] values = input.split(" ");
+		Integer dancerCount = Integer.parseInt(values[0]);
+		Integer surprisingCount = Integer.parseInt(values[1]);
+		Integer targetScore = Integer.parseInt(values[2]);
+		
+		for (int i = 3; i < dancerCount + 3; i++) {
+			Integer dancerTotal = Integer.parseInt(values[i]);
+			
+			if (dancerTotal >= lookup.get(targetScore)) {
+				maxValue++;
+			} else if (surprisingCount > 0 && dancerTotal >= surprisingLookup.get(targetScore)) {
+				maxValue++;
+				surprisingCount--;
+			}
+		}
+		return maxValue;
+	}
+	
+	private static void buildLookups() {
+		for (int i = 0; i <= 10; i++) {
+			lookup.put(i, getPossibleScores(i));
+			surprisingLookup.put(i, getPossibleSurprisingScores(i));
+		}
+	}
+	
+	private static Integer getPossibleScores(Integer i) {
+		Set<Integer> scoreSet = new HashSet<Integer>();
+		
+		if (i == 0) {
+			scoreSet.add(0);
+		} else {
+			scoreSet.addAll(getScores(i - 1, i));
+			scoreSet.addAll(getScores(i, i + 1));
+			scoreSet.add(3 * i);
+		}
+		return Collections.min(scoreSet);
+	}
+	
+	private static Integer getPossibleSurprisingScores(Integer i) {
+		Set<Integer> scoreSet = new HashSet<Integer>();
+		
+		if (i == 0) {
+			scoreSet.add(0);
+		} else {
+			scoreSet.addAll(getScores(i - 2, i));
+			scoreSet.addAll(getScores(i, i + 2));
+			
+			if ((i - 2) >= 0) {
+				scoreSet.add((i - 2) + (i - 1) + i);
+			}
+			
+			if (i - 1 >= 0 && i + 1 <= 10) {
+				scoreSet.add((i - 1) + i + (i + 1));
+			}
+			
+			if (i + 2 <= 10) {
+				scoreSet.add(i + (i + 1) + (i + 2));
+			}
+		}
+		
+		return Collections.min(scoreSet);
+	}
+	
+	private static Set<Integer> getScores(Integer min, Integer max) {
+		Set<Integer> scores = new HashSet<Integer>();
+		
+		if (min >= 0 && max <= 10) {
+			scores.add((2 * min) + max);
+		}
+		return scores;
+	}
+	
+}

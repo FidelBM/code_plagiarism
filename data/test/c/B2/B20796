@@ -1,0 +1,41 @@
+#include <iostream>
+#include <fstream>
+
+using namespace std;
+
+int main()
+{
+    long masks[] = {1, 10, 100, 1000, 10000, 100000, 1000000};
+
+    ifstream fin("C-large.in");
+    ofstream fout("output.txt");
+
+    int n;
+    fin >> n;
+
+    for (int i = 0; i != n; ++i) {
+        long count = 0;
+        long a, b;
+        fin >> a >> b;
+        int num_digit = 1;
+        long temp = a;
+        while (temp / 10) {
+            ++num_digit;
+            temp /= 10;
+        }
+
+        for (long num = a; num <= b; ++num) {
+            for (int j = 1; j != num_digit; ++j) {
+                long rec = num % masks[j] * masks[num_digit - j] + num / masks[j];
+                if (rec > num && rec <= b) ++count;
+            }
+        }
+
+        fout << "Case #" << (i + 1) << ": " << count << endl;
+    }
+
+    fin.close();
+    fout.close();
+
+    return 0;
+}

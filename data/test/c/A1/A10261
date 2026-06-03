@@ -1,0 +1,52 @@
+#include "inputreader.h"
+#include <QFile>
+#include <QTextStream>
+#include <QtDebug>
+#include "algo.h"
+#include <QListIterator>
+InputReader::InputReader()
+{
+
+}
+
+
+QList<Algo*> * InputReader::read(QString filename)
+{
+
+    QList<Algo*> * algos = new QList<Algo*>();
+    Algo * algo;
+    int nbCase, nbGooglers;
+
+    QFile file(filename);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+         return algos;
+
+    QTextStream in(&file);
+
+
+    int tempInt, surprises, minScore;
+
+    in>>nbCase;
+
+    for(int case_idx=0;case_idx<nbCase;case_idx++)
+    {
+        algo = new Algo(case_idx);
+        algos->push_back(algo);
+
+        in>>nbGooglers;
+        in>>surprises;
+        in>>minScore;
+
+        algo->surprises = surprises;
+        algo->minScore = minScore;
+        for(int idx=0;idx<nbGooglers;idx++)
+        {
+            in>>tempInt;
+
+            algo->googlersScore.push_back(tempInt);
+        }
+
+    }
+
+    return algos;
+}

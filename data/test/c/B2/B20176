@@ -1,0 +1,77 @@
+#include<iostream>
+//#include<conio.h>
+#include<math.h>
+#include<algorithm>
+using namespace std;
+long int check( unsigned int a,unsigned int b,unsigned int i)
+{
+		long int arr[10000],index=0l;
+   long int f,d,count=0l,temp=0l,te=0l,final=0l;
+    f=i;
+    d=log10(i);
+//    cout<<d<<" "<<i<<endl;
+   long int e[d],m=0l,l[d],pp[d];
+    while(f>0)
+    {
+              e[m]=f%10;
+              l[m]=f%10;
+              pp[m]=f%10;
+              f=f/10;
+              m++;
+              }
+  m--;
+ 
+unsigned int h;
+ h=m;
+ while(h--)
+ {
+            temp=l[0];
+    for(long int j=0l;j<=m-1;j++)
+    {
+            l[j]=l[j+1];       
+            }
+    l[m]=temp;
+    temp=0;
+    for(long int j=m;j>=0l;j--)
+    {
+            temp=temp*10+l[j];
+            }
+    if((temp>=a&&temp<=b)&&l[m]!=0&&pp[m]!=0&&temp>i)
+{
+	if(!binary_search(arr,arr+index,temp))
+{
+    //cout<<i<<" "<<temp<<endl;
+	arr[index]=temp;
+index++;
+final++;
+} 
+   
+    }
+}
+return(final);
+    }
+int main()
+{
+ long  int a,b,count=0l,n,h,t=0l;
+ cin>>n;
+    h=0l;
+    while(h<n)
+    {
+count=0l;
+t=0l;     
+         h++;
+    cin>>a>>b;
+    for(long int i=a;i<=b;i++)
+    {
+    if((t=check(a,b,i))>0)
+    {
+     
+        //     cout<<i<<endl;
+                    count+=t;
+                    }
+}
+cout<<"Case #"<<h<<": "<<count<<endl;
+}
+//getch();
+return(0);
+    }

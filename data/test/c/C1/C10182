@@ -1,0 +1,98 @@
+#include "Rational.h"
+#include <iostream>
+
+using namespace std;
+
+int gcd(int a, int b) {
+  if (a < 0) a = -a;
+  if (b < 0) b = -b;
+  while (a!=0 && b!=0) {
+    if (b > 0 && a >= b) a %= b;
+    if (a > 0 && b >= a) b %= a;
+  }
+  if (a) return a; else return b;
+}
+
+//====== class Rational
+// int p, q;
+
+int compare(const Rational &r0, const Rational &r1) {
+  return r0.P()*r1.Q() - r1.P()*r0.Q();
+}
+
+bool operator==(const Rational &r0, const Rational &r1) {
+  return compare(r0, r1)==0;
+}
+
+bool operator!=(const Rational &r0, const Rational &r1) {
+  return compare(r0, r1)!=0;
+}
+
+bool operator<(const Rational &r0, const Rational &r1) {
+  return compare(r0, r1)<0;
+}
+
+bool operator>(const Rational &r0, const Rational &r1) {
+  return compare(r0, r1)>0;
+}
+
+bool operator<=(const Rational &r0, const Rational &r1) {
+  return compare(r0, r1)<=0;
+}
+
+bool operator>=(const Rational &r0, const Rational &r1) {
+  return compare(r0, r1)>=0;
+}
+
+int floor(const Rational &r) {
+  return r.P()/r.Q();
+}
+
+Rational operator+(const Rational &r0, const Rational &r1) {
+  return Rational(r0.P()*r1.Q() + r1.P()*r0.Q(), r0.Q()*r1.Q());
+}
+
+Rational operator-(const Rational &r0, const Rational &r1) {
+  return Rational(r0.P()*r1.Q() - r1.P()*r0.Q(), r0.Q()*r1.Q());
+}
+
+Rational operator*(const Rational &r0, const Rational &r1) {
+  return Rational(r0.P()*r1.P(), r0.Q()*r1.Q());
+}
+
+Rational operator/(const Rational &r0, const Rational &r1) {
+  return Rational(r0.P()*r1.Q(), r0.Q()*r1.P());
+}
+
+int Rational::P() const { return p; }
+int Rational::Q() const { return q; }
+
+void Rational::Normalize() { 
+  if (p==0) { q = 1; return; }
+  if (q==0) { p = 1; return; } else if (q < 0) { q = -q; p = -p; }
+  
+  int a[2];
+  a[0] = (p < 0) ? -p : p;
+  a[1] = (q < 0) ? -q : q;
+  
+  int i;
+  for (i = 0; a[i]; i = 1-i)
+    a[1-i] %= a[i];
+  
+  p /= a[1-i];
+  q /= a[1-i];
+}
+
+void Rational::Set(int _p, int _q) { 
+  p = _p; q = _q; Normalize();
+}
+
+Rational::Rational(int _p, int _q) { 
+  Set(_p, _q); 
+}
+
+std::ostream &operator<<(std::ostream &os, const Rational &r) {
+  if (r.q==0) return os << "infinity";
+  if (r.q==1) return os << r.p;
+  return os << r.p << "/" << r.q;
+}

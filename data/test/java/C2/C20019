@@ -1,0 +1,171 @@
+package template;
+
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
+
+public class TestCaseSolver implements Runnable {
+
+    private ArrayList<TestCase> testCases;
+    private int ref;
+
+    public TestCaseSolver(ArrayList<TestCase> tcs, int ref) {
+        testCases = tcs;
+        this.ref = ref;
+    }
+
+    public TestCaseSolver(TestCase tc, int ref) {
+        ArrayList<TestCase> tcs = new ArrayList<>();
+        tcs.add(tc);
+        testCases = tcs;
+        this.ref = ref;
+    }
+
+    public int getRef() {
+        return ref;
+    }
+
+    @Override
+    public void run() {
+        for (TestCase tc : testCases) {
+            long startTime = System.nanoTime();
+            solve(tc);
+            long duration = System.nanoTime() - startTime;
+            double secs = (double) duration / (1000000000d);
+            tc.setTime(secs);
+            System.out.println("Thread " + ref + " solved testcase " + tc.getRef() + " in " + String.format("%.2f", secs) + " secs.");
+        }
+    }
+
+    private void solve(TestCase tc) {
+        int H = tc.getInteger("H");
+        int W = tc.getInteger("W");
+        int D = tc.getInteger("D");
+        ArrayList<String> rows = tc.getStringList("rows");
+
+        boolean[][] horizMirrors = new boolean[W+1][H+1]; //mirror from x,y to x+1,y
+        boolean[][] vertMirrors = new boolean[W + 1][H + 1]; //mirror from x,y to x+1,y
+        boolean[][] isMirrorCell = new boolean[W][H]; //mirror at x,y
+
+        Pair<Integer, Integer> myLoc = new Pair<>(0, 0);
+        int myX = 0;
+        int myY = 0;
+        for (int i = 0; i < H; i++) {
+            for (int j = 0; j < W; j++) {
+                if (rows.get(i).substring(j, j + 1).equals("X")) {
+                    myLoc.setO1(j);
+                    myX = j;
+                    myLoc.setO2(H - i - 1);
+                    myY = H - i - 1;
+                }
+                if (rows.get(i).substring(j, j + 1).equals("#")) {
+                    isMirrorCell[j][H - i - 1] = true;
+                    horizMirrors[j][H - i - 1] = true;
+                    horizMirrors[j][H - i - 1 + 1] = true;
+                    vertMirrors[j][H - i - 1] = true;
+                    vertMirrors[j + 1][H - i - 1] = true;
+                }
+
+            }
+        }
+        Utils.sout("myLoc " + myLoc);
+        Set<Double> angles = new HashSet<>();
+
+        for (int targetx = -D; targetx <= D; targetx++) {
+            for (int targety = -D; targety <= D; targety++) {
+                if (targetx == 0 && targety == 0) {
+                    continue;
+                }
+
+                boolean xflipped = false;
+                boolean yflipped = false;
+                
+
+                int subgrid = Math.max(Math.abs(targetx), 1) * Math.max(Math.abs(targety), 1);
+                subgrid *= 2;
+
+                int mySubX = myX * subgrid + subgrid / 2;
+                int mySubY = myY * subgrid + subgrid / 2;
+                
+                int xloc = mySubX;
+                int yloc = mySubY;
+
+                double unitStep = Math.sqrt((double)targetx * (double)targetx + (double)targety * (double)targety);
+                int numStepsAllowed = (int)((double)D  * (double)subgrid / unitStep);
+
+                //walk
+                int steps = 0;
+                boolean seen = false;
+                boolean dead = false;
+                while (steps < numStepsAllowed && !seen && !dead) {
+                    xloc += targetx * (xflipped ? -1 : 1);
+                    yloc += targety * (yflipped ? -1 : 1);
+                    
+                    if (xloc == mySubX && yloc == mySubY) {seen = true;}
+                    
+                    //inner horiz edge
+                    if(yloc % subgrid == 0 && xloc % subgrid != 0) {
+                        if (horizMirrors[xloc / subgrid][yloc / subgrid]) {yflipped = !yflipped;}
+                    }
+                    
+                    //inner vert edge
+                    if(xloc % subgrid == 0 && yloc % subgrid != 0) {
+                        if (vertMirrors[xloc / subgrid][yloc / subgrid]) {xflipped = !xflipped;}
+                    }
+                    
+                    //corner
+                    if(xloc % subgrid == 0 && yloc % subgrid == 0) {
+                        int prevX = xloc - targetx * (xflipped ? -1 : 1);
+                        int prevY = yloc - targety * (yflipped ? -1 : 1);
+                        int nextX = xloc + targetx * (xflipped ? -1 : 1);
+                        int nextY = yloc + targety * (yflipped ? -1 : 1);
+                        
+                        boolean nextBlock = isMirrorCell[nextX / subgrid][nextY / subgrid];
+                        boolean lastHoriz = horizMirrors[prevX / subgrid][yloc / subgrid];
+                        boolean lastVert = vertMirrors[xloc / subgrid][prevY / subgrid];
+                        
+                        
+                        if (lastVert && nextBlock) {
+                            xflipped = !xflipped;
+                        }
+                        
+                        if (lastHoriz && nextBlock) {
+                            yflipped = !yflipped;
+                        }
+                        if (!lastHoriz && !lastVert && nextBlock) {
+                            dead = true;
+                        }
+                        
+                        
+                    }
+                    
+
+                    steps++;
+
+                } //end while
+                
+                if (seen) {
+                    double angle = Math.atan2((double)targety, (double)targetx);
+                    angles.add(angle);
+                    //System.out.println("added " + targetx + " " + targety + " in " + steps + " steps " + (steps * unitStep / subgrid) + " dist.");
+                }
+
+            } //end y target
+        } //end x target
+        System.out.println("total " + angles.size());
+
+        tc.setSolution(new Integer(angles.size()));
+    }
+
+    private double distance(Pair<Integer, Integer> loc1, Pair<Integer, Integer> loc2) {
+        int x = Math.abs(loc1.getO1() - loc2.getO1());
+        int y = Math.abs(loc1.getO2() - loc2.getO2());
+        if (y == 0) {
+            return (double) x;
+        }
+        if (x == 0) {
+            return (double) y;
+        }
+        return Math.sqrt((double) (x * x + y * y));
+    }
+}

@@ -1,0 +1,59 @@
+// repeatNumbers.cpp : Defines the entry point for the console application.
+//
+
+#include "stdafx.h"
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <set>
+using namespace std;
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	fstream f("in.txt", ios::in);
+	fstream fout("out.txt", ios::out);
+	int T;
+	f >> T;
+	for(int i = 1; i <= T; ++i) {
+		long long A, B;
+		f >> A >> B;
+		long long repeatCount = 0;
+		set<pair<long long, long long> > st;
+		for(long long j = A; j <= B; ++j) {
+			stringstream iss;
+			iss << j;
+			string s = iss.str();
+			for(int k = 1; k < s.size(); ++k) { // for all shifts of this num
+				string newS;
+				for(int l = 0; l < s.size(); ++l) {
+					int x = (l + k)%s.size();
+					newS += s[x];
+				}
+				stringstream oss(newS);
+				long long repeatNumber;
+				oss >> repeatNumber;
+				// cout << "Repeat number for " << j << " is " << repeatNumber ;
+				// fout << "Repeat number for " << j << " is " << repeatNumber ;	
+				if(repeatNumber != j && repeatNumber >= A && repeatNumber <= B) {
+					pair<long long, long long> p(j, repeatNumber);
+					if(st.find(p) == st.end()) {
+						st.insert(p);
+						++repeatCount;
+						// cout << " Yes!.";
+						// fout << " Yes!.";
+					}
+				}
+				// cout << endl;
+				// fout << endl;
+			}
+		}
+		cout << "Case #" << i << ": " << repeatCount/2 << endl;
+		fout << "Case #" << i << ": " << repeatCount/2 << endl;
+	}
+	f.close();
+	fout.close();
+
+
+	return 0;
+}
+

@@ -1,0 +1,57 @@
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+
+
+inline int verif (int A, int B)
+{
+	int ka = 0, kb = 0, ca = A, cb = B;
+	
+	while (ca) ca /= 10, ++ ka;
+	while (cb) cb /= 10, ++ kb;
+	
+	if (ka != kb) return 0;
+	
+	ca = A;
+	
+	while (ka)
+	{
+		int uca = ca % 10;
+		ca /= 10;
+		
+		for (int i = 1; i < kb; ++ i) uca *= 10;
+		ca += uca;
+		if (ca == B)return 1;
+		
+		ka --;
+	}
+	
+	return 0;
+}
+
+
+int main()
+{
+	freopen ("date.in", "r", stdin);
+	freopen ("date.out", "w", stdout);
+	
+	int T;
+	scanf ("%d", &T);
+
+	for (int t = 1; t <= T; ++ t)
+	{
+		int A, B, sol = 0;
+		scanf ("%d %d", &A, &B);
+		
+		for (int i = A; i <= B; ++ i)
+			for (int j = i + 1; j <= B; ++ j)
+				if (verif (i, j)) ++ sol;
+		
+		printf ("Case #%d: %d\n", t, sol);
+	}
+	
+	return 0;
+}

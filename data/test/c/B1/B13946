@@ -1,0 +1,40 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+int main(void)
+{
+    
+    int t,a,b,m,i,count,mid,num,one,ten,hundred,New;
+    FILE *fp1,*fp2;
+    if((fp1=fopen("C-small-attempt0.in","r"))==NULL)exit(0);
+    if((fp2=fopen("C-small-attempt0.out","w"))==NULL)exit(0);
+    fscanf(fp1,"%d",&t);
+    for(count=1;count<=t;count++)
+    {
+         fscanf(fp1,"%d %d",&a,&b);                        
+         fprintf(fp2,"Case #%d: ",count);
+         num=0;
+         for(i=a;i<=b;i++)
+         {
+             if(b<10||b==1000){num=0;break;}
+             if(b<100)
+             {
+                  ten=i/10;one=i%10;
+                  New=one*10+ten;
+                  if(i<New&&New<=b)num++;
+             }    
+             else if(b<1000)
+             {
+                  hundred=i/100;ten=i%100/10;one=i%10;
+                  New=ten*100+one*10+hundred;
+                  m=one*100+hundred*10+ten;
+                  if(i<New&&New<=b)num++;
+                  if(i<m&&m<=b)num++;     
+             }
+         }
+         fprintf(fp2,"%d\n",num);                     
+    }
+    fclose(fp2);
+    fclose(fp1);
+    return 0;
+}

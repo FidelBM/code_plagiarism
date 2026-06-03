@@ -1,0 +1,146 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <algorithm>
+#include <utility>
+#include <cmath>
+//#include <map>
+
+using namespace std;
+
+
+/*
+long Factorial(long val)
+{
+   long Result = 1;
+   for(long i = 2; i < val; ++i)
+   {
+      Result *= i;
+   }
+   return Result;
+}
+
+
+long Combination(long N, long R)
+{
+     return (Factorial(N) / ((Factorial(N-R) * Factorial(R));
+}
+*/
+
+int shiftOneDigit(int a, int Ndigit)
+{
+	int lastDigit=a%10;
+	return lastDigit*(int)(pow(10.0,double(Ndigit-1)))+(a-lastDigit)/10;
+}
+
+
+
+int countPair(int start, int end)
+{
+   int Ndigit= log10((double) start)+1;
+   int Ntotal=end-start+1;
+   int Npair=0;
+   //cout<<"Ndigit= "<<Ndigit<<endl;
+   int *count=new int[Ndigit];
+   vector<int> shift;
+
+   for(int i=0; i<Ndigit; i++)
+   {
+	   count[i]=0;
+	   //cout<<count[i]<<endl;
+   }
+
+   for(int i=start; i<=end; i++ )
+   {
+	   shift.push_back(i);
+	   int n=0;
+	   int temp=i;
+       for(int id=1; id<Ndigit; id++)
+	   {    
+			temp=shiftOneDigit(temp, Ndigit);
+	        if(temp<=end && temp>=start)
+			{
+				int j=0;
+				// make sure it won't duplicate after shift
+				while(j<shift.size() && temp!=shift[j])
+				{
+	                j++;
+			//		cout<<j<<endl;
+				}
+			//	cout<<"outj="<<j<<endl;
+				if(j==shift.size()) 
+				{
+					n++;
+					shift.push_back(temp);
+				}
+			}	
+	   }
+	   shift.clear();
+
+	   //cout<<"n="<<n<<endl;
+	   count[n]++;
+	   //cout<<"count[n]="<<count[n]<<endl;
+   }
+
+   Npair=Ntotal-count[0];
+   for (int i=1; i<Ndigit; i++)
+   {
+       Npair+=count[i]*(i-1);
+   }
+   Npair=Npair/2;
+
+   //cout<<"Npair="<<Npair<<endl;
+
+   return Npair;
+}
+
+
+
+
+
+int main()
+{
+  int num_case;
+  string line;
+  string inFileName, outFileName;
+  cout<<"input data file name:"<<endl;
+  cin>>inFileName;
+  cout<<"input output file name:"<<endl;
+  cin>>outFileName;
+  
+
+  ifstream in_file(inFileName.c_str());
+  ofstream out_file(outFileName.c_str());
+
+  in_file>>num_case;
+  getline(in_file, line);//ignore 1st line
+  //cout<<num_case<<" test cases "<<endl;
+    
+  int caseNum=1;
+  int start=0;
+  int end=0;
+  int Npair=0;
+
+  
+  
+  while (getline(in_file, line))
+  {
+	  istringstream sline(line);
+      sline>>start;
+      sline>>end;
+
+      int count=0;
+      int temp=0;
+
+	  Npair=countPair(start,end);
+
+
+      out_file<<"Case #"<<caseNum<<": "<< Npair <<endl;        
+      line.clear(); 
+	
+      caseNum++;       
+  }    
+    return 1;    
+}

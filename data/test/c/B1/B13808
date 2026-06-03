@@ -1,0 +1,93 @@
+
+/*  File: container.h
+ *  Date: 12 Sep 06
+ *  Rev: 25 Sep 07
+ *
+ *  Container class declarations and prototypes - version 2
+ */
+
+#ifndef CONTAINER_H
+#define CONTAINER_H
+
+#include <stdlib.h>
+#include "common.h"
+#include "entry.h"
+#include <iostream>
+using namespace std;
+
+const int MAXCONTAINER = 7;
+
+typedef int Position;
+class ContainerIterator;
+
+class Container {
+
+public:
+
+	// constructors
+	Container();
+	~Container();
+
+	// accessors
+	bool isempty() const;
+	bool isfull() const;
+	int size() const;
+	Entry get(Position p) const;
+
+	// mutators
+	void clear();
+		// clear the container to empty
+	void traverse(void(*Visit)(Entry));
+		// apply Visit to each element in the container
+	void insert(Entry x, Position p = -1 );
+		// add a new node with data x at position p (-1 is end
+		// of container)
+	Entry remove(Position p = -1);
+		// remove node at position p returning its data
+	void replace(Entry x, Position p);
+		// replace data at position p with x
+	bool operator==(const Container &other) const;
+	bool operator!=(const Container &other) const;
+	
+	// iterator 
+	ContainerIterator Start() const;
+	ContainerIterator End() const;
+
+	friend ostream& operator<<(ostream& s, const Container &a);
+
+private:
+
+	int count;
+	Entry elements[MAXCONTAINER];
+	void verify(int x, int lo, int hi, const char *msg) const;
+
+	//helper functions
+	void init_to_empty();
+	void destroy_elements();
+	
+};
+
+ostream& operator<<(ostream& s, const Container &a);
+
+class ContainerIterator {
+public:
+	ContainerIterator(); // construct an "empty" iterator
+	
+	Entry operator*() const; // return current item in container
+
+	//compare iterators
+	int operator==(const ContainerIterator& it) const;
+	int operator!=(const ContainerIterator& it) const;
+
+	ContainerIterator operator++(); //prefix
+	ContainerIterator operator++(int); //postfix
+
+private:
+	Entry *next;	//pointer to next element in container
+	friend ContainerIterator Container::Start() const;
+	friend ContainerIterator Container::End() const;
+	
+};
+#include "container_inl.h"
+#endif
+

@@ -1,0 +1,56 @@
+#include "Input.h"
+#include <QDebug>
+#include <cstdio>
+
+const QString& Input::readLine()
+{
+    static QString line;
+    line.clear();
+    char c = getchar();
+    while( c != '\n' )
+    {
+        line += c;
+        c = getchar();
+    }
+    return line;
+}
+
+
+int Input::readInteger()
+{
+    return readLine().toInt();
+}
+
+
+QList<unsigned long long> Input::readIntegers()
+{
+    static QString line;
+    static QList<QString> stringIntegers;
+    static QList<unsigned long long> integers;
+    line = readLine();
+    stringIntegers = line.split( " " );
+    integers.clear();
+    foreach( const QString stringInt, stringIntegers )
+        integers.push_back( stringInt.toULongLong() );
+    return integers;
+}
+
+
+double Input::readDouble()
+{
+    return readLine().toDouble();
+}
+
+
+QList<double> Input::readDoubles()
+{
+    static QString line;
+    static QList<QString> stringDoubles;
+    static QList<double> doubles;
+    line = readLine();
+    stringDoubles = line.split( " " );
+    doubles.clear();
+    foreach( const QString stringInt, stringDoubles )
+        doubles.push_back( stringInt.toDouble() );
+    return doubles;
+}

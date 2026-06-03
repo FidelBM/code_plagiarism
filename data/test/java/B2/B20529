@@ -1,0 +1,54 @@
+import java.util.Scanner;
+
+/*
+ * Google Code Jam 2012
+ * Program by Tommy Ludwig
+ * Problem: Recycled Numbers (large dataset)
+ * Date: 2012-04-14
+ * Time: 18:30 (PM) EST
+ */
+
+
+public class recycle_big {
+	public static void main(String[] args) {
+		Scanner in = new Scanner(System.in);
+		int T = in.nextInt();
+		
+		for (int i = 1; i <= T; i++) {
+			int A, B, n, m, y = 0;
+			A = in.nextInt();
+			B = in.nextInt();
+			
+			for (m = B; m > A; m--) {
+				boolean skip = true;
+				int lastN = 0;
+				String strM = String.valueOf(m);
+				
+				for (int x = 1; x < strM.length(); x++) {
+					if (Integer.valueOf(strM.substring(x, x+1)) != 0 && Integer.valueOf(strM.substring(x, x+1)) <= Integer.valueOf(strM.substring(0, 1))) {
+						skip = false;
+						break;
+					}
+				}
+				if (skip) continue;
+				
+				//mutate m to make a valid n
+				for (int l = 1; l < strM.length(); l++) {
+					String sub = strM.substring(l);
+					
+					String strN = sub + strM.substring(0, l);
+					n = Integer.valueOf(strN);
+					
+					//check that n is within bounds
+					//check for duplicate pairs
+					//check for leading zeros in strN
+					if (n >= A && n < m && n != lastN && strN.equalsIgnoreCase(String.valueOf(n))) {
+						y++;
+						lastN = n;
+					}
+				}
+			}
+			System.out.printf("Case #%d: %d\n", i, y);
+		}
+	}
+}

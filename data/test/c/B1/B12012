@@ -1,0 +1,79 @@
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <iostream>
+#include <algorithm>
+#include <vector>
+using namespace std;
+
+#define mpair make_pair
+#define pii pair<int,int>
+#define MM(a,b) memset(a,b,sizeof(a));
+typedef long long lld;
+typedef unsigned long long u64;
+template<class T> bool up_max(T& a,const T& b){return b>a? a=b,1 : 0;}
+template<class T> bool up_min(T& a,const T& b){return b<a? a=b,1 : 0;}
+#define maxn
+
+int len;
+int Min_num(char *s){
+    int i=0, j=1, k=0, t;
+    while( i<len && j<len && k<len ){
+        t= s[ (i+k)%len ] - s[ (j+k)%len ];
+        if(0==t) { ++k; continue; }
+        if(t>0) i+= k+1;
+        else j+= k+1;
+        if(i==j) ++j;
+        k= 0;
+    }
+    return i<j ? i : j;
+}
+bool ok(int x,int y){
+    char cx[10], cy[10];
+    int i= 0;
+    while(x) cx[i++]= x%10 + '0', x/= 10;
+    cx[i]= '\0';
+    reverse( cx, cx+len );
+    i= 0;
+    while(y) cy[i++]= y%10 + '0', y/= 10;
+    cy[i]= '\0';
+    reverse( cy, cy+len );
+
+    int sx, sy;
+    sx= Min_num( cx );
+    sy= Min_num( cy );
+    char x1[10], x2[10];
+    copy(cx+sx,cx+len,x1);
+    copy(cx,cx+sx,x1+len-sx);
+    x1[len]= '\0';
+    copy(cy+sy,cy+len,x2);
+    copy(cy,cy+sy,x2+len-sy);
+    x2[len]= '\0';
+    return (strcmp( x1, x2 )==0) ;
+}
+
+int main()
+{
+    freopen("C-small-attempt0.in","r",stdin);
+    freopen("C-small-attempt0.out","w",stdout);
+    int T,a,b,TT=0;
+    cin>>T;
+    while(T--){
+        cin>>a>>b;
+        int ans= 0;
+        int i,j;
+        len= 0;
+        int tt= a;
+        while(tt) tt/= 10, ++len;
+
+        for(i=a+1;i<=b;++i){
+            int t= 0;
+            char mm[10];
+            for(j=a;j<i;++j){
+                if( ok( j, i ) ) ++t;
+            }
+            ans+= t;
+        }
+        printf("Case #%d: %d\n", ++TT, ans);
+    }
+}

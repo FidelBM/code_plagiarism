@@ -1,0 +1,51 @@
+#include <iostream>
+#include <stdio.h>
+#include <string>
+using namespace std;
+
+int tran(int n,int num){
+	int x=num,y=0;
+	while(x){
+	    x/=10;
+	    y++;
+	}
+	int p=1,q=1;
+	while(y--){
+	    p*=10;
+	}
+	while(n--){
+	    q*=10;
+	}
+	return (num%q)*(p/q)+num/q;
+}
+
+int main(){
+freopen("C-small-attempt0.in","r",stdin);
+freopen("out.txt","w",stdout);
+	int i,j,k,t,a,b,ans,h;
+	scanf("%d",&t);
+	for(i=1;i<=t;i++){
+ 	    ans = 0;
+ 	    scanf("%d%d",&a,&b);
+  	    for(j=a;j<=b;j++){
+ 		    int x=j,y=0;
+ 		    while(x){
+ 			    x/=10;
+ 			    y++;
+			}
+			int su[21];
+ 		    for(k=1;k<y;k++){
+	  		    int z = tran(k,j);
+	  		    su[k] = z;
+	  		    for(h=1;h<k;h++){
+				    if(z==su[h])
+				        break;
+				}
+	  		    if(z>j && z<=b && h==k){
+	  		        ans++;
+				}
+			}
+		}
+		printf("Case #%d: %d\n",i,ans);
+ 	}
+} 

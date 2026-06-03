@@ -1,0 +1,488 @@
+#include <iostream>
+#include <sstream>
+#include <cstdio>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <string>
+#include <vector>
+#include <deque>
+#include <stack>
+#include <queue>
+#include <list>
+#include <map>
+#include <set>
+
+using namespace std;
+typedef long long ll;
+#define sz(a)  int((a).size())
+#define pb  push_back
+#define all(c)  (c).begin(),(c).end()
+#define tr(c,i)  for(typeof((c).begin()) i=(c).begin(); i!=(c).end(); i++)
+#define rep(var,n)  for(int var=0;var<(n);var++)
+#define found(s,e)  ((s).find(e)!=(s).end())
+
+typedef pair<int,int> ii;
+
+//#include "cout.h"
+
+int gcd(int x, int y) {
+  if (x<0) x=-x; if (y<0) y=-y;
+  while(x) swap(x, y%=x);
+  return y;
+}
+
+int ub(ii x) {
+  if (x.second == 1) return x.first + 1;
+  return (x.first + x.second - 1) / x.second;
+}
+int lb(ii x) {
+  if (x.second == 1) return x.first - 1;
+  return x.first / x.second;
+}
+double dou(ii x) {
+  return ((double)x.first)/x.second;
+}
+
+void add(ii& x, ii& y) { // x += y
+  int n = x.first * y.second + x.second * y.first;
+  int d = x.second * y.second;
+  int g = gcd(n,d); if (d < 0) g = -g;
+  x.first = n/g; x.second = d/g;
+}
+void sub(ii& x, ii& y) { // x -= y
+  int n = x.first * y.second - x.second * y.first;
+  int d = x.second * y.second;
+  int g = gcd(n,d); if (d < 0) g = -g;
+  x.first = n/g; x.second = d/g;
+}
+void mul(ii& x, ii& y) { // x *= y
+  int n = x.first * y.first;
+  int d = x.second * y.second;
+  int g = gcd(n,d); if (d < 0) g = -g;
+  x.first = n/g; x.second = d/g;
+}
+void div(ii& x, ii& y) { // x /= y
+  int n = x.first * y.second;
+  int d = x.second * y.first;
+  int g = gcd(n,d); if (d < 0) g = -g;
+  x.first = n/g; x.second = d/g;
+}
+void mns(ii& x) { // x = -y
+  if (x.second < 0) {
+    x.second = -x.second;
+  } else {
+    x.first = -x.first;
+  }
+}
+bool equ(ii& x, ii& y) {
+  return x.first * y.second == x.second * y.first;
+}
+
+#define F_THRU    0
+#define F_REFLECT 1
+#define F_BACK    2
+#define F_DESTROY 4
+#define F_ON_ME   8
+
+int at_corner(int corner, int dx, int dy, bool is_vertical) {
+  int flags = F_THRU;
+
+  switch (corner) {
+    case 10:
+      if (is_vertical) flags |= F_REFLECT;
+      break;
+    case 5:
+      if (!is_vertical) flags |= F_REFLECT;
+      break;
+    case 3:
+      if (dx > 0 && dy < 0) flags |= F_DESTROY;
+      else if (dx < 0 && dy > 0) flags |= F_BACK;
+      break;
+    case 9:
+      if (dx > 0 && dy > 0) flags |= F_DESTROY;
+      else if (0 > dx && 0 > dy) flags |= F_BACK;
+      break;
+    case 6:
+      if (dx < 0 && dy < 0) flags |= F_DESTROY;
+      else if (dx > 0 && dy > 0) flags |= F_BACK;
+      break;
+    case 12:
+      if (dx < 0 && dy > 0) flags |= F_DESTROY;
+      else if (dx > 0 && dy < 0) flags |= F_BACK;
+      break;
+    case 15: // thru
+    default:
+      break;
+  }
+
+  return flags;
+}
+
+#define DINF 99999999
+
+main(){
+  int _T; cin>>_T; //1-100
+  rep(_t,_T){
+    int H,W; cin>>H>>W; // 3-30
+    int D; cin>>D; //1-50
+    vector<string> M(H);
+    rep(h,H) cin>>M[h];
+
+    int mx,my;
+#ifdef DEBUG
+    printf("H=%d, W=%d; D=%d;\n", H,W,D);
+#endif
+    rep(y,H) {
+      rep(x,W) if (M[y][x]=='X') { mx=x; my=y; }
+#ifdef DEBUG
+      cout << M[y] << endl;
+#endif
+    }
+#ifdef DEBUG
+    printf("me: (%d,%d)\n", mx, my);
+#endif
+    //printf("gcd(15,12)=%d\n", gcd(15,12));
+
+    vector<vector<ii> > hseg(H+1); // hseg[y][]
+    vector<vector<ii> > vseg(W+1); // vseg[x][]
+    vector<vector<int> > cor(W+1, vector<int>(H+1, 0));
+
+    rep(y,H) rep(x,W) {
+      if (M[y][x] != '#') continue;
+
+      cor[x][y] ^= 9;
+      cor[x+1][y] ^= 12;
+      cor[x][y+1] ^= 3;
+      cor[x+1][y+1] ^= 6;
+
+      if (y>0 && M[y-1][x] != '#') {
+        hseg[y].pb(ii(x,x+1));
+      }
+      if (y<H-1 && M[y+1][x] != '#') {
+        hseg[y+1].pb(ii(x,x+1));
+      }
+      if (x>0 && M[y][x-1] != '#') {
+        vseg[x].pb(ii(y,y+1));
+      }
+      if (x<W-1 && M[y][x+1] != '#') {
+        vseg[x+1].pb(ii(y,y+1));
+      }
+    }
+
+    int ans = 0;
+    // right
+    for (int x=mx+1; x<W; x++) {
+      if (M[my][x]=='#') {
+        if ((x-mx)*2-1 <= D) ans++;
+        break;
+      }
+    }
+    // left
+    for (int x=mx-1; x>=0; x--) {
+      if (M[my][x]=='#') {
+        if ((mx-x)*2-1 <= D) ans++;
+        break;
+      }
+    }
+    // down
+    for (int y=my+1; y<H; y++) {
+      if (M[y][mx]=='#') {
+        if ((y-my)*2-1 <= D) ans++;
+        break;
+      }
+    }
+    // left
+    for (int y=my-1; y>=0; y--) {
+      if (M[y][mx]=='#') {
+        if ((my-y)*2-1 <= D) ans++;
+        break;
+      }
+    }
+
+    //D = 50;
+    set<ii> dir;
+    for (int dy=-D; dy<=D; dy++) {
+      if (dy==0) continue;
+      for (int dx=-D; dx<=D; dx++) {
+        if (dx==0) continue;
+        int g = gcd(dx,dy);
+        int x = dx/g, y=dy/g;
+        if (x*x + y*y <= D*D)
+          dir.insert(make_pair(x,y));
+      }
+    }
+    //printf("candid: %d\n", (int)dir.size());
+    //exit(0);
+    //vector<ii> dir(all(dir_s));
+    //cout << dir << endl;
+
+    int bns = 0;
+
+    ii mx_(mx*2+1,2); // mx + 1/2
+    ii my_(my*2+1,2); // my + 1/2
+
+    tr(dir,it) {
+      double dtotal = 0;
+      ii d(it->second, it->first);
+      ii lx(mx_);
+      ii ly(my_);
+      // dx(y-my) = dy(x-mx)
+      // (dy)x + (-dx)y + (-dy.mx + dx.my) = 0
+#ifdef DEBUG
+      printf(" DIR (%d,%d)...\n", d.second,d.first);
+#endif
+      for (int z=0;;++z) {
+#ifdef DEBUG
+        printf(" %d) (%g,%g)+(%d,%d)\n", z, dou(lx),dou(ly), d.second,d.first);
+#endif
+        double dmin = DINF; ii xlx(0,0), xly(0,0), xd(0,0);
+
+        bool on_me = false;
+        double dme = DINF;
+        if (z > 0) {
+          // (lx,ly) + (d.second, d.first)
+          // (dmx, dmy) = (mx_ - lx, my_ - ly)
+          ii dmx(mx_); sub(dmx,lx);
+          ii dmy(my_); sub(dmy,ly);
+          ii r_(1,1); mul(r_,dmy); div(r_,dmx);
+          int g = gcd(d.second, d.first); if (d.second<0) g=-g;
+          ii d_(d.first/g, d.second/g);
+          if (equ(r_, d_)) {
+            on_me = true;
+            double _x = dou(mx_) - dou(lx);
+            double _y = dou(my_) - dou(ly);
+            dme = sqrt(_x*_x + _y*_y);
+            // printf("  ON ME ??? %g\n", dme);
+          }
+        }
+
+        // 左右方向
+        int x0, x1, xs;
+        if (d.second>0) { // dx > 0
+          x0 = ub(lx); x1 = W; xs = 1;
+        } else {
+          x0 = lb(lx); x1 = -1; xs = -1;
+        }
+        for (int x=x0; x!=x1; x+=xs) {
+          // y = ly + (x - lx) * d
+          ii y(x,1); sub(y,lx); mul(y,d); add(y,ly);
+          // printf("  at x=%d, x-lx = %d-%g, dy/dx = %d/%d, y=%d/%d\n", x, x,dou(lx), d.first,d.second, y.first,y.second);
+          double dix = dou(lx) - x, diy = dou(ly) - dou(y);
+          double dis = sqrt(dix*dix + diy*diy);
+
+          tr(vseg[x],st) {
+            int y0 = st->first, y1 = st->second;
+
+            // printf("  %g on (%d,%d)-(%d-%d)\n", dou(y), x,y0, x,y1);
+            int flags = F_THRU;
+            //if (y.second < 0) { y.second = -y.second; y.first = -y.first; }
+            if (y.second == 1 && (y.first == y0 || y.first == y1)) {
+              // printf(" cor[%d][%d] = %d\n", x, y.first, cor[x][y.first]);
+              flags = at_corner(cor[x][y.first], d.second, d.first, true);
+              if (flags == F_THRU) continue;
+            } else if (y0*y.second < y.first && y.first < y1*y.second) {
+              flags |= F_REFLECT;
+            }
+            
+            if (on_me && dme <= dis) {
+              if (dme < dmin) {
+                // printf("  <on_me> %g/%g\n", dme, dis);
+                flags |= F_ON_ME;
+                dmin = dme;
+                xd = make_pair(0,0);
+                xlx = mx_; xly = my_;
+              }
+              break;
+            }
+
+            if (flags & F_DESTROY) {
+#ifdef DEBUG
+              printf("   | destroyed at corner (%d,%g),%g on (%d,%d)-(%d-%d)\n",
+                     x,dou(y), dtotal+dis, x,y0, x,y1);
+#endif
+              if (dis < dmin) {
+                dmin = dis;
+                xd = make_pair(0,1);
+                xlx = ii(x,1); xly = y;
+              }
+              break;
+            }
+
+            if (flags & F_BACK) {
+              if (dis < dmin) {
+#ifdef DEBUG
+                printf("   | backing at (%d,%g),%g on (%d,%d)-(%d-%d)\n",
+                       x,dou(y), dtotal+dis,
+                       x,y0, x,y1);
+#endif
+                dmin = dis;
+                xd = make_pair(0,2);
+                ///xd = make_pair(-d.first, -d.second);
+                xlx = ii(x,1); xly = y;
+              }
+              break;
+            }
+            if (flags & F_REFLECT) {
+              if (dis < dmin) {
+#ifdef DEBUG
+                printf("   | reflecting at (%d,%g),%g on (%d,%d)-(%d-%d)\n",
+                       x,dou(y), dtotal+dis,
+                       x,y0, x,y1);
+#endif
+                dmin = dis;
+                xd = make_pair(d.first, -d.second);
+                xlx = ii(x,1); xly = y;
+              }
+              break;
+            }
+            //printf("    no cross w/(%d,%d)-(%d-%d) ;; y=%g\n", x,y0, x,y1, dou(y));
+          }
+        }
+
+        // 上下方向
+        int y0, y1, ys;
+        if (d.first > 0) { // dy > 0
+          y0 = ub(ly); y1 = H; ys = 1;
+        } else {
+          y0 = lb(ly); y1 = -1; ys = -1;
+        }
+        for (int y=y0; y!=y1; y+=ys) {
+          // (x - lx) = (dx/dy)(y - ly)
+          ii x(y,1); sub(x,ly); div(x,d); add(x,lx);
+          // printf("  at y=%d, y-ly = %d-%g, dx/dy = %d/%d, x=%d/%d\n", y, y,dou(ly), d.second,d.first, x.first,x.second);
+          double dix = dou(lx) - dou(x), diy = dou(ly) - y;
+          double dis = sqrt(dix*dix + diy*diy);
+          
+          tr(hseg[y],st) {
+            int x0 = st->first, x1 = st->second;
+
+              // printf("  %g on (%d,%d)-(%d-%d)\n", dou(y), x,y0, x,y1);
+            int flags = F_THRU;
+            //if (x.second < 0) { x.second = -x.second; x.first = -x.first; }
+            if (x.second == 1 && (x.first == x0 || x.first == x1)) {
+              flags = at_corner(cor[x.first][y], d.second, d.first, false);
+              if (flags == F_THRU) continue;
+            } else if (x0*x.second < x.first && x.first < x1*x.second) {
+              flags |= F_REFLECT;
+            }
+
+            if (on_me && dme <= dis) {
+              // printf("  <on_me> %g/%g\n", dme, dis);
+              if (dme < dmin) {
+                flags |= F_ON_ME;
+                dmin = dme;
+                xd = make_pair(0,0);
+                xlx = mx_; xly = my_;
+              }
+              break;
+            }
+            
+            if (flags & F_DESTROY) {
+#ifdef DEBUG
+              printf("   - destroyed at corner (%g,%d),%g on (%d,%d)-(%d-%d)\n",
+                     dou(x),y, dtotal+dis, x0,y, x1,y);
+#endif
+              if (dis < dmin) {
+                dmin = dis;
+                xd = make_pair(0,1);
+                xlx = x; xly = ii(y,1);
+              }
+              break;
+            }
+
+            if (flags & F_BACK) {
+              if (dis < dmin) {
+#ifdef DEBUG
+                printf("   - backing at (%g,%d),%g on (%d,%d)-(%d-%d)\n",
+                       dou(x),y, dtotal+dis,
+                       x0,y, x1,y);
+#endif
+                dmin = dis;
+                xd = make_pair(0,2);
+                ///xd = make_pair(-d.first, -d.second);
+                xlx = x; xly = ii(y,1);
+              }
+              break;
+            }
+            if (flags & F_REFLECT) {
+              if (dis < dmin) {
+#ifdef DEBUG
+                printf("   - reflecting at (%g,%d),%g on (%d,%d)-(%d-%d)\n",
+                       dou(x),y, dtotal+dis,
+                       x0,y, x1,y);
+#endif
+                dmin = dis;
+                xd = make_pair(-d.first, d.second);
+                xlx = x; xly = ii(y,1);
+              }
+              break;
+            }
+            //printf("    no cross w/(%d,%d)-(%d-%d) ;; x=%g\n", x0,y, x1,y, dou(x));
+          }
+        }
+
+
+        if (xd.first == 0) {
+          bool fin = false;
+          switch (xd.second) {
+            case 0: // on me
+              dtotal += dme;
+              if (dtotal <= D) {
+#ifdef DEBUG
+                printf(" has image at (%d,%d) <ON ME>. %g <= %d\n", it->first,it->second, dtotal, D);
+                printf("  ZZZ(%d,%d) ON ME (possible). %g <= %d\n",
+                       it->second, it->first,
+                       dtotal, D);
+#endif
+                bns++;
+              } else {
+#ifdef DEBUG
+                printf("  ON ME (impossible). %g > %d\n", dtotal, D);
+#endif
+              }
+              fin = true;
+              break;
+            case 1: // destroyed
+              fin = true;
+              break;
+            case 2: // back
+              dtotal += dmin;
+              dtotal *= 2;
+              if (dtotal <= D) {
+#ifdef DEBUG
+                printf(" has image at (%d,%d) <BACK>. %g <= %d\n", it->first,it->second, dtotal, D);
+                printf("  ZZZ(%d,%d) BACK (possible). %g <= %d\n",
+                       it->second, it->first,
+                       dtotal, D);
+#endif
+                bns++;
+              } else {
+#ifdef DEBUG
+                printf("  BACK (impossible). %g > %d\n", dtotal, D);
+#endif
+              }
+              fin = true;
+              break;
+            default:
+              break;
+          }
+          if (fin) break;
+        }
+
+        dtotal += dmin;
+        //printf("dmin = %g\n", dmin);
+        if (dtotal <= D) {
+          d = xd; lx = xlx; ly = xly;
+        } else {
+          break;
+        }
+      }
+    }
+#ifdef DEBUG
+    printf("\n");
+    printf("Case #%d: %d+%d\n", 1+_t, ans,bns);
+#endif
+    printf("Case #%d: %d\n", 1+_t, ans+bns);
+  }
+}

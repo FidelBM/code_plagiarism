@@ -1,0 +1,45 @@
+package egWo;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Scanner;
+import java.util.Set;
+
+public class Cl {
+	public static void main(String[] args) {
+		Scanner in = new Scanner(System.in);
+		int T = in.nextInt();
+
+		for (int l = 1; l <= T; l++) {
+			in.nextLine();
+			int n = in.nextInt();
+			int m = in.nextInt();
+			int count = 0;
+			for (int i = n; i < m; i++) {
+				int uv = 0;
+				for (int j = 1000000; j >= 1; j = j / 10) {
+					if (m / j > 0 && m / j < 10) {
+						uv = j;
+					}
+				}
+				ArrayList revI = new ArrayList();
+				int s = 10;
+				for (int c = uv; c >= 10; c = c / 10) {
+					int h = i / c;
+					int t = i % c;
+					int rev = (t * s) + h;
+					s *= 10;
+					revI.add(rev);
+				}
+				Set set = new HashSet(revI);
+				for (Object j : set) {
+					if (i < ((Integer) j).intValue()
+							&& ((Integer) j).intValue() <= m) {
+						count++;
+					}
+				}
+			}
+			System.out.format("\nCase #%d: %d", l, count);
+		}		
+	}
+}

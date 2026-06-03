@@ -1,0 +1,205 @@
+/*
+
+Name: Takvir Hossain Tusher
+E-Mail : tusher205@gmail.com
+
+*/
+
+#include <cstring>
+#include <string>
+#include <map>
+#include <deque>
+#include <queue>
+#include <stack>
+#include <sstream>
+#include <iostream>
+#include <iomanip>
+#include <cstdio>
+#include <cmath>
+#include <cstdlib>
+#include <ctime>
+#include <algorithm>
+#include <vector>
+#include <set>
+#include <complex>
+#include <list>
+
+using namespace std;
+
+#define rep(i,m) for(int i=0;i<(int)(m);i++)
+#define rep2(i,n,m) for(int i=n;i<(int)(m);i++)
+
+#define SMALL
+//#define LARGE
+
+#ifdef SMALL
+    #define N_MAX 6
+#endif
+#ifdef LARGE
+    #define N_MAX 100
+#endif
+
+int T;
+multimap<int,int> refMap;
+
+bool checkValue(int k, int v){
+    if (refMap.count(k) <= 0)
+        return false;
+    else{
+        multimap<int,int>::const_iterator it;
+        pair<multimap<int,int>::iterator, multimap<int,int>::iterator> ii;
+        ii = refMap.equal_range(k);
+        for(it = ii.first; it != ii.second; ++it){
+            if(it->second == v)
+                return true;
+        }
+    }
+
+    return false;
+}
+
+bool checkMap(int k, int v){
+    if( k == v)
+        return true;
+
+    if (checkValue(k,v))
+        return true;
+    else if (checkValue(v,k))
+        return true;
+    else
+        return false;
+}
+
+int getDigits(int n){
+    if (n <= 9)
+        return 1;
+    else if((n/10) <10)
+        return 2;
+    else if((n/10) <100)
+        return 3;
+    else if((n/10) <1000)
+        return 4;
+    else if((n/10) <10000)
+        return 5;
+    else if((n/10) <100000)
+        return 6;
+    else if((n/10) <1000000)
+        return 7;
+    else
+        return 0;
+}
+
+int getX(int n, int digits){
+    switch(digits){
+        case 2:
+            n = n*10;
+            break;
+        case 3:
+            n = n*100;
+            break;
+        case 4:
+            n = n*1000;
+            break;
+        case 5:
+            n = n*10000;
+            break;
+        case 6:
+            n = n*100000;
+            break;
+        case 7:
+            n = n*1000000;
+            break;
+        default:
+            n = 0;
+    }
+    return n;
+}
+
+int getY(int digits){
+    int n = 0;
+    switch(digits){
+        case 2:
+            n = 11;
+            break;
+        case 3:
+            n = 111;
+            break;
+        case 4:
+            n = 1111;
+            break;
+        case 5:
+            n = 11111;
+            break;
+        case 6:
+            n = 111111;
+            break;
+        case 7:
+            n = 1111111;
+            break;
+        default:
+            n = 1;
+    }
+    return n;
+}
+
+int shiftDigit(int n, int digits){
+    int last_d = n%10;
+    int d = n/10;
+    return getX(last_d,digits)+d;
+}
+
+int recycle(int n, int digits, int min, int max){
+    int count =0;
+    int shift = n;
+
+    rep2(i,1,digits){
+        shift = shiftDigit(shift, digits);
+        if (shift < min || shift > max)
+            continue;
+        if(!checkMap(n,shift)){
+            refMap.insert(pair<int,int>(n,shift));
+            count++;
+        }
+    }
+
+    return count;
+}
+
+int main() {
+#ifdef SMALL
+	freopen("C-small-attempt1.in","rt",stdin);
+	freopen("C-small.out","wt",stdout);
+#endif
+#ifdef LARGE
+	freopen("C-large-practice.in","rt",stdin);
+	freopen("C-large.out","wt",stdout);
+#endif
+
+    int min, max;
+	cin >> T;
+	rep2(nn,1,T+1) {
+        cin>>min>>max;
+
+        int digits = getDigits(max);
+        int count = 0;
+
+		printf("Case #%d: ", nn);
+        refMap.clear();
+
+		if (max <= 11)
+            cout<<count<<endl;
+        else{
+            rep2(nn,min,max+1){
+                int x = getX(1,digits);
+                int y = getY(digits);
+                if ((nn%x) == 0 || (nn%y) == 0)
+                    continue;
+
+                count += recycle(nn,digits,min,max);
+            }
+            cout<<count<<endl;
+        }
+
+	}
+	return 0;
+}

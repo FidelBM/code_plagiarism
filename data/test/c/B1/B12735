@@ -1,0 +1,91 @@
+/*
+ * Solver.cpp
+ *
+ *  Created on: Mar 17, 2012
+ *      Author: dasc
+ */
+
+#include "Solver.h"
+#include <iostream>
+#include <algorithm>
+#include <map>
+#include <sstream>
+
+Solver::Solver() {
+}
+
+Solver::~Solver() {
+}
+
+void SolveCase(InputData &inputData, std::vector<OutputData> &outputs)
+{
+	OutputData outputData;
+
+	std::stringstream ss;
+
+	ss.clear();
+	ss << inputData.A;
+	std::string A = ss.str();
+
+	ss.clear();
+	ss << inputData.B;
+	std::string B;
+
+	outputData.numberOfPairs = 0;
+
+	//std::cout << inputData.A << " " << inputData.B << std::endl;
+
+	std::string iAsString;
+	std::string mAsString;
+	std::string movedChunk;
+
+	std::map<int, std::vector<int>> catchDoubles;
+
+	for(int i = inputData.A; i <= inputData.B; i++)
+	{
+		std::ostringstream oss;
+		oss << i;
+		iAsString = oss.str();
+
+		for(unsigned int recycleTry = 1; recycleTry < iAsString.size(); recycleTry++)
+		{
+			mAsString = iAsString.substr(iAsString.size() - recycleTry, recycleTry);
+			movedChunk = iAsString.substr(0, iAsString.size() - recycleTry);
+			mAsString.append(movedChunk);
+			int m = 0;
+			std::istringstream issM(mAsString);
+			issM >> m;
+
+			if((inputData.A <= i) && (i < m) && (m <= inputData.B))
+			{
+				auto it = catchDoubles.find(i);
+				if(it != catchDoubles.end())
+				{
+					auto vec = (*it).second;
+
+					if(std::find(vec.begin(), vec.end(), m)!=vec.end())
+					{
+						//std::cout << "DOPPIONE" << std::endl;
+						continue;
+					}
+
+					vec.push_back(m);
+				}
+
+				outputData.numberOfPairs++;
+				//std::cout << i << " " << m << " " << outputData.numberOfPairs << std::endl;
+				catchDoubles[i] = std::vector<int> {m};
+			}
+		}
+	}
+
+	outputs.push_back(outputData);
+}
+
+void Solver::Solve(std::vector<InputData> &inputs, std::vector<OutputData> &outputs)
+{
+	for(auto data : inputs)
+	{
+		SolveCase(data, outputs);
+	}
+}

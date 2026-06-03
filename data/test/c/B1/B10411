@@ -1,0 +1,88 @@
+#include<iostream>
+#include<stdio.h>
+#include<string.h>
+#include<string>
+#include<algorithm>
+using namespace std;
+
+bool n[2000001];
+
+string int_string(int a, int lenth) {
+    int i;
+    string s = "";
+    for(i = 0;i < lenth;i++) {
+        s += char((a % 10) + '0');
+        a /= 10;
+    }
+    reverse(s.begin(), s.end());
+    return s;
+}
+
+int string_int(string s) {
+    int i;
+    int tmp = 1;
+    int a = 0;
+    for(i = s.size() - 1;i >= 0;i--) {
+        a += int(s[i] - '0') * tmp;
+        tmp *= 10;
+    }
+    return a;
+}
+
+int int_lenth(int a) {
+    int lenth = 0;
+    if(!a) return 1;
+    while(a) {
+        a /= 10;
+        lenth++;
+    }
+    return lenth;
+}
+
+
+int main() {
+    FILE* f = fopen("PC.txt", "w");
+    int T, A, B, ans;
+    int i, j, count = 1, tmp, lenth;
+    string s;
+    int a;
+    char c;
+    
+    cin >> T;
+    while(T--) {
+        memset(n, 0, sizeof(n));
+        ans = 0;
+        cin >> A >> B;
+        /*
+        if(A == B) {
+            cout << "Case #" << count++ << ": " << ans << endl;
+            continue;
+        }
+        */
+        lenth = int_lenth(B);
+        for(i = A;i <= B;i++) {
+            if(!n[i]) {
+                n[i] = true;
+                tmp = 1;
+                a = i;
+                for(j = 0;j < lenth;j++) {
+                    s = int_string(a, lenth);
+                    c = s[0];
+                    s.erase(0, 1);
+                    s += c;
+                    a = string_int(s);
+                    if(a <= B && a >= A) {
+                        if(!n[a]) {
+                            n[a] = true;
+                            tmp++;
+                        }
+                    }
+                }
+                ans += tmp * (tmp - 1) / 2;
+                if(ans > 1111111111) cout << "%%%";
+            }
+        }
+        cout << "Case #" << count << ": " << ans << endl;
+        fprintf(f, "Case #%d: %d\n", count++, ans);
+    }
+}

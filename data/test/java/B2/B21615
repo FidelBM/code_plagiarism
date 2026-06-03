@@ -1,0 +1,131 @@
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Scanner;
+
+public class C {
+	static long[] ten;
+
+	public static void main(String[] args) throws IOException {
+		initializeTens();
+
+		Scanner in = new Scanner(new FileReader("input.in"));
+		BufferedWriter bw = new BufferedWriter(new FileWriter("output"));
+
+		int T = in.nextInt(), start, end;
+		for (int i = 1; i <= T; i++) {
+			start = in.nextInt(); end = in.nextInt();
+			int ans = cntPairs(start, end);
+			bw.write("Case #" + i + ": " + ans);
+			bw.newLine();
+		}
+
+		bw.close();
+		System.out.println("end");
+	}
+
+	private static int cntPairs(int start, int end) {
+		boolean[] v = new boolean[end+1];
+		
+		int cnt = 0;
+		for(int i = start; i <= end; i++)
+			if(!v[i])
+				cnt += getPairs(i, start, end, v);
+		
+		return cnt;
+	}
+
+	private static int getPairs(int n, int start, int end, boolean[] v) {
+		HashSet<Integer> set = new HashSet<Integer>();
+		
+		int len = getLength(n), cnt = 0;
+		v[n] = true;
+		
+		for (int i = 1; i < len; i++) {
+			long num = n * ten[i];
+			num = num + n / ten[len - i];
+			num = num % ten[len];
+
+			int res = (int) num;
+			if (res >= start && res <= end && len == getLength(res) && !v[res] && !set.contains(res)){
+				set.add(res);
+				cnt++;
+			}
+		}
+		return cnt;
+	}
+
+	public static int getLength(int n) {
+		return (int) (Math.log10(n) + 1e-6) + 1;
+	}
+
+	private static void initializeTens() {
+		ten = new long[8];
+		ten[1] = 10;
+		for (int i = 2; i < ten.length; i++)
+			ten[i] = 10 * ten[i - 1];
+	}
+}
+
+/*
+Case #1: 2498449
+
+ *
+ */
+
+/*
+Case #1: 615
+Case #2: 0
+Case #3: 680
+Case #4: 732
+Case #5: 622
+Case #6: 536
+Case #7: 0
+Case #8: 721
+Case #9: 719
+Case #10: 0
+Case #11: 730
+Case #12: 560
+Case #13: 590
+Case #14: 742
+Case #15: 596
+Case #16: 738
+Case #17: 604
+Case #18: 662
+Case #19: 670
+Case #20: 6
+Case #21: 614
+Case #22: 640
+Case #23: 684
+Case #24: 757
+Case #25: 608
+Case #26: 697
+Case #27: 780
+Case #28: 646
+Case #29: 776
+Case #30: 199
+Case #31: 624
+Case #32: 602
+Case #33: 748
+Case #34: 728
+Case #35: 6
+Case #36: 628
+Case #37: 718
+Case #38: 634
+Case #39: 674
+Case #40: 609
+Case #41: 0
+Case #42: 695
+Case #43: 637
+Case #44: 0
+Case #45: 744
+Case #46: 1
+Case #47: 36
+Case #48: 801
+Case #49: 192
+Case #50: 724
+*/

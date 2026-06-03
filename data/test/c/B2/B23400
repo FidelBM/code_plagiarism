@@ -1,0 +1,40 @@
+#include <iostream>
+#include <stdio.h>
+#include <algorithm>
+#include <vector>
+#include <cstring>
+#include <cmath>
+
+using namespace std;
+
+int main()
+{
+    int t,j;
+	long a,b,i,k,len, temp, tmp1, tmp2;
+    long ans;
+    scanf("%d", &t);
+    j=1;
+    while(t--)
+    {
+		scanf("%ld%ld", &a,&b);
+		ans=0;
+		for(i=a;i<b;i++)
+		{
+			k=i;
+			for(len=0;k>0;len++,k/=10);
+			for(k=1;k<len;k++)
+			{
+				tmp1 = pow(10,k);
+				tmp2 = pow(10,len-k);
+				temp = (i/tmp1 + tmp2*(i%tmp1));
+				if(temp<=b&&i<temp)
+				{
+					ans++;
+				}
+			}
+		}
+    	printf("Case #%d: %ld\n", j, ans);
+    	j++;
+    }
+    return 0;
+}

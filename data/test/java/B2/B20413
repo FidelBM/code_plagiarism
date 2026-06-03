@@ -1,0 +1,154 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
+
+public class Numbers {
+	
+	private static int [][] input;
+	private static int [] output;
+	
+	public static void main(String [] args) throws NumberFormatException, IOException{
+		
+		readData();
+		output = new int [input.length];
+		
+		for (int i=0 ; i< input.length ; i++){
+			output[i] = numberOfPairs(input[i][0], input[i][1]);
+		}
+		
+		writeData();
+	}
+
+	public static int numberOfPairs(int a, int b){
+		int r=0;
+		
+		for (int i=a ; i<=b ; i++ )
+		{
+			
+			String A = Integer.toString( i );
+			int f = flip(A);
+			int f2 = flip2(A);
+			int f3 = flip3(A);
+			int f4 = flip4(A);
+			int f5 = flip5(A);
+			int f6 = flip6(A);
+			
+			if ( i<f && a<=f && f<=b ){
+				r++;
+			
+			}
+			if (i>100){
+				if ( i<f2 && a<=f2 && f2<=b && f2 !=f ){
+					r++;
+				
+				}
+			}
+			
+			if (i>1000){
+				
+				if ( i<f3 && a<=f3 && f3<=b && f2 !=f && f3 != f2 && f3 != f){
+					r++;
+			
+						}			
+				}	
+			if (i>10000){
+				
+				if ( i<f4 && a<=f4 && f4<=b && f2 !=f && f3 != f2 && f3 != f && f4 !=f3 && f4!= f2 && f4 !=f )
+					r++;
+				}
+			if (i>100000){
+				
+				if ( i<f5 && a<=f5 && f5<=b && f2 !=f && f3 != f2 && f3 != f && f4 !=f3 && f4!= f2 && f4 !=f
+						&& f5 != f4 && f5 != f3 && f5!= f2 && f5 !=f)
+					r++;
+				}
+			if (i>1000000){
+				
+				if ( i<f6 && a<=f6 && f6<=b && f2 !=f && f3 != f2 && f3 != f && f4 !=f3 && f4!= f2 && f4 !=f
+						&& f5 != f4 && f5 != f3 && f5!= f2 && f5 !=f && f6 !=f5 && f6 != f4 && f6 != 3 && f6 != f2
+						&& f6 !=f )
+					r++;
+				}
+			
+		}
+		return r;
+		
+	}
+	
+	public static int flip(String A){
+		
+		if(A.length() < 2)
+			return 0;
+		String ans = A.substring( 1)+ A.substring( 0, 1 );
+		return Integer.parseInt( ans );
+	
+	}
+	public static int flip2(String A){
+		if(A.length() <3 )
+			return 0;
+	
+	String ans = A.substring( 2)+ A.substring( 0, 2 );
+	return Integer.parseInt( ans );
+
+	}
+	
+	public static int flip3(String A){
+		if(A.length() < 4)
+			return 0;
+		
+		String ans = A.substring( 3)+ A.substring( 0, 3 );
+		return Integer.parseInt( ans );
+
+		}
+	public static int flip4(String A){
+		if(A.length() < 5)
+			return 0;
+		String ans = A.substring( 4)+ A.substring( 0, 4 );
+		return Integer.parseInt( ans );
+
+		}
+	public static int flip5(String A){
+		if(A.length() <6 )
+			return 0;
+		
+		String ans = A.substring( 5)+ A.substring( 0, 5 );
+		return Integer.parseInt( ans );
+
+		}
+	public static int flip6(String A){
+		if(A.length() < 7)
+			return 0;
+		
+		String ans = A.substring( 6)+ A.substring( 0, 6 );
+		return Integer.parseInt( ans );
+
+		}
+	
+	public static void readData() throws NumberFormatException, IOException{
+		FileReader fr = new FileReader("Input.txt");
+		BufferedReader br = new BufferedReader(fr);
+		int numberOfInputs = Integer.parseInt( br.readLine() );
+		input = new int [numberOfInputs][2];
+		for (int i = 0; i<numberOfInputs ; i++  ){
+			String [] numbers = ((String)(br.readLine())).split( " " );   
+			for (int j = 0 ; j<2 ;j++){
+				input [i][j] =  Integer.parseInt(numbers [j]);
+			}
+		}
+		br.close();
+	}
+	
+	public static void writeData() throws IOException{
+		FileWriter fw = new FileWriter("Output.txt");
+		BufferedWriter bw = new BufferedWriter(fw);
+		for (int i = 0; i< output.length ; i++ ){
+			String out = "Case #" +(i+1) +": "+ output[i];
+			bw.write( out );
+			bw.newLine();
+		}
+		bw.close();
+	}
+}

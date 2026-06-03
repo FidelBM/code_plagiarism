@@ -1,0 +1,48 @@
+//Program question at: http://code.google.com/codejam/contest/1460488/dashboard#s=p2
+#include <cstdio>
+using namespace std;
+
+inline void inc(int* num)
+{
+	int i=2;
+	while(num[i] == 9) num[i--]=0;
+	num[i]++;
+}
+
+inline int form(int* D, int n, int c)
+{
+	int num=0,a;
+	for(a=c+n;a<3;a++) num = num*10 + D[a];
+	for(a=c;a<c+n;a++) num = num*10 + D[a];
+	return num;
+}
+
+int main()
+{
+	int t; scanf("%d\n",&t);
+	for(int cas=1;cas<=t;cas++)
+	{
+		int A,B; scanf("%d %d",&A,&B);
+		if(B == 1000) B = 999;
+		if(A < 12) A=12;
+		if(A >= B) { printf("Case #%d: 0\n",cas); continue; }
+		int D[3]; D[0] = D[1] = D[2] = 0;
+
+		int len=2,i=2,ans=0, tmp = A;
+		if(A >= 100) len=3;
+		while(tmp) { D[i--] = tmp%10; tmp/=10; }	// initializing digits array
+
+		for(;A<B;inc(D),A++)
+		{
+			if(A>=100) len=3;
+			for(int n=1;n<len;n++)
+			{
+				if( !D[3-len+n] ) continue;
+				int nn = form(D,n,3-len);
+				if( nn > A && nn <= B) ans++;
+			}
+		}
+		printf("Case #%d: %d\n",cas,ans);
+	}
+	return 0;
+}

@@ -1,0 +1,68 @@
+#include<stdio.h>
+#include<string.h>
+#include <sstream>
+#include<algorithm>
+#include<map>
+#include<iostream>
+
+using namespace std;
+
+map<pair<int,int>, int> mp;
+
+int main(void){
+
+    int x, y;
+    int T;
+
+    freopen("C-small-attempt0.in","r",stdin);
+    freopen("C-small-attempt0.out","w",stdout);
+    scanf("%d",&T);
+    for(int t = 0; t<T; t++)
+    {
+        scanf("%d%d",&x,&y);
+        int cnt = 0;
+        for(int i = x; i<=y; i++)
+        {
+            string str;
+            stringstream s;
+
+            s << i;
+            str = s.str();
+        //cout << str << endl;
+            int sz = str.size();
+            string tmp = "";
+
+            for(int k = 0; k<sz - 1; k++)
+            {
+                tmp += str[k];
+
+                string tmp1 = "";
+                for(int j = k + 1; j<sz; j++)
+                {
+                    tmp1 += str[j];
+                }
+
+                string ans = tmp1 + tmp;
+                stringstream ss;
+                ss.str(ans);
+                int a;
+                ss >> a;
+
+                if(a>=x && a<=y && a>i)
+                {
+
+                    pair<int, int > p = make_pair(i,a);
+                    if(mp[p] != 1)
+                    {
+                        mp[p] = 1;
+                        cnt++;
+                        //cout << a << endl;
+                    }
+                }
+            }
+        }
+        printf("Case #%d: %d\n",t + 1, cnt);
+        mp.clear();
+    }
+    return 0;
+}

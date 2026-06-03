@@ -1,0 +1,100 @@
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.io.*;
+
+/**
+ *
+ * @author virginia
+ *
+ */
+public class RecycledNumbers {
+	public static Long countn(Long v)
+	{
+		Long count=0L;
+		while (v> 0 && count<10 )
+			{
+				   Long r = v % 10;
+					count++;
+				   v = v / 10;
+	        }
+	        return count;
+		}
+ public static void main(String[] args) {
+
+ try {
+   BufferedReader br = new BufferedReader(new FileReader("C-large.in"));
+   BufferedWriter output=new BufferedWriter(new FileWriter("Output.txt"));
+  PrintWriter pw = new PrintWriter(output);
+
+int n = Integer.parseInt(br.readLine());
+ Long[][] result = new Long[n][2];
+
+ String line;
+ int a= 0;
+ while ((line = br.readLine()) != null) {
+  String[] tokens = line.split("\\s");
+
+  for (int j = 0; j <2; j++) {
+   result[a][j] = Long.parseLong(tokens[j]);
+  }
+
+  a++;
+ }
+   int index = 0;
+
+   for(int i =0; i < n; i++)
+   {
+	    int found=0;
+								index++;
+							   Long A=result[i][0];
+							   Long B=result[i][1];
+							   for(Long j=A;j<=B;j++)
+							   {
+											  int cnt=0;
+											  Long num=j;
+											  while (num> 0 && cnt<10 )
+												{
+													   Long r = num % 10;
+														cnt++;
+													   num = num / 10;
+
+												}
+												Long num1=j;
+												Long num2=j;
+												int p=cnt-1;
+												int r=0;
+												do
+												{
+													cnt--;
+													Long s=(num1)%10;
+													num2=num2/10;
+													num1=(long)(s*Math.pow(10,(p)))+(num2);
+
+													num2=num1;
+
+													if(RecycledNumbers.countn(j)==RecycledNumbers.countn(num1))
+													{
+													if((A<=j)&&(j<num1)&&(num1<=B))
+													{
+
+														 found++;
+												}}
+												 }while(cnt>0);
+								  }
+   pw.print("Case #" + index + ": ");
+   pw.println(found);
+   System.out.print("Case #" + index + ": ");
+   System.out.println(found);
+   }
+   output.close();
+  } catch (FileNotFoundException e) {
+   e.printStackTrace();
+  } catch (IOException e) {
+   e.printStackTrace();
+  }
+ }
+}

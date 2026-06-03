@@ -1,0 +1,77 @@
+#include <assert.h>
+#include <ctype.h>
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <time.h>
+#include <algorithm>
+#include <numeric>
+#include <functional>
+#include <bitset>
+#include <vector>
+#include <list>
+#include <set>
+#include <map>
+#include <queue>
+#include <stack>
+#include <deque>
+#include <string>
+#include <sstream>
+#include <iostream>
+#include <limits.h>
+#include <valarray>
+using namespace std;
+
+int numberLen(int n) {
+	int cnt = 0;
+	while (n) {
+		n /= 10;
+		++cnt;
+	}
+	return cnt;
+}
+
+inline bool recycledPair(int n, int m) {
+	if (n == m)
+		return false;
+	int a = n;
+	int zero = 0;
+	do {
+		int back = a % 10;
+		a /= 10;
+		if (back == 0) {
+			++zero;
+			continue;
+		}
+		int front = pow(10.0, numberLen(a) + zero) * back;
+		zero = 0;
+		a += front;
+		if (a == m) return true;
+	} while (a != n);
+	return false;
+}
+
+int main() {
+	//freopen("in.txt", "r", stdin);
+	//freopen("out.txt", "w", stdout);
+	int T; cin >> T;
+	for (int c = 1; T--; ++c) {
+		int A, B; cin >> A >> B;
+		if (B < A) swap(A, B);
+		int res = 0;
+		for (int a = A; a <= B; ++a)
+			for (int b = a + 1; b <= B; ++b) {
+				int aLen = numberLen(a);
+				int bLen = numberLen(b);
+				if (bLen > aLen) break;
+				if (bLen < aLen) continue;
+				if (aLen == bLen) {
+					if (recycledPair(a, b))
+						++res;
+				}
+			}
+		printf("Case #%d: %d\n", c, res);
+	}
+	return 0;
+}

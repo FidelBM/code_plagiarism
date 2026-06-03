@@ -1,0 +1,111 @@
+#include <vector>
+#include <list>
+#include <map>
+#include <set>
+#include <deque>
+#include <queue>
+#include <stack>
+#include <bitset>
+#include <algorithm>
+#include <functional>
+#include <numeric>
+#include <utility>
+#include <sstream>
+#include <iostream>
+#include <iomanip>
+#include <cstdio>
+#include <cmath>
+#include <cstdlib>
+#include <cctype>
+#include <string>
+#include <cstring>
+#include <cstdio>
+#include <cmath>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+const int MAX_SIZE = 20000001;
+int n,m,ans,len;
+int mark[MAX_SIZE];
+vector <long> str;
+
+int getLen(int a){
+	int n_=a;
+	int l=0;
+	while(n_){
+		l++;
+		n_/=10;
+	}
+	return l;
+}
+
+int getHigh(int len,int i,int index){
+	return i/(int)pow(10,len-index);
+}
+int getLow(int len,int i,int index){
+	return i%(int)pow(10,len-index);
+}
+
+int isHave(int nn,long s){
+	int i,ii;
+	ii=mark[nn];
+	if(ii!=0){
+		for(i=ii;i<ans;i++){
+			if(str[i]==s){
+				return 0;
+			}
+		}
+	}
+	mark[nn]=ans;
+	str.push_back(s);
+	ans++;
+	return 1;
+}
+
+void search(int num){
+	int i,j;
+
+	for(i=1;i<len;i++){
+		int t=getHigh(len,num,i)+getLow(len,num,i)*pow(10,i);
+		if(t>num&&t>=n&&t<=m){
+			char ss[10]={0};
+			sprintf(ss,"%d%d",num,t);
+		
+			long tt=atol(ss);
+			if(isHave(num,tt)){
+			//	cout<<"("<<num<<","<<t<<") ";
+			}
+		
+		}
+
+	}
+}
+int solve(){
+	int i,j;
+	len=getLen(n);
+	for(i=n;i<=m;i++){
+		search(i);
+	}
+	return ans;
+}	
+
+
+int main()
+{
+	//freopen("C.in","r",stdin);
+	//freopen("C.out","w",stdout);
+	int T,Case,i;
+	cin>>T;
+	Case=1;
+	while(Case<=T){
+		cout<<"Case #"<<Case++<<": ";
+		memset(mark,0,sizeof(mark));
+		str.clear();
+		ans=0;
+		cin>>n>>m;
+		solve();
+		cout<<ans<<endl;
+	}
+	return 0;
+}

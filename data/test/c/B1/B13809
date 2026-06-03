@@ -1,0 +1,80 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include "container.h"
+#include <iostream>
+#include <string>
+using namespace std;
+
+#define MAX 7
+
+void insert_dig(Container *a, char n[MAX]);
+void switch_dig(Container *a);
+main()
+{
+	Container a, b, c;
+	c.insert('0');
+	int cases;
+	char n[MAX];
+	char m[MAX];
+	char ch[MAX];
+	int case_count, match;
+	match = 0;
+	cin >> cases;
+	case_count = 1;
+	while(case_count <= cases)
+	{
+		cin >> n;
+		cin >> m;
+
+		int start = atoi(n);
+		int end = atoi(m);
+		if(end >= 10)
+		{
+		for(int i = start; i <= end; i++)
+		{
+			sprintf(ch,"%d",i);
+			insert_dig(&a, ch);
+		for(int j = i+1; j <= end; j++)
+		{
+			sprintf(ch,"%d",j);
+			insert_dig(&b,ch);
+			if(a == b)
+				match++;	
+			else
+			{
+				bool good = false;
+				c = b;
+				switch_dig(&b);
+				while(b != c && !good)
+				{
+					if(a == b)
+					{
+						match++;
+						good = true;
+					}
+					else
+						switch_dig(&b);
+				}	
+			}
+		}
+		}	
+		}		
+		cout << "Case #" << case_count << ": " << match << endl;
+		match = 0;
+		case_count++;
+	}
+}
+
+void insert_dig(Container *a, char n[MAX])
+{
+	a->clear();
+	for(int i = 0; n[i] != '\0'; i++)
+		a->insert(n[i]);	
+}
+	
+void switch_dig(Container *a)
+{
+	Entry x;
+	x = a->remove(0);
+	a->insert(x);
+}

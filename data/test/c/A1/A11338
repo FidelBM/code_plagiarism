@@ -1,0 +1,95 @@
+#include <iostream>
+#include <string>
+#include <cstring>
+#include <sstream>
+#include <map>
+#include <vector>
+#include <cmath>
+
+using namespace std;
+
+
+int main() {
+
+	int T;
+	cin >> T;
+
+	vector<pair<bool, bool> > canBe;
+
+
+	for(int t=0; t < T; ++t){
+		int N; cin >> N;
+		int S; cin >> S;
+		int P; cin >> P;
+
+		canBe.clear();
+
+		for(int i=0; i < N; ++i){
+			int googler; cin >> googler;
+
+			canBe.push_back(pair<bool,bool>(false,false)); //Norm Sup
+
+			for(int a=0; a <= 10; ++a)
+				for(int b=0; b <= 10; ++b)
+					for(int c=0; c <= 10; ++c){
+						if(a + b + c == googler && abs(a-b) <= 2 && abs(a-c) <= 2 && abs(b-c) <= 2 && c >= P){
+							if(abs(a-b) < 2 && abs(a-c) < 2 && abs(b-c) < 2){
+								canBe[canBe.size()-1].first = true;
+							}
+							else{
+								canBe[canBe.size()-1].second = true;
+							}
+						}
+					}
+		}
+
+		int result = 0;
+		if(S == 0){
+			for(int i=0; i < canBe.size(); ++i)
+				if(canBe[i].first == true)
+					++result;
+		}
+		else if(S == 1){
+			int tmpres = 0;
+			for(int s=0; s < canBe.size(); ++s){
+				tmpres = 0;
+				if(canBe[s].second == true)
+					++tmpres;
+					for(int i=0; i < canBe.size(); ++i){
+						if(i != s && canBe[i].first == true)
+							++tmpres;
+					}
+					result = max(tmpres, result);
+			}
+		}
+		else if(S == 2){
+			int tmpres = 0;
+			for(int ns=0; ns < canBe.size(); ++ns){
+				tmpres = 0;
+				if(canBe[ns].first == true)
+					++tmpres;
+					for(int i=0; i < canBe.size(); ++i){
+						if(i != ns && canBe[i].second == true)
+							++tmpres;
+					}
+					result = max(tmpres, result);
+			}
+		}
+		else{	//3
+			for(int i=0; i < canBe.size(); ++i)
+				if(canBe[i].second == true)
+					++result;
+		}
+
+
+		cout << "Case #" << t+1 << ": " << result << endl;
+
+	}
+
+
+
+
+	return 0;
+}
+
+

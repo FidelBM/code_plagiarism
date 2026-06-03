@@ -1,0 +1,85 @@
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <vector>
+
+using namespace std;
+
+int result[50];
+string prvTmp[50];
+
+
+int parseInt(string a)
+{
+    stringstream ss(a);
+    int i;
+    ss >> i;
+    return i;
+}
+
+string toString(int a)
+{
+    ostringstream oss;
+    oss << a;
+    return oss.str();
+}
+
+string solve(string a, int size)
+{
+    string tmp = a.substr(a.length()-size, a.length());
+    tmp += a.substr(0,a.length()-size);
+    return tmp;
+}
+
+int main()
+{
+    string tmp,strA;
+    ifstream in("input");
+    ofstream out("output");
+    int t=0,nMin,num=2000000,nuMax=0;
+    int min[50];
+    int max[50];
+    in >> t;
+    for(int i=0; i<t; i++)
+    {
+        in >> min[i];
+        in >> max[i];
+        if(min[i] < num) num = min[i];
+        if(max[i] > nuMax) nuMax = max[i];
+        prvTmp[i] = "";
+    }
+    nMin=num;
+    for(int j=0;j<=(nuMax- nMin); j++)
+    {
+        strA = toString(num);
+        for(int k=1;k<strA.length();k++)
+        {
+            tmp = solve(strA, k);
+            for(int i=0;i<t;i++)
+            {
+                if(num < min[i] || num > max[i])
+                {
+                }
+                else if(parseInt(tmp) <= max[i] && parseInt(tmp) >= min[i] && parseInt(tmp) > parseInt(strA))
+                {
+                    if(tmp.compare(prvTmp[i]) != 0)
+                    {
+                        result[i]++;
+                        prvTmp[i] = tmp;
+                    }
+                }
+            }
+        }
+        for(int i=0;i<t;i++)
+            prvTmp[i] = "";
+        tmp = "";
+        num++;
+    }
+    for(int i=0;i<t;i++)
+    {
+        out << "Case #" << i+1 << ": " << result[i] << endl;
+    }
+    in.close();
+    out.close();
+    return 0;
+}

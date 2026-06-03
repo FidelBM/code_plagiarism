@@ -1,0 +1,236 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+
+using namespace std ;
+int main()
+{
+  vector<int> v ;
+  int i , j , k , l  ;
+  int t ;
+  int n ;
+  int s ;
+  int b ;
+  int m ;
+  int temp ;
+  int q , r ;
+  int c ;
+  int as = 0;
+  int ps = 0;
+  cin>>t ;
+  for(i = 0 ; i<t ; i++)
+     {      
+               as = 0 ;
+               ps = 0 ;     
+	       m = 0 ;
+	       cin>>n ;
+	       cin>>s ;
+	       cin>>b ;
+	       for(j = 0 ; j<n ; j++)
+		 {
+			cin>>temp ;
+			v.push_back(temp) ;
+		  }
+		 sort(v.begin(),v.end()) ;
+		 for(l = 0 ; l<v.size() ; l++)
+                 {
+                      q = v[l]/3 ;
+		      r = v[l]%3 ;
+		           if(v[l] >= 2 && v[l] <= 28)
+		           {
+			      if(r == 0)
+		              {
+		              
+		                 if(q+1 >= b)
+				 as++ ;
+		                 
+		                 
+		               }
+		               else if(r == 1)
+		               {
+		                 
+				  if(q+1 >= b)
+		                   as++ ;
+		                }
+		                else if(r == 2)
+		          	 {
+		                   if(q+2 >= b)
+				    as++ ;
+		                  }
+		                  
+			          ps++ ;
+                              }
+                         
+                                   
+
+			
+
+                    }        
+
+
+
+
+
+
+                 for(k = v.size()-1 ; k>=0;k--)
+	           {
+                      q=v[k]/3 ;
+		        r=v[k]%3 ;
+		     if(v[k] >=2 && v[k]<= 28)
+                      {
+	               
+                        if(s != 0)
+                        {
+			    if(r == 2)
+                             { 
+                               c = q+1 ;
+                                if(c+1>=b && c>=b )
+			        {
+                                   m++ ;
+                                   if(as == s )
+				    {
+                                       s-- ;
+                                       as-- ;
+                                     }
+                                     else if(as>s)
+                                       as-- ;
+                                     else if(as<s)
+                                       {
+                                          as-- ;
+                                          s-- ; 
+                                        }
+                                  }
+                                  else if(c+1 >= b && c<b)
+                                  {
+                                         m++ ;
+                                         as-- ;
+				         s-- ;
+                                   }
+                                   else if(c+1 < b && as<s)
+                                   {
+                                         s-- ;
+                                    }
+			       }
+			      else if(r == 1)
+			      {
+				 c= q+1 ;
+                                if(c+1>=b && c>=b )
+			        {
+                                   m++ ;
+                                   if(as == s )
+				    {
+                                       s-- ;
+                                       as-- ;
+                                     }
+                                     else if(as>s)
+                                       as-- ;
+                                     else if(as<s)
+                                       {
+                                          as-- ;
+                                          s-- ; 
+                                        }
+                                  }
+                                  else if(c+1 >= b && c<b)
+                                  {
+                                         m++ ;
+                                         as-- ;
+				         s-- ;
+                                   }
+                                   else if(c+1 < b && as<s)
+                                   {
+                                         s-- ;
+                                    }
+                                    
+				       
+			         }
+			       
+                                 else if(r == 0)
+                                 {
+ 				                   c= q ;
+				                               if(c+1>=b && c>=b )
+						              {  
+								   m++ ;
+								   if(as == s )
+								    {
+								       s-- ;
+								       as-- ;
+								     }
+								     else if(as>s)
+								       as-- ;
+								     else if(as<s)
+								       {
+								          as-- ;
+								          s-- ; 
+								        }
+								  }
+								  else if(c+1 >= b && c<b)
+								  {
+								         m++ ;
+								         as-- ;
+									 s-- ;
+								   }
+								   else if(c+1 < b && as<s)
+								   {
+								         s-- ;
+								    }  
+                                       ps-- ;             
+				    }
+                                   
+
+	   		    }		
+                           
+                           else if(s == 0)
+                            {
+		                         if(r == 1||r==2)
+		                        {  
+						    c= q+1 ;
+				                if(c>=b)
+						{
+				                   m++ ;
+					          
+					         }
+			                 }  
+                                         else if(r == 0)
+                                         {
+ 				                   c= q ;
+				                if(c>=b)
+						{
+				                   m++ ;
+					        
+					         }
+			                 } 
+                                      ps-- ; 
+                              }
+
+                            
+                       }
+                       else if(v[k] > 28)
+                            m++ ;
+                       else if(v[k] < 2)
+                       {
+                               
+				 if(r == 1)
+		                        {  
+						    c= q+1 ;
+				                if(c>=b)
+						{
+				                   m++ ;
+					 
+					         }
+			                 }  
+                                         else if(r == 0)
+                                         {
+ 				                   c= q ;
+				                if(c>=b)
+						{
+				                   m++ ;
+					 
+					         }
+			                 }  
+                         }                         
+                       }   
+	               cout<<"Case #"<<i+1<<": "<<m<<endl;
+                        
+                   v.clear() ;
+          }
+}

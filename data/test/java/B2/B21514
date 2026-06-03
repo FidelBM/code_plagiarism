@@ -1,0 +1,29 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
+public class Problem3_D {
+
+	public static void main(String[] args) throws FileNotFoundException {
+
+		Scanner scanner = new Scanner(new File("C-large.in"));
+		int num = scanner.nextInt();
+		for (int count = 1; count <= num; count++) {
+			int ii = scanner.nextInt();
+			int jj = scanner.nextInt();
+			int counter = 0;
+			for (int i = ii; i <= jj; i++) {
+				String s2 = "" + i;
+				for (int k = 0; k <= s2.length(); k++) {
+					String a = s2.substring(0, k);
+					String b = s2.substring(k, s2.length());
+					int j = Integer.parseInt(b + a);
+					if (j > i && j <= jj)
+						counter++;
+
+				}
+			}
+			System.out.println("Case #" + count + ": " + counter);
+		}
+	}
+}

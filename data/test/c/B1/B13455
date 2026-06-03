@@ -1,0 +1,23 @@
+#include <iostream>
+#include <string>
+#include "input.h"
+
+int main(int argc, char **argv)
+{
+   if( argc < 1 )
+   {
+      std::cout << "Usage: " << std::endl;
+      std::cout << "./codejam filename " << std::endl;
+      return 0;
+   }
+
+   // Input file name
+   std::string inputFile(argv[argc-1]);
+
+
+   Input input(inputFile);
+   if( !input.failed() )
+   {
+	   input.processCases();
+   }
+}

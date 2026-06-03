@@ -1,0 +1,49 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.InputStreamReader;
+
+
+public class rec2 {
+	public static void main(String args[]) throws Exception{
+		FileInputStream fs = new FileInputStream("input2.txt");
+	    DataInputStream in = new DataInputStream(fs);
+	    BufferedReader br=new BufferedReader(new InputStreamReader(in));
+	    FileWriter fstream = new FileWriter("output3.txt");
+		BufferedWriter out = new BufferedWriter(fstream);
+		int T=Integer.parseInt(br.readLine());
+	    for(int i=0;i<T;i++){
+	    	int temp=0;
+	    	long[] found=new long[10000000];
+	    	int count=0;
+	    	String str=br.readLine();
+	    	String str1[]=str.split(" ");
+	    	int nod=str1[1].length();
+	    	int A=Integer.parseInt(str1[0]);
+	    	int B=Integer.parseInt(str1[1]);
+	    	for(int x=A;x<=B;x++){
+	    		if(found[x]!=1){
+	    			int t=1;
+	    			int a=x;
+	    			found[a]=1;
+	    			int n1=nod-1;
+	    			for(int k=0;k<n1;k++){
+	    				int b=((a%10)*((int)Math.pow(10,n1)))+(a/10);
+	    				if(b!=x && found[b]!=1 && b<=B && A<=b){
+	    					t++;
+	    					found[b]=1;
+	    				}
+	    				a=b;	    			
+	    			}
+	    			count=count+((t*(t-1))/2);
+	    		}
+	    	}
+	    	out.write("Case #"+(i+1)+": "+count);
+			out.newLine();
+	    }
+	    out.close();
+		br.close();
+	   }
+}

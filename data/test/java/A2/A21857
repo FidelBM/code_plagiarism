@@ -1,0 +1,28 @@
+import java.io.*;
+import java.math.*;
+class Main{
+	public static void main(String[] args)throws Exception{	
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		String u=br.readLine();
+		int i,j,t,n,s,p,tp,a,c;
+		t=Integer.valueOf(u);
+		for(i=1;i<=t;i++){
+			String v=br.readLine();
+			String[] vs=v.split(" ");
+			n=Integer.valueOf(vs[0]);
+			s=Integer.valueOf(vs[1]);
+			p=Integer.valueOf(vs[2]);
+			a=0;
+			c=0;
+			for(j=3;j<n+3;j++){
+				tp=Integer.valueOf(vs[j]);
+				switch(tp){
+					case 0: if(p==0){a++;};break;
+					case 1: if(p<=1){a++;};break;
+					default: if(p<=(tp+2)/3){a++;} else {if(p<=(tp+4)/3){c++;}};
+				}
+			}
+			System.out.printf("Case #%d: %d%n",i,a+Math.min(s,c));
+		}
+	}
+}

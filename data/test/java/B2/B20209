@@ -1,0 +1,72 @@
+import java.io.*;
+import java.util.*;
+
+public class Recycled {
+    public static class Pair {
+        public String a;
+        public String b;
+
+        public Pair(String a, String b) {
+            this.a = a;
+            this.b = b;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            Pair pair = (Pair) o;
+
+            if (a != null ? !a.equals(pair.a) : pair.a != null) return false;
+            if (b != null ? !b.equals(pair.b) : pair.b != null) return false;
+
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = a != null ? a.hashCode() : 0;
+            result = 31 * result + (b != null ? b.hashCode() : 0);
+            return result;
+        }
+    }
+
+    public static void main(String[] args) {
+        try {
+            BufferedReader in = new BufferedReader(new FileReader("C-large.in"));
+            PrintWriter out = new PrintWriter(new FileWriter("C-large.out"));
+
+            int cases = Integer.valueOf(in.readLine().trim());
+            for (int i =0; i < cases; i++) {
+                StringTokenizer st = new StringTokenizer(in.readLine().trim());
+                int a = Integer.valueOf(st.nextToken().trim());
+                int b = Integer.valueOf(st.nextToken().trim());
+                int pairs = solve(a, b);
+                out.println(String.format("Case #%d: %d", i+1, pairs));
+            }
+            in.close();
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static int solve(int a, int b) {
+        Set<Pair> pairs = new HashSet<Pair>();
+        String aStr = String.valueOf(a);
+        String bStr = String.valueOf(b);
+        int digits = aStr.length();
+        for (int i = a; i < b; i++) {
+            String iStr = String.valueOf(i);
+            String s = iStr+iStr;
+            for (int j = 0; j < digits; j++) {
+                String recycled = s.substring(j, j + digits);
+                if (recycled.compareTo(iStr) > 0 && recycled.compareTo(bStr) <= 0) {
+                    pairs.add(new Pair(iStr, recycled));
+                }
+            }
+        }
+        return pairs.size();
+    }
+}

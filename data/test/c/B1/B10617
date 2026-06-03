@@ -1,0 +1,68 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+#include <list>
+#include <map>
+#include <algorithm>
+
+int T;
+int A;
+int B;
+
+bool IsRecycle(int n, int m)
+{
+	char n_[100];
+	char m_[100];
+	itoa(n,n_,10);
+	itoa(m,m_,10);
+
+	int digit = strlen(n_);
+	for(int sp = 0; sp < digit; sp++)
+	{
+		if(n_[sp] == '0')
+			continue;
+		bool flag = true;
+		for(int i = 0; i < digit; i++)
+		{
+			int n_p = (sp + i) % digit;
+			if(n_[n_p] != m_[i])
+			{
+				flag = false;
+				break;
+			}
+		}
+		if(flag)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+int main()
+{
+	std::fstream input;
+	std::fstream output;
+	input.open( "input.txt", std::istream::in );
+	output.open("output.txt", std::ostream::out);
+
+	input >> T;
+	for(int t = 0; t < T; t++)
+	{
+		input >> A >> B;
+		int out = 0;
+		for(int n = A; n < B; n++)
+		{
+			for(int m = n + 1; m <= B; m++)
+			{
+				out += IsRecycle(n,m);
+			}
+		}
+
+		std::cout << "Case #" << t+1 << ": " << out << std::endl;
+		output << "Case #" << t+1 << ": " << out << std::endl;
+	}
+	getchar();
+	return 1;
+}

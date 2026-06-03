@@ -1,0 +1,66 @@
+// Author : Team Heisenbug
+#include <cstdio>
+#include <algorithm>
+#include <iostream>
+#include <map>
+#include <stack>
+#include <queue>
+#include <set>
+#include <vector>
+#include <cstring>
+#include <sstream>
+using namespace std;
+
+#define F first
+#define S second
+#define mp make_pair
+#define pb push_back
+typedef vector<int> VI;
+typedef vector<VI> VII;
+typedef pair<int,int> PII;
+typedef long long LL;
+int main() {
+	int T;
+	scanf("%d",&T);
+	for(int cno=1;cno<=T;cno++) {
+		int A,B;
+		scanf("%d %d", &A, &B);
+		int cnt = 0;
+		for(int n=A;n<B;n++) {
+			stringstream T;
+			T<<n;
+			string ST;
+			ST = T.str();
+			if(ST.size() == 1) {
+				// do nothing
+			}
+			else if(ST.size() == 2) {
+				int x = ST[0]-'0';
+				int y = ST[1] -'0';
+				if(y != 0) {
+					int m = 10*y + x;
+					if(n < m && m<=B)
+						cnt++;
+				}
+			}
+			else if(ST.size() == 3) {
+				int x = ST[0]-'0';
+				int y = ST[1]-'0';
+				int z = ST[2]-'0';
+				if(y!=0){
+					int m = 100*y + 10*z + x;
+					if(n < m && m<=B)
+						cnt++;
+				}
+				if(z!=0){
+					int m = 100*z + 10*x + y;
+					if(n<m && m<=B)
+						cnt++;
+				}
+			}
+		}
+		printf("Case #%d: %d\n",cno,cnt);
+	}
+	return 0;
+}
+

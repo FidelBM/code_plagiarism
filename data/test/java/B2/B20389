@@ -1,0 +1,55 @@
+import java.io.*;
+import java.util.HashMap;
+class probC{
+	public static void main(String[] args){
+		Code b=new Code();
+	}
+}
+class Code{
+	public Code(){
+		try {
+			FileWriter fstream = new FileWriter("output.txt");
+			BufferedWriter out = new BufferedWriter(fstream);
+
+			File fin = new File("C-large.in");
+			FileReader fr = new FileReader(fin);
+			BufferedReader reader = new BufferedReader(fr);
+
+			int t = Integer.parseInt(reader.readLine());
+
+			for (int qq=0;qq<t;qq++){
+
+				String soal=reader.readLine();
+				System.out.println(qq+" "+soal);
+				int jwb=0;
+
+				String[] agg=soal.split(" ");
+				int awal=Integer.parseInt(agg[0]);
+				int akhir=Integer.parseInt(agg[1]);
+
+				for (int i=awal;i<=akhir;i++){
+					String ck=i+"";
+					int pjg=ck.length();
+					int cek=Integer.parseInt(ck);
+
+					for (int j=0;j<pjg;j++){
+						if (cek>i && cek<=akhir){
+							jwb++;
+						}
+						ck=ck.substring(1)+ck.charAt(0);
+						cek=Integer.parseInt(ck);
+					}
+				}
+
+				out.write("Case #"+(qq+1)+": "+jwb+"\n");
+
+			}
+
+			reader.close();
+			out.close();
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+        }
+	}
+
+}

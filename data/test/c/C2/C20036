@@ -1,0 +1,462 @@
+#pragma once
+
+#pragma comment(linker, "/STACK:60000000")
+#define _CRT_SECURE_NO_WARNINGS
+#define _SECURE_SCL			1	// To enable checked iterators
+#define _SECURE_SCL_THROWS	1
+
+//------------------------------------------------------
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <time.h>
+#include <conio.h>
+#include <errno.h>
+#include <stdarg.h>
+
+#include <iostream>
+#include <fstream>
+
+#include <string>
+#include <vector>
+#include <map>
+
+#include <set>
+#include <list>
+#include <queue>
+#include <stack>
+#include <deque>
+
+#include <sstream>
+
+using namespace std;
+
+#ifdef NDEBUG
+#	define NODEBUG
+#	undef NDEBUG
+#endif
+#	include <assert.h>
+#	define ASSERT assert
+#ifdef NODEBUG
+#	define NDEBUG
+#endif
+
+//------------------------------------------------------
+
+//#define ACC_COMPILE_TIME_ASSERT(e)  switch(0) {case 1:case !(e):break;}
+//#define ACC_COMPILE_TIME_ASSERT(e)  {typedef int __acc_cta_t[1-2*!(e)];}
+#define ACC_COMPILE_TIME_ASSERT(e)  typedef int __acc_cta_t[1-2*!(e)]
+
+#define CT_ASSERT(e)   ACC_COMPILE_TIME_ASSERT(e)	// COMPILE_TIME_ASSERT
+
+//------------------------------------------------------
+// Different macro:
+
+#define all(a)		(a).begin(), (a).end()
+
+#define sz(a)		((int)(a).size())
+#define LEN(a)		((int)(a).length())
+
+#define last(a)		(int((a).size() - 1))
+
+#define st first
+#define nd second
+
+#define fi(it) (it)->first
+#define se(it) (it)->second
+
+#define TE iterator
+#define VAR(V,init) __typeof(init) V=(init)
+
+#define pb push_back
+#define pf push_front
+
+#define mp(a,b) make_pair(a,b)
+
+#define SZARR(arr)	(sizeof(arr)/sizeof(arr[0]))
+
+#define FOPEN(f, name, rights) f = fopen(name, rights); if(f == NULL) { printf("FOPEN failed to fopen('%s', '%s')!\n", name, rights); return 1; }
+
+//------------------------------------------------------
+// Loops:
+
+#define forab(i, i1, i2)	for(int i=(i1); i<=(int)(i2); i++)
+#define forba(i, i2, i1)	for(int i=(i2); i>=(int)(i1); i--)
+
+#define forn(i, n)			for(int i=0; i<(int)(n); i++)
+#define ford(i, n)			for(int i=(n)-1; i>=0; i--)
+
+//#define forit(it, a)		for(__typeof((a).begin()) it = (a).begin(); it != (a).end(); it++)
+#define foreach3(iter, Coll, coll) for(Coll::iterator iter = (coll).begin(); iter != (coll).end(); iter++)
+#define foreach3_const(iter, Coll, coll) for(Coll::const_iterator iter = (coll).begin(); iter != (coll).end(); iter++)
+
+//------------------------------------------------------
+// Simple Types:
+
+typedef signed   long long i64;
+typedef signed   long long int64;
+typedef unsigned long long u64;
+typedef unsigned long long uint64;
+
+typedef unsigned short ushort;
+typedef unsigned char uchar;
+
+typedef unsigned int uint;
+typedef unsigned int u32;
+typedef unsigned int uint32;
+typedef int i32;
+typedef int int32;
+
+typedef long double LD;
+typedef long double ld;
+
+CT_ASSERT(sizeof(i64) == 8);
+CT_ASSERT(sizeof(int64) == 8);
+CT_ASSERT(sizeof(u64) == 8);
+CT_ASSERT(sizeof(uint64) == 8);
+CT_ASSERT(sizeof(i32) == 4);
+CT_ASSERT(sizeof(u32) == 4);
+CT_ASSERT(sizeof(int32) == 4);
+CT_ASSERT(sizeof(uint32) == 4);
+CT_ASSERT(sizeof(int) == 4);
+CT_ASSERT(sizeof(bool) == 1);
+CT_ASSERT(sizeof(LD) == 8);
+CT_ASSERT(sizeof(ld) == 8);
+
+//------------------------------------------------------
+// STL Collections:
+
+typedef set < int > SI;
+typedef set < int64 > SI64;
+typedef vector < ld > VD;
+typedef vector < int > VI;
+typedef vector < int64 > VI64;
+typedef vector < bool > VB;
+typedef vector < string > VS;
+typedef map < string, int > MSI;
+typedef map < int, string > MIS;
+typedef map < string, string > MSS;
+typedef map < int, int > MII;
+
+typedef pair < int, int > PII;
+
+typedef vector<VI> VVI;
+typedef vector<PII> VPII;
+
+typedef istringstream ISS;
+typedef ostringstream OSS;
+
+typedef char* PCHAR;
+typedef uchar* PUCHAR;
+typedef short* PSHORT;
+typedef ushort* PUSHORT;
+typedef int* PINT;
+typedef uint* PUINT;
+typedef int64* PINT64;
+typedef uint64* PUINT64;
+
+//------------------------------------------------------
+// Constants
+
+#define ISBIT(a, i) (!!(((a) >> (i)) & 1))	// bit count from 0
+
+//const long double pi = 3.1415926535897932384626433832795;
+//const long double eps = 1e-9;
+//const int32 NIL = (-1);
+//const int32 inf = (1 << 30) - 1;
+//const int64 inf64 = ((int64)1 << 62) - 1;
+#define pi		(3.1415926535897932384626433832795)
+#define eps		(1e-9)
+#define NIL		((int32)(-1))
+#define inf		((int32)((1 << 30) - 1))
+#define inf64	((int64)(((int64)1 << 62) - 1))
+const long double log2 = log(2.0);
+
+#define MAX_uint64	((uint64)~((uint64)0))
+#define MAX_int64	((uint64)(MAX_uint64 >> 1))
+#define MIN_int64	((uint64)(~MAX_int64))
+
+CT_ASSERT(inf > 100000);
+CT_ASSERT(inf64 > 100000);
+CT_ASSERT(!ISBIT(inf, 31));
+CT_ASSERT(!ISBIT(inf, 30));
+CT_ASSERT(ISBIT(inf, 29));
+CT_ASSERT(!ISBIT(inf64, 63));
+CT_ASSERT(!ISBIT(inf64, 62));
+CT_ASSERT(ISBIT(inf64, 61));
+
+#define MAKEWORD(a, b)      ((ushort)(((uchar)(((u32)(a)) & 0xff)) | ((ushort)((uchar)(((u32)(b)) & 0xff))) << 8))
+#define MAKELONG(a, b)      ((i32)(((ushort)(((u32)(a)) & 0xffff)) | ((u32)((ushort)(((u32)(b)) & 0xffff))) << 16))
+#define LOWORD(l)           ((ushort)(((u32)(l)) & 0xffff))
+#define HIWORD(l)           ((ushort)((((u32)(l)) >> 16) & 0xffff))
+#define LOBYTE(w)           ((uchar)(((u32)(w)) & 0xff))
+#define HIBYTE(w)           ((uchar)((((u32)(w)) >> 8) & 0xff))
+
+//------------------------------------------------------
+// Popular functions:
+
+template <class T> inline T sqr(const T& a) { return a*a; }
+
+template<class T> inline int bitcount(T r) { int c = 0; while(r != 0) { c += int(r&1); r >>= 1; } return c; }
+template<class T> inline T nod(T x, T y) {return x ? nod(y%x,x) : y;}	// Greatest common divisor
+
+template <class T> inline T DIV_CEIL(const T& a, const T& b) { return a/b + (a%b ? 1 : 0); }
+
+template <class T> inline bool between(const T& x, const T& x1, const T& x2) { return x1 <= x && x <= x2; }
+
+inline int32 abs2(const int32& x) { return x >= 0 ? x : -x; }
+inline int64 abs264(const int64& x) { return x >= 0 ? x : -x; }
+inline ld fabs2(const ld& x) { return x >= 0.0 ? x : -x; }
+
+inline bool fequal(const ld& x1, const ld& x2) { return fabs2(x1) <= eps ? fabs2(x2) <= eps : fabs2((x2-x1)/x1) <= eps; }
+inline bool fequalEps(const ld& x1, const ld& x2) { return x2-eps <= x1 && x1 <= x2+eps; }
+
+#define clr(a)		memset(&(a), 0, sizeof(a))
+#define seta(a,x)	memset(&(a), x, sizeof(a))
+
+template <class T>
+inline string ToStr(const T& x) { OSS s; s << x; return s.str(); }
+
+//inline string LdToStr(const ld& x) { char b[_CVTBUFSIZE]; return _gcvt(x, 22, b); }
+//inline string LdToStr(const ld& x) { char b[200]; sprintf(b, "%.20f", x); return b; }
+inline string LdToStr(const ld& x, const int nDigitsAfterDot = 6) { char f[20]; sprintf(f, "%%.%df", nDigitsAfterDot); char b[200]; sprintf(b, f, x); return b; }
+
+//------------------------------------------------------
+
+inline std::string implode(const std::vector<std::string>& vect, const std::string& sDelim)
+{
+	std::string s;
+	//std::ostringstream stream;	// SK: it is significantly slower than std::string for some reason
+	const std::string::size_type n = vect.size();
+	for(std::string::size_type i = 0; i < n; i++)
+	{
+		if(i > 0)
+		{
+			s += sDelim;
+			//stream << sDelim;
+		}
+		s += vect[i];
+		//stream << vect[i];
+	}
+	return s;
+	//return stream.str();
+}
+
+//------------------------------------------------------
+//===========================================================================================
+//------------------------------------------------------
+
+inline void explode(std::vector<std::string>& vect, const std::string& sText, const std::string& sDelim)
+{
+	vect.clear();
+
+	if(sText.empty())
+		return;
+
+	if(sDelim.empty())
+	{
+		vect.push_back(sText);
+		return;
+	}
+
+	std::string::size_type pos = 0;
+	while(true)
+	{
+		const std::string::size_type pos2 = sText.find(sDelim, pos);
+		if(std::string::npos == pos2)
+		{
+			vect.push_back(sText.substr(pos));
+			break;
+		}
+
+		vect.push_back(sText.substr(pos, pos2-pos));
+		pos = pos2 + sDelim.length();
+	}
+}
+
+inline std::vector<std::string> explode(const std::string& sText, const std::string& sDelim = ", ")
+{
+	std::vector<std::string> vect;
+	explode(vect, sText, sDelim);
+	return vect;
+}
+
+inline bool contains(const std::string& str, const char ch)
+{
+	return str.find(ch) != std::string::npos;
+}
+
+inline bool begins(const std::string& s, const std::string& begin)
+{
+	const std::string::size_type len = begin.length();
+	if(s.length() < len)
+		return false;
+
+	return 0 == strncmp(s.c_str(), begin.c_str(), len);
+}
+
+inline bool ends(const std::string& s, const std::string& end)
+{
+	const std::string::size_type len = end.length();
+	if(s.length() < len)
+		return false;
+
+	return 0 == strncmp(s.c_str() + s.length() - len, end.c_str(), len);
+}
+
+inline std::string trim_left(const std::string& s, const std::string& drop = " \t\r\n")
+{
+	const std::string::size_type pos = s.find_first_not_of(drop);
+	if(std::string::npos == pos)
+	{
+		return "";
+	}
+	else
+	{
+		return s.substr(pos);
+	}
+}
+
+inline std::string trim_right(const std::string& s, const std::string& drop = " \t\r\n")
+{
+	const std::string::size_type pos = s.find_last_not_of(drop);
+	if(std::string::npos == pos)
+	{
+		return "";
+	}
+	else
+	{
+		return s.substr(0, pos+1);
+	}
+}
+
+inline std::string trim(const std::string& s, const std::string& drop = " \t\r\n") // trim left & right
+{
+	const std::string::size_type posBegin = s.find_first_not_of(drop);
+	if(std::string::npos == posBegin)
+	{
+		return "";
+	}
+	const std::string::size_type posEnd = s.find_last_not_of(drop);
+	const std::string::size_type length = s.length();
+	if(posBegin == 0 && posEnd == length-1)
+	{
+		return s;
+	}
+	if(posBegin == 0)
+	{
+		return s.substr(0, posEnd+1);
+	}
+	return s.substr(posBegin, posEnd+1 - posBegin);
+}
+
+template<class T>
+inline void findandreplace(T& source, const T& find, const T& replace)
+{
+	if(find.empty())
+		return;
+
+	T::size_type pos = 0;
+	while((pos = source.find(find, pos)) != T::npos)
+	{
+		source.replace(pos, find.length(), replace);
+		pos += replace.length();
+	}
+}
+
+inline void findandreplace(std::string& source, const char* find, const char* replace)
+{
+	::findandreplace(source, (std::string)find, (std::string)replace);
+}
+
+#define START_DYN_BEFFER_SIZE	200
+#define RESIZE_DYN_BEFFER_MULT	4
+#define RESIZE_DYN_BEFFER_DIV	1
+
+inline int ProcessFormatError(const void* pszFormat)
+{
+	if(pszFormat == NULL)
+	{
+		printf("ERROR! String formatting failed with a NULL format string!\n");
+	}
+	else
+	{
+		printf("ERROR! String formatting failed with format string \"%hs\"!\n", pszFormat);
+	}
+	ASSERT(0 && "String formatting failed! (CONTINUE will produce empty string)");
+
+	errno = EINVAL;
+	return -1;
+}
+
+inline std::string FormatV(const char* pszFormat, va_list argList)
+{
+	int nBufferSize = START_DYN_BEFFER_SIZE;
+	int nRetVal = -1;
+	int nErrno = 0;
+
+	std::vector<char> arrTemp;
+	char* pszTemp = NULL;
+
+	do {
+		nBufferSize = nBufferSize * RESIZE_DYN_BEFFER_MULT / RESIZE_DYN_BEFFER_DIV;
+		arrTemp.resize( nBufferSize );
+		pszTemp = &arrTemp.front();
+
+		errno = 0;
+		try
+		{
+			nRetVal = _vsnprintf_s(pszTemp, nBufferSize, nBufferSize - 1, pszFormat, argList);
+		}
+		catch(...)
+		{
+			nRetVal = ProcessFormatError(pszFormat);
+		}
+		nErrno = errno;
+		if( nRetVal == nBufferSize - 1 )
+		{
+			// write terminating character if the buffer is the same length as result
+			//printf( "Writing terminating NULL!!!\n" );
+			pszTemp[nBufferSize - 1] = '\0';
+		}
+	} while (nRetVal == -1 && nErrno != EINVAL);
+
+	if(nRetVal < 0)
+		return std::string();
+	return pszTemp;
+}
+
+inline std::string Format(const char* pszFormat, ...)
+{
+	va_list vl;
+	va_start(vl, pszFormat);
+	return FormatV(pszFormat, vl);
+}
+
+//------------------------------------------------------
+//===========================================================================================
+//------------------------------------------------------
+#if defined(USE_BI)
+#include <NTL\ZZ.h>
+// "NTL: A Library for doing Number Theory", version 5.5.2
+// NTL is a big integer open source library. It uses GNU General Public License.
+// Source code is available at: http://www.shoup.net/ntl/download.html
+
+NTL_CLIENT
+typedef ZZ BI;
+
+inline BI Str2BI(const string& s) { return ZZ(INIT_VAL, s.c_str()); }
+inline string BI2Str(const BI& x) { OSS s; s << x; return s.str(); }
+
+inline BI int642BI(const int64& x) { OSS s; s << x; return ZZ(INIT_VAL, s.str().c_str()); }
+
+const BI g_minInt64(int642BI(MIN_int64));
+const BI g_maxInt64(int642BI(MAX_int64));
+
+inline int64 BI2int64(const BI& x, const int64& defValue = 0)
+{ return between(x, g_minInt64, g_maxInt64) ? _atoi64(BI2Str(x).c_str()) : defValue; }
+
+#endif // if defined(USE_BI)
+
+//------------------------------------------------------

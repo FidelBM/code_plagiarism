@@ -1,0 +1,57 @@
+#include<stdio.h>
+#define for(i,set,n) for(i=set;i<=n;i++)
+int min,max;
+inline void fastread(int *a)
+{
+    register char c=0;
+    while (c<33) c=getchar();
+    *a=0;
+    while (c>33)
+    {
+        *a=*a*10+c-'0';
+        c=getchar();
+    }
+}
+int cycle(int a)
+{
+    if(a/10==0)return 0;
+    else if(a/100==0)
+    {
+                int a1,a2;
+                a1=a/10;
+                a2=a%10;
+                if((min<=a)&&(a<(a2*10+a1))&&((a2*10+a1)<=max))
+                return 1;
+                else return 0;
+    }
+    else if(a==1000)return 0;
+    else 
+    {
+         int a1,a2,a3,n1,n2,cnt=0;
+         a1=a/100;
+         a3=a%10;
+         a2=(a/10)%10;
+         n1=a3*100+a1*10+a2;
+         n2=a2*100+a3*10+a1;
+         if((min<=a)&&(a<n1)&&(n1<=max))cnt++;
+         if((min<=a)&&(a<n2)&&(n2<=max))cnt++;
+         return cnt;
+    }
+    
+}
+
+int main()
+{
+    int t,k,i,j,sum;
+    fastread(&t);k=t;
+    while(t--)
+    {
+              sum=0;
+              fastread(&min);
+              fastread(&max);
+              for(i,min,max)
+              sum+=cycle(i);
+              printf("Case #%d: %d\n",k-t,sum);
+    }
+    return 0;
+}

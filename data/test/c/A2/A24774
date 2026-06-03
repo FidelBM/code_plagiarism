@@ -1,0 +1,124 @@
+#include <string>
+using std::string;
+
+#include <iostream>
+using std::cin;
+using std::cout;
+using std::endl;
+
+#include <cstdlib>
+using std::abs;
+
+#include <algorithm>
+using std::max;
+
+#include <map>
+using std::map;
+
+#include <utility>
+using std::pair;
+using std::make_pair;
+
+#include <vector>
+using std::vector;
+
+struct triplet {
+    int a;
+    int b;
+    int c;
+    triplet(int p_a, int p_b, int p_c) : a(p_a), b(p_b), c(p_c) {}
+    triplet next();
+    bool surprising();
+    int max_diff();
+    int best();
+    int total_points();
+};
+
+int triplet::max_diff() {
+    return std::max(std::max(abs(a-b), abs(a-c)), abs(b-c));
+}
+
+int triplet::best() {
+    return std::max(std::max(a, b), c);
+}
+
+int triplet::total_points() {
+    return a + b + c;
+}
+bool triplet::surprising() {
+    return max_diff() == 2;
+}
+
+triplet triplet::next()
+{
+    triplet n = *this;
+    do {
+        if (++n.c > 10) {
+            n.c = 0;
+            if (++n.b > 10) {
+                n.b = 0;
+                ++n.a;
+            }
+        }
+    } while (n.max_diff() > 2);
+    return n;
+}
+
+
+typedef map<int, int> best_opts_t;
+best_opts_t expected;
+best_opts_t surprising;
+
+int T;
+int N;
+int S;
+int p;
+vector<int> t(100);
+
+
+
+int answer() {
+    int ans = 0;
+    for (int i = 0; i < N; ++i) {
+        if (expected[t[i]] >= p) ++ans;
+        else if(S) {
+            if (surprising[t[i]] >= p) {
+                ++ans;
+                --S;
+            }
+        }
+    }
+    return ans;
+
+}
+
+int main(int argc, char** argv)
+{
+
+    triplet tr(0,0,0);
+    while (tr.a < 11) {
+        if (tr.surprising())
+            surprising[tr.total_points()] = max (
+                    surprising[tr.total_points()],
+                    tr.best() 
+                    );
+        else
+            expected[tr.total_points()] = max (
+                    expected[tr.total_points()],
+                    tr.best() 
+                    );
+        tr = tr.next();
+    }
+
+    cin >> T;
+
+    for (int testcase = 1; testcase <= T; ++testcase) {
+        cin >> N  >> S >> p;
+        for (int i = 0; i < N; ++i) {
+            cin >> t[i];
+        }
+
+        cout << "Case #" << testcase << ": "
+            << answer() << endl;
+    }
+}

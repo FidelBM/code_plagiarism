@@ -1,0 +1,64 @@
+#include<iostream>
+#include<cstdio>
+#include<vector>
+#include<sstream>
+#include<set>
+
+#define REP(i,n) for(int i=0;i<n;++i)
+#define FOR(i,j,k) for(int i=j;i<k;++i)
+#define PRINT(n) {REP(i,n.size()) cout<<n[i]<<"|";cout<<endl;}
+#define PB(n) push_back(n)
+
+using namespace std;
+
+string toString(int a)
+{
+	ostringstream oss;
+	oss<<a;
+	return oss.str();
+}
+
+bool isRecycled(int i,int j)
+{
+	string x = toString(i);
+	string y = toString(j);
+	
+	if(x.length()!=y.length()) return false;
+	
+	FOR(k,1,x.length())
+	{
+		string a = x.substr(x.length()-k,k);
+		string b = x.substr(0,x.length()-k);
+		string test = a + b;
+		if(test == y) return true;
+	}
+	
+	
+	return false;
+}
+
+void solve(int testNumber)
+{
+
+	int A,B;
+	cin>>A>>B;
+	
+	int ret = 0;
+	
+	FOR(i,A,B+1)
+	 FOR(j,i+1,B+1)
+	  if(isRecycled(i,j)) ++ret;
+
+	cout<<"Case #"<<testNumber<<": "<<ret<<endl;
+
+	
+}
+
+int main()
+{
+	int t;
+	cin>>t;
+	REP(i,t) solve(i+1);
+}
+
+ 

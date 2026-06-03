@@ -1,0 +1,22 @@
+/*
+ * InputParser.h
+ *
+ *  Created on: Mar 17, 2012
+ *      Author: dasc
+ */
+
+#ifndef INPUTPARSER_H_
+#define INPUTPARSER_H_
+
+#include <vector>
+#include "InputData.h"
+
+class InputParser {
+public:
+	InputParser();
+	virtual ~InputParser();
+
+	void Parse(std::vector<InputData> &taskList);
+};
+
+#endif /* INPUTPARSER_H_ */

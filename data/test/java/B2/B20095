@@ -1,0 +1,115 @@
+package codejam;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.InputStreamReader;
+
+public class Recycled {
+
+	/**
+	 * @param args
+	 */
+	private boolean[] b;
+	private int[] factorial = { 1, 1, 2, 6, 24, 120, 720, 5040 };
+
+	private String in, temp;
+	private int count = 0;
+	private int total = 0;
+	private char[] c;
+
+	public int getMaxRecycle(int min, int max) {
+		b = new boolean[max + 1 - min];
+		count = 0;
+		total = 0;
+		for (int i = min; i <= max; i++) {
+			if (!b[i - min]) {
+				b[i - min] = true;
+				total++;
+				in = "" + i;
+				c = in.toCharArray();
+				StringBuilder sb = new StringBuilder(in);
+				total = c.length;
+				for (int j = 0; j < c.length - 1; j++) {
+					sb.append(c[j]);
+					if (c[j + 1] != '0') {
+						temp = sb.substring(j + 1);
+						if (!temp.equals(in)) {
+							int pos = Integer.parseInt(temp);
+							if (pos <= max && pos >= min && !b[pos - min]) {
+								b[pos - min] = true;
+							} else {
+								total--;
+							}
+						} else {
+							total--;
+						}
+					} else {
+						total--;
+					}
+				}
+
+				if (total >= 2) {
+					count += (factorial[total] / (2 * factorial[total - 2]));
+				}
+			}
+		}
+		return count;
+	}
+
+	// Input
+	// 4
+	// 1 9
+	// 10 40
+	// 100 500
+	// 1111 2222
+	//
+	// Output
+	// Case #1: 0
+	// Case #2: 3
+	// Case #3: 156
+	// Case #4: 287
+
+	public static void main(String[] args) {
+		Recycled r = new Recycled();
+		long start = System.currentTimeMillis();
+
+		try {
+			FileInputStream fstream = new FileInputStream("C-large.in");
+			DataInputStream in = new DataInputStream(fstream);
+			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+
+			FileWriter fwriter = new FileWriter("C-large.out");
+			BufferedWriter out = new BufferedWriter(fwriter);
+
+			String strLine;
+			strLine = br.readLine();
+			int testCases = Integer.parseInt(strLine);
+
+			int currentCase = 0;
+			String[] input;
+			int min, max, temp;
+			while ((strLine = br.readLine()) != null && currentCase < testCases) {
+				input = strLine.split(" ");
+				min = Integer.parseInt(input[0]);
+				max = Integer.parseInt(input[1]);
+				if (min > max) {
+					temp = min;
+					min = max;
+					max = temp;
+				}
+				out.write("Case #" + ++currentCase + ": "
+						+ r.getMaxRecycle(min, max));
+				out.newLine();
+			}
+			System.out.println("Time is: "
+					+ (System.currentTimeMillis() - start) * 10E-3 + " Sec.");
+			in.close();
+			out.close();
+		} catch (Exception e) {
+			System.err.println("I/O Error while reading file.");
+		}
+	}
+}

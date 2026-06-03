@@ -1,0 +1,60 @@
+#include <iostream>
+#include "Input.h"
+#include <QHash>
+#include <cstring>
+
+const int maxN = 100;
+const int maxS = 101;
+int results[maxN][maxS];
+
+int recursion( QList<unsigned long long int>& l, int S, int p, int index );
+
+int main()
+{
+    int cases = Input::readInteger();
+    for( int i = 0; i < cases; i++ )
+    {
+        QList<unsigned long long int> l = Input::readIntegers();
+        int N = l.takeFirst();
+        int S = l.takeFirst();
+        int p = l.takeFirst();
+        //for( int j = 0; j < N; j++ )
+        //    memset( results[j], -1, maxS * sizeof( int ) );
+        std::cout << "Case #" << ( i + 1 ) << ": "
+                  << recursion( l, S, p, 0 ) << std::endl;
+    }
+    return 0;
+}
+
+
+int recursion( QList<unsigned long long int>& l, int S, int p, int index )
+{
+    if( index < l.size() )
+    {
+        const int each = l[index] / 3;
+        const int left = l[index] % 3;
+        int current = each;
+        if( each == 0 )
+            current = ( left > 0 ) ? 1 : 0;
+        else if( left > 0 )
+            current = each + 1;
+        int a = 0,
+                b = 0;
+        a = recursion( l, S, p, index + 1 ) + ( current >= p ? 1 : 0 );
+        if( S > 0 )
+        {
+            if( each == 0 )
+                current = left;
+            else
+            {
+                if( left == 0 )
+                    current = each + 1;
+                else
+                    current = each + left;
+            }
+            b = recursion( l, S - 1, p, index + 1 ) + ( current >= p ? 1 : 0 );
+        }
+        return results[index][S] = std::max( a, b );
+    }
+    return 0;
+}

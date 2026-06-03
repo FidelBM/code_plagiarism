@@ -1,0 +1,99 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+const int VAL_MAX = 2000000;
+
+int nbTests;
+int test;
+int A, B;
+
+int mark[VAL_MAX+1];
+
+bool
+est_recycle(int n, int m)
+{
+  //on fait passer le dernier digit de n et on test egalite
+  //on fait passer les deux derniers digit de n et on test egalite, etc
+
+  int tab_n[200];
+  int tab_m[200];
+
+  int nbDigN = 0;
+  int nbDigM = 0;
+
+  int copieN = n;
+  int copieM = m;
+
+  while(copieN > 0)
+    {
+      tab_n[nbDigN] = copieN % 10;
+      copieN /= 10;
+      nbDigN++;
+    }
+  
+  while(copieM > 0)
+    {
+      tab_m[nbDigM] = copieM % 10;
+      copieM /= 10;
+      nbDigM++;
+    }
+  
+  for(int posDep = 1; posDep < nbDigN; posDep++)
+    {
+      bool ok = true;
+      for(int pos = posDep; pos < posDep + nbDigN; pos++)
+	{
+	  if(tab_n[pos % nbDigN] != tab_m[pos - posDep])
+	    ok = false;
+	}
+
+      if(ok)
+	return true;
+    } 
+  return false;
+}
+
+void
+compte_recycle()
+{
+  int count = 0;
+  for(int n = A; n < B; n++)
+    for(int m = n+1; m <= B; m++)
+      {
+	/*
+	if(est_recycle(n,m) && !(mark[n] == test && mark[m] == test))
+	  {
+	    mark[n] = test;
+	    mark[m] = test;
+	    count++;
+	  }
+	*/
+	if(est_recycle(n,m))
+	   count++;
+      }
+  printf("%d\n", count);
+}
+
+void
+scan_input()
+{
+  scanf("%d", &nbTests);
+  for(test = 1; test <= nbTests; test++)
+    {
+      scanf("%d%d", &A, &B);
+      printf("Case #%d: ", test);
+      compte_recycle();
+    }
+}
+
+int
+main()
+{
+  scan_input();
+
+  return 0;
+}

@@ -1,0 +1,52 @@
+package com.paupicas.year2012.codejam.qr;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.util.HashMap;
+
+public class C {
+
+	public static void main(String[] args) throws Exception {
+		String filename = "C-large";
+		BufferedReader inputFile = new BufferedReader(new FileReader(filename + ".in"));
+		FileWriter outputFile = new FileWriter(filename + ".out");
+
+		int casesNumber = Integer.valueOf(inputFile.readLine());
+		for (int cn = 1; cn <= casesNumber; cn++) {
+			String result = "Case #" + cn + ": ";
+
+			String[] tn = inputFile.readLine().split(" ");
+			int a = Integer.valueOf(tn[0]);
+			int b = Integer.valueOf(tn[1]);
+
+			HashMap<String, Boolean> counted = new HashMap<String, Boolean>(b - a);
+
+			int c = 0;
+			for (int i = a; i <= b; i++) {
+				String is = String.valueOf(i);
+				for (int j = 1; j < is.length(); j++) {
+					String ps = is.substring(j, is.length()) + is.substring(0, j);
+					String pair = is + "," + ps;
+					int p = Integer.valueOf(ps);
+					if (p > i && p <= b && !counted.containsKey(pair)) {
+						c++;
+						counted.put(pair, true);
+					}
+				}
+			}
+
+			result = result + c;
+
+			System.out.println(result);
+			outputFile.write(result);
+			if (cn < casesNumber) {
+				outputFile.write("\n");
+			}
+		}
+
+		inputFile.close();
+		outputFile.close();
+	}
+
+}

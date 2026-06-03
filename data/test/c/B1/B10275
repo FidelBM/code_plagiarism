@@ -1,0 +1,64 @@
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <algorithm>
+#include <set>
+using namespace std;
+
+int tests;
+
+int A,B;
+int dig;
+int big_base;
+long long ans;
+
+void get(int num)
+{
+    int div = 10;
+    int base = big_base;
+    int temp;
+	set<int> rec;
+    for(int i = 0; i < (dig-1); i++)
+    {
+        if ((num%div) >= (div / 10))
+        {
+            temp = (num / div) + (num%div)*base;
+			if ((temp != num)&&(temp >= A)&&(temp <= B)&&(rec.find(temp) == rec.end()))
+            {
+				rec.insert(temp);
+	            ans++;
+            }
+        }
+        base /= 10;
+		div *= 10;
+    }
+}
+
+int main()
+{
+  
+    freopen("input.txt","r",stdin);    
+    freopen("output.txt","w",stdout);    
+    scanf("%d\n",&tests);
+    for(int t = 0; t < tests; t++)
+    {
+        scanf("%d%d",&A,&B);
+      	ans = dig = 0;
+      	big_base = 1;
+      	int temp = A;      	
+        while(temp != 0)
+        {
+            temp/=10;
+            dig++;
+            big_base *= 10;
+        }
+        big_base /= 10;
+        for(int i = A; i <= B; i++)
+            get(i);
+        ans /= 2;
+        printf("Case #%d: %lld\n",(t+1),ans);
+    }
+    
+    return(0);
+}
+

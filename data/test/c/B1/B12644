@@ -1,0 +1,47 @@
+#include <stdio.h>
+
+ int main() {
+	freopen("C-small-attempt0.in","r",stdin);
+	freopen("C-small-attempt0.out","w",stdout);
+	int t;
+	int i,j;
+	scanf("%d",&t);
+	int n, m, count;
+	int table[2000];
+	for(i = 1; i <= t; i++) {
+		scanf("%d %d",&n,&m);
+		for(j = n; j <= m; j++) {
+			table[j]=0;
+		}
+		count = 0;
+		for(j = n; j <= m; j++) {
+			if(table[j] == 0) {
+				if(j < 10) {
+					continue;
+				} else if(j < 100) {
+					if(((j % 10) * 10 + j / 10 ) <= m && ((j % 10) * 10 + j / 10 >=n) && ((j%10)*10+j/10 !=j)) {
+						table[j] = 1;
+						table[(j % 10) * 10 + j / 10] = 1;
+						count++;
+					}
+				} else {
+					if((j % 10)*100+j/10 <= m && (j % 10)*100+j/10 >=n && (j % 10)*100+j/10 !=j) {
+						table[j]=1;
+						table[(j % 10)*100+j/10]=1;
+						count++;
+					}
+					if((j%100)*10+j/100<=m && (j%100)*10+j/100 >= n && (j%100)*10+j/100!=j) {
+						table[j]++;
+						count++;
+						table[(j%100)*10+j/100]=1;
+					}
+					if(table[j]==2 && (j%100)*10+j/100 != (j % 10)*100+j/10) {
+						count++;
+					}
+				}
+			}
+		}
+		printf("Case #%d: %d\n",i,count);
+	}
+	return 0;
+ }

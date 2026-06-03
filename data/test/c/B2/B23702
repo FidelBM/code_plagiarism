@@ -1,0 +1,197 @@
+#include<stdio.h>
+#include<fstream>
+using std::ofstream;
+using std::ifstream;
+using std::ios;
+int main()
+{
+	int cases_no,min,max,number,reflection,reflection1,counter,thousands,tenthous,hundthous,million,reflection2,reflection3,reflection4,reflection5;
+	int tenth,units,hundreds;
+	ifstream in("C-large.in",ios::in);
+	ofstream out("output.txt",ios::out);
+	if ( ! in ) 
+		printf("error in openning ip file");
+	if ( ! out ) 
+		printf("error in openning op file");
+	
+	in>>cases_no;
+	for(int i=0;i<cases_no;i++)
+	{
+		counter=0;
+		in>>min>>max;
+		
+		if(!((min/10)==0 && (max/10)==0))
+		{
+			for(number=min;number<max;number++)
+			{
+				if((number/10)==0)
+					break;
+				else if((number/100)==0)
+				{
+					tenth=number/10;
+					units=number%10;
+					reflection=(units*10)+tenth;
+					if(reflection <= max && reflection!=number && reflection > number )
+					{
+						counter++;
+					}
+				}
+				else if((number/1000)==0)
+				{
+					hundreds=number/100;
+					tenth=(number%100)/10;
+					units=(number%100)%10;
+					reflection=(units*100)+(hundreds*10)+tenth;
+					reflection1=(tenth*100)+(units*10)+hundreds;
+					if(reflection <= max && reflection != number && reflection > number)
+					{
+						counter++;
+					}
+					if(reflection1 <= max && reflection1 != number && reflection1 > number)
+					{
+						counter++;
+					}
+				}
+				else if((number/10000)==0)
+				{
+					//
+					thousands=number/1000;
+					hundreds=(number%1000)/100;
+					tenth=((number%1000)%100)/10;
+					units=((number%1000)%100)%10;
+					reflection=(units*1000)+(thousands*100)+(hundreds*10)+tenth;
+					reflection1=(tenth*1000)+(units*100)+(thousands*10)+hundreds;
+					reflection2=(hundreds*1000)+(tenth*100)+(units*100)+(thousands);
+					if(reflection <= max && reflection != number && reflection > number)
+					{
+						counter++;
+					}
+					if(reflection1 <= max && reflection1 != number && reflection1 > number)
+					{
+						counter++;
+					}
+					if(reflection2 <= max && reflection2 != number && reflection2 > number)
+					{
+						counter++;
+					}
+				}
+
+				else if((number/100000)==0)
+				{
+					//
+					tenthous=number/10000;
+					thousands=(number%10000)/1000;
+					hundreds=((number%10000)%1000)/100;
+					tenth=(((number%10000)%1000)%100)/10;
+					units=(((number%10000)%1000)%100)%10;
+					reflection=(units*10000)+(tenthous*1000)+(thousands*100)+(hundreds*10)+tenth;
+					reflection1=(tenth*10000)+(units*1000)+(tenthous*100)+(thousands*10)+hundreds;
+					reflection2=(hundreds*10000)+(tenth*1000)+(units*100)+(tenthous*10)+(thousands);
+					reflection3=(thousands*10000)+(hundreds*1000)+(tenth*100)+(units*10)+(tenthous);
+					if(reflection <= max && reflection != number && reflection > number)
+					{
+						counter++;
+					}
+					if(reflection1 <= max && reflection1 != number && reflection1 > number)
+					{
+						counter++;
+					}
+					if(reflection2 <= max && reflection2 != number && reflection2 > number)
+					{
+						counter++;
+					}
+					if(reflection3 <= max && reflection3 != number && reflection3 > number)
+					{
+						counter++;
+					}
+				}
+
+				else if((number/1000000)==0)
+				{
+					//
+					hundthous=number/100000;
+					tenthous=(number%100000)/10000;
+					thousands=((number%100000)%10000)/1000;
+					hundreds=(((number%100000)%10000)%1000)/100;
+					tenth=((((number%100000)%10000)%1000)%100)/10;
+					units=((((number%100000)%10000)%1000)%100)%10;
+					reflection=(units*100000)+(hundthous*10000)+(tenthous*1000)+(thousands*100)+(hundreds*10)+tenth;
+					reflection1=(tenth*100000)+(units*10000)+(hundthous*1000)+(tenthous*100)+(thousands*10)+hundreds;
+					reflection2=(hundreds*100000)+(tenth*10000)+(units*1000)+(hundthous*100)+(tenthous*10)+(thousands);
+					reflection3=(thousands*100000)+(hundreds*10000)+(tenth*1000)+(units*100)+(hundthous*10)+(tenthous);
+					reflection4=(tenthous*100000)+(thousands*10000)+(hundreds*1000)+(tenth*100)+(units*10)+hundthous;
+					if(reflection <= max && reflection != number && reflection > number)
+					{
+						counter++;
+					}
+					if(reflection1 <= max && reflection1 != number && reflection1 > number)
+					{
+						counter++;
+					}
+					if(reflection2 <= max && reflection2 != number && reflection2 > number)
+					{
+						counter++;
+					}
+					if(reflection3 <= max && reflection3 != number && reflection3 > number)
+					{
+						counter++;
+					}
+					if(reflection4 <= max && reflection4 != number && reflection4 > number)
+					{
+						counter++;
+					}
+				}
+				
+				else if((number/1000000)==0)
+				{
+					
+					million=number/1000000;
+					hundthous=(number%1000000)/100000;
+					tenthous=((number%1000000)%100000)/10000;
+					thousands=(((number%1000000)%100000)%10000)/1000;
+					hundreds=((((number%1000000)%100000)%10000)%1000)/100;
+					tenth=(((((number%1000000)%100000)%10000)%1000)%100)/10;
+					units=(((((number%1000000)%100000)%10000)%1000)%100)%10;
+
+					reflection=(units*1000000)+(million*100000)+(hundthous*10000)+(tenthous*1000)+(thousands*100)+(hundreds*10)+tenth;
+					reflection1=(tenth*1000000)+(units*100000)+(million*10000)+(hundthous*1000)+(tenthous*100)+(thousands*10)+hundreds;
+					reflection2=(hundreds*1000000)+(tenth*100000)+(units*10000)+(million*1000)+(hundthous*100)+(tenthous*10)+(thousands);
+					reflection3=(thousands*1000000)+(hundreds*100000)+(tenth*10000)+(units*1000)+(million*100)+(hundthous*10)+(tenthous);
+					reflection4=(tenthous*1000000)+(thousands*100000)+(hundreds*10000)+(tenth*1000)+(units*100)+(million*10)+hundthous;
+					reflection5=(hundthous*1000000)+(tenthous*100000)+(thousands*10000)+(hundreds*1000)+(tenth*100)+(units*10)+(million);
+
+					if(reflection <= max && reflection != number && reflection > number)
+					{
+						counter++;
+					}
+					if(reflection1 <= max && reflection1 != number && reflection1 > number)
+					{
+						counter++;
+					}
+					if(reflection2 <= max && reflection2 != number && reflection2 > number)
+					{
+						counter++;
+					}
+					if(reflection3 <= max && reflection3 != number && reflection3 > number)
+					{
+						counter++;
+					}
+					if(reflection4 <= max && reflection4 != number && reflection4 > number)
+					{
+						counter++;
+					}
+
+						if(reflection5 <= max && reflection5 != number && reflection5 > number)
+					{
+						counter++;
+					}
+				}
+				}
+
+			}
+		
+
+		out<<"Case #"<<i+1<<": "<<counter<<'\n';
+	}
+	return(0);
+}

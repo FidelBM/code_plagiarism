@@ -1,0 +1,57 @@
+/*
+ * InputParser.cpp
+ *
+ *  Created on: Mar 17, 2012
+ *      Author: dasc
+ */
+
+#include "InputParser.h"
+#include <fstream>
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <algorithm>
+#include <iterator>
+
+InputParser::InputParser() {
+}
+
+InputParser::~InputParser() {
+}
+
+void InputParser::Parse(std::vector<InputData> &taskList)
+{
+	int lineNumber;
+	std::cin >> lineNumber;
+	std::cin.get();
+
+	int count = 0;
+	while(count++ < lineNumber) {
+		InputData data;
+		std::string line;
+		getline(std::cin, line);
+
+		std::istringstream iss(line);
+
+		iss >> data.googlers;
+		iss >> data.surprisingTriplets;
+		iss >> data.targetBestResult;
+
+		//std::cout << data.googlers << std::endl;
+		//std::cout << data.surprisingTriplets << std::endl;
+		//std::cout << data.targetBestResult << std::endl;
+
+		copy(std::istream_iterator<int>(iss),
+				std::istream_iterator<int>(),
+				std::back_inserter(data.totalScores));
+
+		//while (iss)
+		//{
+		//	int totalScore;
+		//    iss >> totalScore;
+		//    data.totalScores.push_back(totalScore);
+		//}
+
+		taskList.push_back(data);
+	 }
+}

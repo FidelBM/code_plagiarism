@@ -1,0 +1,85 @@
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <cstdlib>
+#include <fstream>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <stack>
+#include <queue>
+#include <map>
+#include <set>
+#include <list>
+#include <bitset>
+#include <numeric>
+#include <algorithm>
+#include <functional>
+using namespace std;
+
+#define PI 2*acos(0.0)
+#define FOR(i,n) for(int i = 0;i<n;++i)
+#define setbit(a,b) a|=(1<<b)
+#define S1(a) scanf("%d",&a)
+#define S2(a,b) scanf("%d %d",&a,&b)
+#define S3(a,b,c) scanf("%d %d %d",&a,&b,&c)
+#define C1(a) __builtin_popcount(a)
+#define gcd(a,b) __gcd(a,b)
+#define ALL(a) (a.begin(),a.end())
+
+typedef long long LL;
+typedef vector<int> vi;
+const int INF = (1LL<<31)-1;
+
+int A,B;
+int P[10] = {1,10,100,1000,10000,100000,1000000,10000000};
+
+int howMany( int a ){
+
+    int n = 0;
+    while( a / P[n] )
+        ++n;
+
+    int ret = 0,b = 0,bb,cur;
+    for(int i = 0;i<n;++i){
+
+        cur = (a/P[i])%10;
+        if(!cur)continue;
+
+        b += P[i]*cur;
+        bb = a/P[i+1];
+        bb += b*P[ n-i-1 ];
+
+        if( bb > a && bb <= B )
+            ++ret;
+
+    }
+
+    return ret;
+
+}
+
+int main(){
+
+    freopen("Clarge.txt","r",stdin);
+    freopen("Clarge_Out.txt","w",stdout);
+    int t;
+    S1(t);
+
+    for(int ca = 1;ca<=t;++ca){
+
+        S2(A,B);
+
+        int res = 0;
+        for(int a = A;a<=B;++a)
+            res += howMany(a);
+
+        printf("Case #%d: %d\n",ca,res);
+
+    }
+
+	return 0;
+
+}

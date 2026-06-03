@@ -1,0 +1,30 @@
+#include<cstdio>
+#include<cstring>
+
+int main()
+{
+    //freopen("data.in", "r", stdin);
+    //freopen("data.out", "w", stdout);
+    int nt, idx = 0, A, B, ans, tmp, i, j;
+    scanf("%d", &nt);
+    while( (nt --) > 0 ) {
+        scanf("%d %d", &A, &B);
+        ans = 0; tmp = 0;
+        for(i = A; i <= B; ++i) {
+            if( i < 10 ) continue;
+            else if( i < 100 ) j = (i % 10) * 10 + i / 10;
+            else if( i < 1000 ) j = (i % 10) * 100 + i / 10;
+            else if( i < 10000 ) j = (i % 10) * 1000 + i / 10;
+            else if( i < 100000 ) j = (i % 10) * 10000 + i / 10;
+            else j = (i % 10) * 100000 + i / 10;
+
+            if( i != j && A <= j && j <= B ) {
+                ++ans;
+                if( j < 100 ) tmp ++;
+                //printf("i = %d, j = %d\n", i, j);
+            }
+        }
+        printf("Case #%d: %d\n", ++idx, ans - (tmp >> 0x1));
+    }
+    return 0;
+}

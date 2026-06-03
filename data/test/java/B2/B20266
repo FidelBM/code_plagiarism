@@ -1,0 +1,89 @@
+import java.io.*;
+import java.util.*;
+
+public class RecycledNumbers implements Runnable {
+	public static void main(String[] args) throws IOException {
+		new Thread(new RecycledNumbers()).start();
+	}
+
+	public BufferedReader br;
+
+	public StringTokenizer in;
+
+	public PrintWriter out;
+
+	public String nextToken() throws IOException {
+		while (in == null || !in.hasMoreTokens()) {
+			in = new StringTokenizer(br.readLine());
+		}
+
+		return in.nextToken();
+	}
+
+	public int nextInt() throws IOException {
+		return Integer.parseInt(nextToken());
+	}
+
+	int[] was;
+	int[] count;
+	long ans;
+
+	int A, B;
+
+	public void go(int i, int c) {
+		if (i < A || i > B)
+			return;
+
+		if (was[i] > 0)
+			return;
+
+		ans += count[c];
+		was[i] = c;
+		count[c]++;
+		String s = "" + i;
+		for (int j = 0; j < s.length() - 1; j++) {
+			String t = s.substring(j + 1) + s.substring(0, j + 1);
+			if (t.charAt(0) != '0') {
+				go(Integer.parseInt(t), c);
+			}
+		}
+	}
+
+	public void solve() throws IOException {
+		A = nextInt();
+		B = nextInt();
+		was = new int[2000001];
+		count = new int[2000001];
+
+		ans = 0;
+
+		int c = 0;
+		for (int i = A; i <= B; i++) {
+			if (was[i] == 0) {
+				c++;
+				go(i, c);
+			}
+		}
+
+		out.println(ans);
+	}
+
+	public void run() {
+		try {
+			br = new BufferedReader(new FileReader("C-small.in"));
+			out = new PrintWriter("c.out");
+
+			int t = nextInt();
+			for (int i = 0; i < t; i++) {
+				System.err.println(i);
+				out.print("Case #" + (i + 1) + ": ");
+				solve();
+			}
+
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+	}
+}

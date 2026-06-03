@@ -1,0 +1,63 @@
+// Dancing.cpp : Defines the entry point for the console application.
+//
+
+#include "stdafx.h"
+#include <conio.h>
+#include <string.h>
+#include <stdio.h>
+
+int suprisingTriplets[31][11];
+int notSuprisingTriplets[31][11];
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	int T;
+	scanf("%d\n",&T);
+
+	memset(suprisingTriplets,0,sizeof(suprisingTriplets));
+	memset(notSuprisingTriplets,0,sizeof(notSuprisingTriplets));
+	for (int s1=0; s1<=10; s1++)
+		for (int s2=s1; s2<=s1+2; s2++)
+			for (int s3=s2; s3<=s1+2; s3++)
+				if (s2<=10 && s3<=10)
+			{
+				int sum=s1+s2+s3;
+				if (s3 == s1+2) // suprising
+				{
+					for (int p=0; p<=s3; p++)
+						suprisingTriplets[sum][p]++;
+				}
+				else
+				{
+					for (int p=0; p<=s3; p++)
+						notSuprisingTriplets[sum][p]++;
+				}
+			}
+			
+	for (int i=0; i<T; i++)
+	{
+		int N, S, p;
+		int score[256];
+
+		scanf("%d %d %d",&N, &S, &p);
+		for (int j=0; j<N; j++)
+			scanf("%d",&score[j]);
+
+		int count=0;
+		int scount=0;
+		for (int j=0; j<N; j++)
+		{
+			//printf("Score: %d p=%d  S:%d  U:%d\n",score[j],p,suprisingTriplets[score[j]][p],notSuprisingTriplets[score[j]][p]);
+			if (notSuprisingTriplets[score[j]][p]>0)
+				count++;
+			else if (suprisingTriplets[score[j]][p]>0 && scount<S)
+			{
+				count++;
+				scount++;
+			}
+		}
+		printf("Case #%d: %d\n",i+1,count);
+	}
+	return 0;
+}
+

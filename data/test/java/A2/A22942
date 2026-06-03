@@ -1,0 +1,25 @@
+package com.jedruch.utils;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class Files {
+
+	public interface LineReader {
+		public void onNewLine(String line, int lineNumber);
+	}
+
+	public static void readFileByLine(String path, LineReader reader) {
+		try (BufferedReader r = new BufferedReader(new FileReader(path))) {
+			String line = null;
+			int no =1;
+			while ((line = r.readLine()) != null) {
+				reader.onNewLine(line, no);
+				no++;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+}

@@ -1,0 +1,51 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+int main()
+{
+	freopen("C-small-attempt0.in","r",stdin);
+	freopen("C-small-attempt0.out","w",stdout);
+	
+	int t,i,a,b,j,k,c,p,m,n,len,count,case_no=0;
+	char num[10],temp_num[10];
+
+	scanf("%d",&t);
+	while(t--)
+	{
+		scanf("%d %d",&a,&b);
+	
+		count=0;
+		for( i=b; i>=a; i-- )
+		{
+			n = i;
+			for( j=a; j<i; j++)
+			{
+				m = j;
+				itoa(m,num,10);
+				len = strlen(num);
+				
+				for(k=1;k<=len;k++)
+				{
+					c=0;
+					for( p = len-k; p<len ;p++ )
+						temp_num[c++] = num[p];
+					for( p = 0; p<len-k;p++ )
+						temp_num[c++] = num[p];
+					temp_num[c] = 0;
+					
+					if(atoi(temp_num) == n)
+					{
+						count++;
+						break;
+					}
+				}
+				memset(num,0,sizeof(num));
+				memset(temp_num,0,sizeof(temp_num));
+			}
+		}
+		printf("Case #%d: %d\n",++case_no,count);
+	}
+
+	return 0;
+}

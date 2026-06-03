@@ -1,0 +1,60 @@
+#include <iostream>
+#include <fstream>
+#include <utility>
+#include <string.h>
+#include <cstdlib>
+
+#include "loader.h"
+
+using std::make_pair;
+using std::pair;
+using std::cout;
+using std::endl;
+using std::vector;
+//using namespace std;
+
+Loader* Loader::LoadFile(string filename) {
+
+  int number = 0;
+  vector<pair<int,int> >* ranges = new vector<pair<int,int> >();
+  string line;
+  ifstream myfile(filename.c_str());
+  
+#ifdef DEBUG
+  cout << "Reading file " << filename << endl;
+#endif  
+  if (myfile.is_open())
+  {
+    if(myfile.good())
+      getline(myfile, line);
+    number = atoi(line.c_str());
+    while(myfile.good()) {
+      getline(myfile,line);
+      const char* p = strchr(line.c_str(), ' ');
+      int a, b;
+      if(p != NULL) {
+        int pos = p-line.c_str();
+        a = atoi((line.substr(0,pos)).c_str());
+        b = atoi((line.substr(pos+1)).c_str());
+      } else {
+        a = b = atoi(line.c_str());
+      }
+      ranges->push_back(make_pair(a,b));
+    }
+    myfile.close();
+  } else cout << "Unable to open file" << endl; 
+
+  Loader* loader = new Loader(ranges);
+  return loader;
+}
+
+Loader::Loader(vector<pair<int,int> >* ranges) : ranges_(ranges) {
+}
+
+Loader::~Loader() {
+  delete ranges_;
+}
+
+vector<pair<int,int> >* Loader::GetRanges() {
+  return ranges_;
+}

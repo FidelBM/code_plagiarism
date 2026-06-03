@@ -1,0 +1,64 @@
+#include <iostream>
+#include <math.h>
+
+using namespace std;
+
+bool recycled (unsigned long m,unsigned long n)
+{
+	if (m<10) return false;
+	int len=max<unsigned long>(ceil(log10((float)m)),ceil(log10((float)n)));
+	
+	int factor=1;
+	int i=len-1;
+	while (i--) factor*=10;
+	i=len;
+	while (i--)
+	{
+		int k=n%10;
+		n/=10;
+		n=n+k*factor;
+		if (n==m) return true;
+	};
+	return false;
+};
+
+//bool recycled (char m[10],char n[10])
+//{
+//	bool retv=false;
+//	int len=strlen(m);
+//	for (int i=0;i<len;i++)
+//	{
+//		retv=true;
+//		for (int j=0;j<len;j++)
+//		{
+//			if (m[j]!=n[(i+j)%len]) {retv=false;break;};
+//		};
+//		if (retv) return true;
+//	}
+//	return false;
+//};
+
+int main()
+{
+	freopen("C-small-attempt0.in","r",stdin);
+	freopen("output.txt","w",stdout);
+	int tc; cin >> tc;
+	for (int t=0;t<tc;t++)
+	{
+		int c=0;
+		unsigned long min,max;
+		cin >> min >> max;
+		for (unsigned long i=min;i<=max;i++)
+			for (unsigned long j=i+1;j<=max;j++)
+		{
+			/*char num1[10],num2[10];
+			sprintf(num1,"%lu",i);
+			sprintf(num2,"%lu",j);*/
+			if (recycled(i,j)) {c++;
+			//cout << i<< ' '<<j<<endl;
+			};
+		};
+		printf("Case #%d: %d\n",t+1,c);
+	};
+	return 0;
+};

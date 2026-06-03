@@ -1,0 +1,233 @@
+// C.cpp : Defines the entry point for the console application.
+//
+
+#pragma warning(disable:4786)
+#pragma warning(disable:4996)
+#include <list>
+#include <string>
+#include <set>
+#include <map>
+#include <iostream>
+
+using namespace std;
+
+#define VERBOSE
+
+#include "C.h"
+
+const char *szWorkingDir = "C:\\devc\\CodeJam_2012\\Qualification\\C\\Debug\\temp\\data\\";
+
+//const char *szFile_in = "C_test_in.txt";
+//const char *szFile_out = "C_test_out.txt";
+
+//const char *szFile_in = "C-small-attempt0.in";
+//const char *szFile_out = "C-small-attempt0.out";
+
+const char *szFile_in = "C-large.in";
+const char *szFile_out = "C-large.out";
+
+typedef set<string > SET_Str;
+
+SET_Str set_Str;
+
+int nArr[7][7];
+int nD_Arr;
+int nCurr_N;
+int nCurr_B;
+
+int main(int argc, char *argv[])
+{
+	char szFilename_in[256];
+	char szFilename_out[256];
+	sprintf(szFilename_in, "%s%s", szWorkingDir, szFile_in);
+	sprintf(szFilename_out, "%s%s", szWorkingDir, szFile_out);
+
+	printf("file in: %s\n", szFilename_in);
+	printf("file out: %s\n", szFilename_out);
+
+	read_file((char *)szFilename_in, szFilename_out);
+	
+	return 0;
+}
+
+
+void read_file(char *szFile_in, char *szFile_out)
+{
+	FILE *fp_in;
+	FILE *fp_out;
+
+	if ((fp_in=fopen(szFile_in, "r"))==NULL)
+	{
+		printf("kann File %s nicht oeffnen\n", szFile_in);
+		exit(-1);
+	}
+	if ((fp_out=fopen(szFile_out, "w"))==NULL)
+	{
+		printf("kann File %s nicht oeffnen (w)\n", szFile_out);
+		exit(-1);
+	}
+
+	int nT, nA, nB;
+	int nNum_Rec;
+	
+	int i;
+	
+	// num. samples
+	fscanf(fp_in, "%d", &nT);
+	for (i=0; i<nT; i++)
+	{
+
+		fscanf(fp_in, "%d%d", &nA, &nB);
+#ifdef VERBOSE
+		printf("\nA: %d, B: %d\n", nA, nB);
+#endif
+		set_Str.clear();
+
+		nNum_Rec = proceed(nA, nB);
+
+				
+#ifdef VERBOSE
+		printf("case %d: %d\n", i+1, nNum_Rec);
+#endif
+
+		fprintf(fp_out, "Case #%d: %d\n", i+1, nNum_Rec);
+
+		fflush(fp_out);
+	}
+
+	fclose(fp_in);
+	fclose(fp_out);
+}
+
+
+//int nArr[7][7];
+//int nD_Arr;
+
+void init_arr(int nA)
+{
+	nD_Arr=0;	
+	do
+	{
+		nArr[0][nD_Arr]=nA % 10;
+		nA /= 10;
+		nD_Arr++;
+	} while (nA);
+
+	for (int i=1; i<nD_Arr; i++)
+	{
+		for (int j=0; j<nD_Arr; j++)
+			nArr[i][j] = nArr[i-1][j]*10;
+	}	
+}
+
+
+void show_arr(void)
+{
+	printf("\narr:\n");
+	for (int i=0; i<nD_Arr; i++)
+	{
+		printf("[%d]: ", i);
+		for (int j=0; j<nD_Arr; j++)
+			printf("%d: %d; ", j, nArr[i][j]);
+		printf("\n");
+	}
+	printf("\n");
+}
+
+
+void check_curr_val(void)
+{
+	for (int i=1; i<nD_Arr; i++)
+	{
+		check_val_for_part(i);
+	}
+}
+
+
+void check_val_for_part(int nPart)
+{
+	int nM_Val=0;	
+	int i;
+	for (i=0; i<nPart; i++)
+	{
+		nM_Val += nArr[nD_Arr-nPart+i][i];
+#ifdef DEBUG
+		printf("1 M[%d][%d]: %d\n", nD_Arr-nPart+i, i, nArr[nD_Arr-nPart+i][i]);
+#endif
+	}
+	for (i=nPart; i<nD_Arr; i++)
+	{
+		nM_Val += nArr[i-nPart][i];
+#ifdef DEBUG
+		printf("2 M[%d][%d]: %d\n", i-nPart, i, nArr[i-nPart][i]);
+#endif
+	}
+
+#ifdef DEBUG
+	printf("M: %d, N: %d, B: %d\n", nM_Val, nCurr_N, nCurr_B);
+#endif
+
+	if (nM_Val>nCurr_N && nM_Val<=nCurr_B)
+		add_M_to_set(nM_Val);
+}
+
+
+void add_M_to_set(int nM)
+{
+	char szVal[16];
+	sprintf(szVal, "%d %d", nM, nCurr_N);
+	SET_Str::iterator set_Str_iter = set_Str.find(szVal);
+	if (set_Str_iter==set_Str.end())
+		set_Str.insert(szVal);
+}
+
+
+void increment_curr_val(void)
+{
+	for (int i=0; i<nD_Arr; i++)
+	{
+		if (nArr[0][i]==9)
+			reset_value_for_index(i);
+		else
+		{
+			increment_value_for_index(i);
+			break;
+		}
+	}
+}
+
+
+void reset_value_for_index(int nNum_Idx)
+{
+	for (int j=0; j<nD_Arr; j++)
+		nArr[j][nNum_Idx] = 0;
+}
+
+
+void increment_value_for_index(int nNum_Idx)
+{
+	int nInc = 1;
+	for (int j=0; j<nD_Arr; j++)
+	{
+		nArr[j][nNum_Idx] += nInc;
+		nInc *= 10;
+	}
+}
+
+
+int proceed(int nA, int nB)
+{
+	init_arr(nA);
+	show_arr();
+
+	nCurr_B = nB;
+	while (nA<nB)
+	{
+		nCurr_N = nA;
+		check_curr_val();
+		nA++;
+		increment_curr_val();
+		//show_arr();
+	}
+	return set_Str.size();
+}

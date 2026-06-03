@@ -1,0 +1,54 @@
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cmath>
+
+int T, A, B;
+int scratch[3000000];
+
+int ndigits(int n)
+{
+	int d = 0;
+
+	while(n) {
+		d++;
+		n /= 10;
+	}
+
+	return d;
+}
+
+inline int rot(int n, int d)
+{
+	return (n/10) + (n%10)*pow(10, d-1);
+}
+
+int main()
+{
+	scanf(" %d", &T);
+
+	for(int _42 = 1; _42 <= T; ++_42) {
+		scanf(" %d %d", &A, &B);
+
+		int ans = 0;
+	memset(scratch, 0, sizeof(scratch));
+
+		for(int i = A; i <= B; ++i) {
+			int d = ndigits(i);
+
+			int o = i;
+			for(int j = 1; j < d; ++j) {
+				o = rot(o, d);
+				if(o > i && o < B && scratch[o] != i) {
+					ans++;
+					scratch[o] = i;
+//					printf("%d %d\n", i, o);
+				}
+			}
+		}
+
+		printf("Case #%d: %d\n", _42, ans);
+	}
+
+	return 0;
+}

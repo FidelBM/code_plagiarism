@@ -1,0 +1,32 @@
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
+
+#include <QMainWindow>
+#include <QMap>
+#include <QSemaphore>
+#include "algo.h"
+#include "output.h"
+
+namespace Ui {
+class MainWindow;
+}
+
+class MainWindow : public QMainWindow
+{
+    Q_OBJECT
+public slots:
+    void algoFinish(void);
+    void open(void);
+    void clean();
+public:
+    explicit MainWindow(QWidget *parent = 0);
+    ~MainWindow();
+    
+private:
+
+    QList<Algo*> * algos;
+    Ui::MainWindow *ui;
+    QString filename;
+};
+
+#endif // MAINWINDOW_H

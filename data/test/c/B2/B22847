@@ -1,0 +1,90 @@
+#include <cstdio>
+#include <vector>
+#include <iostream>
+using namespace std;
+
+vector<int> ls[2000001];
+int A, B;
+int T;
+
+int pow(int x, int y)
+{
+    int p = 1;
+    for(int i = 1; i <= y; i++)
+    {
+        p *= x;
+    }
+    return p;
+}
+
+bool find(int x, int y)
+{
+    for(int i = 0; i < ls[x].size(); i++)
+    {
+        if (ls[x][i] == y)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+int len(int x)
+{
+    int c = 0;
+    while(x)
+    {
+        c++;
+        x = x/10;
+    }
+    return c;
+}
+
+int reorder(int x, int tail)
+{
+    int sep = pow(10, tail);
+    int t_nr = x % sep;
+    int h_nr = x / sep;
+    return t_nr * pow(10, (len(x) - tail)) + h_nr;
+}
+
+int main()
+{
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+    cin>>T;
+    for(int t = 1; t <= T; t++)
+    {
+        cin>>A>>B;
+        int count = 0;
+
+        for(int i = A; i <= B; i++)
+        {
+            int l = len(i);
+            for(int j = 1; j < l; j++)
+            {
+                int reordered = reorder(i, j);
+                if ((reordered < A) || (reordered > B))
+                {
+                    continue;
+                }
+                if (reordered == i)
+                {
+                    continue;
+                }
+                if (l == len(reordered))
+                {
+                    if((find(i, reordered) == false) && (find(reordered, i) == false))
+                    {
+                        ls[i].push_back(reordered);
+                        ls[reordered].push_back(i);
+                        count++;
+                    }
+                }
+            }
+        }
+
+        cout<<"Case #"<<t<<": "<<count<<endl;
+    }
+    return 0;
+}

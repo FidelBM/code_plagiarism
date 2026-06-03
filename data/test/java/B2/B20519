@@ -1,0 +1,89 @@
+import java.util.*;
+class xyz
+{
+	public static void main(String args[])
+	{
+	Scanner sc=new Scanner(System.in);
+	int p=sc.nextInt();
+	int t=1;
+		while(p!=0)
+		{
+			int z=sc.nextInt();
+			int b=sc.nextInt();
+				int cnt=0;
+
+		for(int i=z;i<=b;i++)
+		{
+			int a[]=new int[5000];
+			String s=""+i;
+			int cnt1=0,d=0;
+			int n=Integer.parseInt(s);
+			char c[]=s.toCharArray();
+			for(int j=1;j<(c.length);j++)
+			{
+				char temp;
+				temp=c[0];
+
+				for(int k=0;k<(c.length-1);k++)
+				{
+
+
+					c[k]=c[k+1];
+
+
+				}
+				c[c.length-1]=temp;
+				String s1=new String(c);
+				int w=Integer.parseInt(s1);
+
+				if((w>n)&&(w>=z)&&(w<=b))
+				{
+					a[d]=w;
+					d++;
+
+					cnt1++;
+
+
+				}
+			}
+				int e=0,cnt2=0;
+				while(a[e]!=0)
+				{
+					cnt2++;
+					e++;
+				}
+				int len=cnt2;
+				for(int l=0;l<len;l++)
+				{
+					for(int m=l+1;m<len;m++)
+					{
+						if(a[l]==a[m])
+						{
+							for(int o=m;o<len-1;o++)
+							{
+								a[o]=a[o+1];
+							}
+							len--;
+
+						}
+					}
+				}
+
+				if(len!=cnt1)
+				{
+					cnt1=len;
+				}
+				cnt+=cnt1;
+
+		}
+
+
+		System.out.println("Case #"+t+": "+cnt);
+
+
+	t++;
+p--;		
+		}
+	
+	}
+}

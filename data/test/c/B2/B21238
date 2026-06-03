@@ -1,0 +1,48 @@
+#include<iostream>
+#include<cmath>
+using namespace std;
+
+
+
+int main()
+{
+	freopen("in.in" , "r" ,stdin);
+	freopen("out.txt" , "w" ,stdout);
+
+
+
+
+	int t, a, b;
+	cin>>t;
+	for(int i = 1; i <= t; ++i)
+	{
+
+		cin >> a >> b;
+		int ans = 0;
+
+		for(int s = a; s != b+1; ++s)
+		{
+			if(a == b) break;
+			char s1[10];
+			char s2[10];
+			sprintf(s1 , "%d" , s);
+			int len = strlen(s1);
+			for(int i = 1 ; i < len ; ++i)
+			{
+				char c = s1[0];
+				strcpy(s2,s1+1);
+				s2[len-1] = c;
+				s2[len] = 0;
+				int num = atoi(s2);
+				if(s2[0] == '0') {strcpy(s1,s2); continue;}
+				if(s < num && num >= a && num <= b)
+				{
+					++ans; 
+				}
+				strcpy(s1,s2);
+			}
+		}
+		cout << "Case #"<< i <<": " <<ans << endl;
+	}
+	return 0;
+}

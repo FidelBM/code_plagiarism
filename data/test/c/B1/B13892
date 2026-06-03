@@ -1,0 +1,38 @@
+#include <iostream>
+#include <cstdlib>
+#include <cstdio>
+#include <string>
+#include <sstream>
+
+using namespace std;
+
+int aq(int xx, int yy)
+{
+    string x,y;
+    stringstream s1,s2;
+    s1 << xx;    s1 >> x;
+    s2 << yy;    s2 >> y;
+    int i,L1=x.size(),L2=y.size();
+    if (L1!=L2)return 0;
+    for (i=0; i<L1; i++)
+    {
+        x=x.substr(1)+x[0];
+        if (x==y)return 1;
+    }
+    return 0;
+}
+int main()
+{
+    freopen ("Recycled Numbers.in" , "r" , stdin);
+    freopen ("Recycled Numbers.out" , "w" , stdout);
+    int ans=0,n,m,i,j,p,l;
+    cin >> p;
+    for (l=1; l<=p; l++,ans=0)
+    {
+        cin >> n >> m;
+        for (i=n; i<=m; i++)
+            for (j=i+1; j<=m; j++)
+                if(aq(i,j))ans++;
+        cout << "Case #" << l << ": " << ans << endl;
+    }
+}

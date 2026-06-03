@@ -1,0 +1,62 @@
+import java.util.Scanner;
+import java.util.List;
+import java.util.ArrayList;
+
+public class Recycled{
+
+    private Scanner input;
+
+    private int min = 0;
+    private int max = 0;
+    
+    private ArrayList<ArrayList<Integer>> list;
+
+    public Recycled(){
+        input = new Scanner(System.in);
+        list = new ArrayList<ArrayList<Integer>>();
+    }
+
+    public void run(){
+        precompute(2000000);
+        int T = input.nextInt();
+        for(int i = 1; i<=T; i++){
+            int A = input.nextInt();
+            int B = input.nextInt();
+            System.out.printf("Case #%d: %d\n",i,check(A,B));
+        }
+    }
+
+    public void precompute(int max){
+        list.add(new ArrayList<Integer>());
+        for(int i = 1; i <= max; i++){
+            list.add(new ArrayList<Integer>());
+            String n = String.valueOf(i);
+            for(int m = 1; m<n.length(); m++){
+                String temp = n.substring(m).concat(n.substring(0,m));
+                if(temp.charAt(0) != '0' && !temp.equals(n) && !list.get(i).contains(Integer.valueOf(temp))){
+                    list.get(i).add(Integer.valueOf(temp));
+                }
+            }
+        }
+    }
+
+    public int check(int A, int B){
+        if(A == B)
+            return 0;
+        int result = 0;
+        for(int n = A; n < B; n++){
+            for(Integer i: list.get(n)){
+                if(i >= n && i <= B){
+                    result++;
+                }
+            }
+        }
+        return result;
+    }
+
+    public static void main(String[] args){
+        Recycled object = new Recycled();
+        object.run();
+    }
+
+}

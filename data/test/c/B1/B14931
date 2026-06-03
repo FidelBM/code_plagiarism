@@ -1,0 +1,55 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include "Recycle.h"
+
+using namespace std;
+
+Recycle::Recycle()
+{
+}
+
+int Recycle::numberOfRecycles(int min, int max)
+{
+	int digits = 0;
+
+	double remaining = (double) min;
+
+	while (remaining >= 1)
+	{
+		remaining /= 10;
+		digits++;
+	}
+
+	int num = 0;
+
+	if (digits > 1)
+	{
+		for (int i = min; i <= max; i++)
+		{
+			vector<int> numbers;
+			for (int j = 0; j < digits - 1; j++)
+			{
+				bool contains = false;
+				int remainder = i % ((int) pow(10.0,j+1));
+				int quotient = i / ((int) pow(10.0,j+1));
+				int newnumber = remainder * ((int) pow(10.0,digits - j - 1)) + quotient;
+				for (vector<int>::iterator it = numbers.begin(); it != numbers.end(); it++)
+				{
+					if (*it == newnumber)
+					{
+						contains = true;
+						break;
+					}
+				}
+				if (newnumber > i && newnumber <= max && !contains)
+				{
+					numbers.push_back(newnumber);
+					num++;
+				}
+			}
+		}
+	}
+
+	return num;
+}

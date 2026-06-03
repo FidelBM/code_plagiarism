@@ -1,0 +1,82 @@
+/*
+ * Solver.cpp
+ *
+ *  Created on: Mar 17, 2012
+ *      Author: dasc
+ */
+
+#include "Solver.h"
+#include <iostream>
+#include <algorithm>
+#include <map>
+
+Solver::Solver() {
+}
+
+Solver::~Solver() {
+}
+
+void SolveCase(InputData &inputData, std::vector<OutputData> &outputs)
+{
+	OutputData outputData;
+
+	int reachTarget = 0;
+	int wouldReachTarget = 0;
+
+	//std::cout << "----" << std::endl;
+
+	for(auto totalScore : inputData.totalScores)
+	{
+		//std::cout << totalScore << std::endl;
+
+		int average = totalScore / 3;
+		int rest = totalScore % 3;
+
+		switch(rest)
+		{
+		case 0:
+			if(average >= inputData.targetBestResult)
+			{
+				//std::cout << "a" << std::endl;
+				reachTarget++;
+			}
+			else if(average + 1 >= inputData.targetBestResult && average - 1 > 0)
+			{
+				//std::cout << "b" << std::endl;
+				wouldReachTarget++;
+			}
+			break;
+		case 1:
+			if(average + 1 >= inputData.targetBestResult)
+			{
+				//std::cout << "c" << std::endl;
+				reachTarget++;
+			}
+			break;
+		case 2:
+			if(average + 1 >= inputData.targetBestResult)
+			{
+				//std::cout << "d" << std::endl;
+				reachTarget++;
+			}
+			else if(average + 2 >= inputData.targetBestResult)
+			{
+				//std::cout << "e" << std::endl;
+				wouldReachTarget++;
+			}
+			break;
+		}
+	}
+
+	outputData.maximumNumber = reachTarget + (wouldReachTarget > inputData.surprisingTriplets ? inputData.surprisingTriplets : wouldReachTarget);
+
+	outputs.push_back(outputData);
+}
+
+void Solver::Solve(std::vector<InputData> &inputs, std::vector<OutputData> &outputs)
+{
+	for(auto data : inputs)
+	{
+		SolveCase(data, outputs);
+	}
+}

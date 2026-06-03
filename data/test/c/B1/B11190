@@ -1,0 +1,91 @@
+#include <WTypes.h>
+#include <direct.h>
+#include <cmath>
+#include <assert.h>
+
+
+#ifdef STL
+    #include <algorithm>
+    #include <vector>
+    #include <list>
+    #include <map>
+    using namespace std;
+#endif
+
+enum {MAX_LINE_LEN = 512};
+#include "InputUtils.h"
+
+int A, B;
+int Len;
+int Po10;
+
+int reCount(int n)
+{
+    int count = 0;
+    int nR = n;
+
+    for (int i=0; i < Len-1; i++)
+    {
+        int MSD = nR / Po10;
+        nR = (nR - MSD*Po10) * 10 + MSD;
+        if (n == nR)
+            return count;
+
+        if ((nR>n) && (nR<=B))
+            count++;
+    }
+
+    return count;
+}
+
+int runCase()
+{
+    int count = 0;
+
+    for (int n=A; n<=B; n++)
+    {
+        count += reCount(n);
+    }
+
+    return count;
+}
+
+void Run(char* a_inputFile)
+{
+    FILE* hInput;
+    errno_t err = fopen_s(&hInput, a_inputFile, "r");
+    if (err != 0) {
+        printf("File not found \n");
+        return;
+    }
+
+    int T = readNumLine(hInput);  // number of cases
+
+    LineType line;
+    for (int i=0; i < T; i++)
+    {
+        readLine(hInput, line);
+        A = ReadFirstNumToken(line);
+        B = ReadNextNumToken();
+
+        float Len_f = log10((float)B);
+        Len = (int)Len_f + 1;
+        Po10 = (int) pow(10.0, Len-1);
+
+        int ans = runCase();
+
+        printf("Case #%d: %i \n", i+1, ans);
+    }
+}
+
+
+void main()
+{
+    _chdir(".\\Src");
+    bool fOk = SetStdoutToFile("C-small.out");
+
+    Run("C-small-attempt0.in");
+
+    system("pause");
+}
+

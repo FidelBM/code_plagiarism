@@ -1,0 +1,54 @@
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+
+using namespace std;
+const int MAXN = 2000001;
+const int ten [] = {1, 10, 100, 1000, 10000, 100000, 1000000, 10000000};
+
+int t, a, b, res;
+bool vis [MAXN];
+
+void DFS (int len, int cur, int num) {
+	if (num >= a && num <= b && vis [num]) return;
+	if (len == cur) {
+		int tmp = num, cnt = 0;
+		do {
+			int p1 = tmp / ten [len - 1];
+			int p2 = tmp % ten [len - 1];
+			tmp = p1 + p2 * ten [1];
+			
+			if (p2 % 10 != 0 && tmp >= a && tmp <= b && (!vis [tmp]))
+				vis [tmp] = true, ++cnt;
+		
+		} while (tmp != num);
+		res += cnt * (cnt - 1) / 2;
+	} else {
+		int start = (cur == 0) ? 1 : 0;
+		for (int i = start; i < 10; ++i)
+			DFS (len, cur + 1, num * 10 + i);
+	}
+}
+
+int main () {
+	freopen ("2012c.in", "r", stdin);
+	freopen ("2012c.out", "w", stdout);
+	
+	scanf ("%d\n", &t);
+	for (int c = 1; c <= t; ++c) {
+		scanf ("%d %d\n", &a, &b);
+		int lena = (int)(log (a) / log (10)) + 1;
+		int lenb = (int)(log (b) / log (10)) + 1;
+
+		res = 0;
+		memset (vis, false, sizeof (vis));
+		for (int i = lena; i <= lenb; ++i)
+			DFS (i, 0, 0);
+
+		printf ("Case #%d: %d\n", c, res);
+	}
+	
+	fclose (stdin);
+	fclose (stdout);
+	return 0;
+}

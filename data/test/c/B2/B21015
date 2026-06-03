@@ -1,0 +1,79 @@
+#include<iostream>
+using namespace std;
+#include<cmath>
+#include<vector>
+long int numofdigits(long int n)
+{
+    long int c=0;
+    while(n>0)
+    {
+        c++;
+        n=n/10;
+    }
+    return c;
+}
+
+bool isrecycle(long int x,long int y)
+{
+    long int nx=numofdigits(x);
+    long int ny=numofdigits(y);
+    if(nx!=ny || x==y)
+        return false;
+    long int t=y;
+    for(long int i=0;i<ny;i++)
+    {
+        //long int t=y;
+        if(x==t)
+            return true;
+        t=(t%10)*pow(10,ny-1) + t/10;
+    }
+    return false;
+}
+
+bool hasSameDigits (long int num1, long int num2) {
+    int digits[10];
+    int i;
+
+    for (i = 0; i < 10; i++)      // Init all counts to zero.
+        digits[i] = 0;
+
+    while (num1 != 0) {           // Process all digits.
+        digits[num1%10]++;        // Increment for least significant digit.
+        num1 /= 10;               // Get next digit in sequence.
+    }
+
+    while (num2 != 0) {           // Same for num2 except decrement.
+        digits[num2%10]--;
+        num2 /= 10;
+    }
+
+    for (i = 0; i < 10; i++)
+        if (digits[i] != 0)       // Any count different, not a permutation.
+            return false;
+
+    return true;                  // All count identical, was a permutation.
+}
+int main() {
+    long int t;
+    cin>>t;
+    for(long int k=1;k<=t;k++)
+    {
+    long int a,b;
+    cin>>a>>b;
+    long int count=0;
+    for(long int i=a;i<=b;i++)
+    {
+        for(long int j=i+1;j<=b;j++)
+        {
+            if(numofdigits(i) < numofdigits(j))
+            	break;
+            if(!hasSameDigits(i,j))
+            	continue;
+            if(isrecycle(i,j))
+                count++;
+        }
+    }
+    cout<<"Case #"<<k<<": "<<count<<endl;
+    }
+}
+

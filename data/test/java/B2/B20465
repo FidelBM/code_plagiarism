@@ -1,0 +1,32 @@
+import java.io.*;
+import java.util.*;
+class Problems 
+{
+    public static void main (String [] args) throws Exception 
+    {
+        BufferedReader f = new BufferedReader(new FileReader("input.java"));
+        PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("output.java")));
+        StringTokenizer st = new StringTokenizer(f.readLine());
+        int T=Integer.parseInt(st.nextToken());
+        for(int t=0;t<T;t++) {
+            st=new StringTokenizer(f.readLine());
+            int A=Integer.parseInt(st.nextToken());
+            int B=Integer.parseInt(st.nextToken());
+            long ans=0;
+            for(int i=A;i<=B;i++) {
+                String currNum=i+"";
+                for(int j=0;j<currNum.length();j++) {
+                    currNum=currNum.charAt(currNum.length()-1)+currNum.substring(0,currNum.length()-1);
+                    int curr=Integer.parseInt(currNum);
+                    if(curr>i&&curr<=B) {
+                        ans++;
+                    }
+                }
+            }
+            System.err.println((t+1)+"");
+            out.println("Case #"+(t+1)+": "+ans);
+        }
+        out.close();
+        System.exit(0);
+    }
+}

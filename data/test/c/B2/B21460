@@ -1,0 +1,90 @@
+// RecycledNumbers.cpp : Defines the entry point for the console application.
+//
+
+#include "stdafx.h"
+
+#include "CppUtils.h"
+
+using namespace std;
+
+void GetRecycledOrderedDistinctPairsBetween(int x, set<pair<int, int> >& pairs, int a, int b)
+{
+	pairs.clear();
+	string s = CppUtils::Stringify(x);
+
+	for (int i = 1; i < s.size(); ++i)
+	{
+		int left = s.size() - i;
+
+		int iDivisor = pow(10.0, i);
+		int leftDivisor = pow(10.0, left);
+
+		int numToMoveUp = x % iDivisor;
+		int numToMoveDown = x / iDivisor;
+
+		int pairmate = numToMoveUp * leftDivisor + numToMoveDown;
+
+		if (x != pairmate && pairmate >= a && pairmate <= b)
+		{
+			pairs.insert(pair<int, int>(min(x, pairmate), max(x, pairmate)));
+		}
+	}
+}
+
+int GetNumRecycledPairsBetween(int a, int b)
+{
+	set<pair<int, int> > allPairs;
+
+	for (int i = a; i <= b; ++i)
+	{
+		set<pair<int, int> > thesePairs;
+		GetRecycledOrderedDistinctPairsBetween(i, thesePairs, a, b);
+
+		allPairs.insert(thesePairs.begin(), thesePairs.end());
+	}
+
+	return allPairs.size();
+}
+
+vector<string> Run(const vector<string>& inputLines)
+{
+	vector<string> outputLines;
+
+	for (unsigned int i = 1; i < inputLines.size(); ++i)
+	{
+		string line = inputLines[i];
+
+		if (line == "")
+			continue;
+
+		vector<string> ab = CppUtils::Split(line, ' ');
+
+		int numRecycledPairs = GetNumRecycledPairsBetween(atoi(ab[0].c_str()), atoi(ab[1].c_str()));
+
+		outputLines.push_back(CppUtils::Stringify(numRecycledPairs));
+	}
+
+	return outputLines;
+}
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	string fileIn = argv[1];
+	string fileOut = argv[2];
+
+	bool shouldOutputCaseNums = true;
+	if (argc > 3)
+	{
+		string sShouldOutputCaseNums = argv[3];
+		shouldOutputCaseNums = sShouldOutputCaseNums == "true";
+	}
+	
+	vector<string> inputLines = CppUtils::GetLinesFromFile(fileIn);
+
+	vector<string> outputLines = Run(inputLines);
+
+	CppUtils::WriteLinesToFile(fileOut, outputLines, shouldOutputCaseNums);
+
+	return 0;
+}
+

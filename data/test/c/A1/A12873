@@ -1,0 +1,116 @@
+// Google Code Jam 2012 
+// Problem B : Dancing with the Googlers 
+
+#include <iostream> 
+#include <fstream> 
+#include <string> 
+#include <sstream> 
+#include <list> 
+using namespace std; 
+
+int main(int argc, char *argv[]) 
+{ 
+	if (argc < 3) 
+	{ 
+		cout << "[Usage] Dance input_file output_file" << endl; 
+		return -1; 
+	} 
+
+	// Initialize problem variables 
+	int numcases = 0; 
+	int numppl = 0; 
+	int numsurprising = 0; 
+	int minbestscore = 0; 
+	list<int> scorelist; 
+
+	// Open the input and outputfile  
+	ifstream inputfile; 
+	ofstream outfile; 
+	string line; 
+	inputfile.open(argv[1]); 
+	outfile.open(argv[2]); 
+
+	// Get the number of cases 
+	inputfile >> numcases; 
+	getline(inputfile, line); 
+
+	// Read through the input 
+	int count = 0; 
+	while (inputfile.good()) 
+	{ 
+		count++; 
+
+		// Get the number of googlers 
+		inputfile >> numppl; 
+
+		// Get the number of surprising scores 
+		inputfile >> numsurprising; 
+
+		// Get the minimum best score 
+		inputfile >> minbestscore; 
+
+		// Get the total points for each of the googler 
+		scorelist.clear(); 
+		for (int k = 0; k < numppl; k++) 
+		{ 
+			int totalscore; 
+			inputfile >> totalscore; 
+			scorelist.push_back(totalscore); 
+		} 
+
+		getline(inputfile, line); 
+		if (!inputfile.good()) break; 
+		
+		// Try to find the number of googlers with the minimum score 
+		int minppl = 0; 
+
+		// Iterate through the googlers 
+		list<int>::iterator m; 
+		for (m = scorelist.begin(); m != scorelist.end(); m++) 
+		{ 
+			double score = double(*m); 
+			double avgscore = score / 3.0; 
+			int iavgscore = int(avgscore); 
+			int scoreleft = *m - 3 * iavgscore; 
+
+			// Check if it is already above or equal the minimum score 
+			if (iavgscore + (scoreleft > 0) >= minbestscore) 
+			{ 
+				minppl++; 
+				continue; 
+			} 
+
+			// Else we check if making it a surprising triplet will allow it 
+			// to be above or equal to the minimum score 
+
+			// First check if we still have surprising cases available 
+			if (numsurprising <= 0) continue; 
+
+			if ((score > 0) && (scoreleft == 0) && (iavgscore + 1 >= minbestscore)) 
+			{ 
+				minppl++; 
+				numsurprising--; 
+				continue; 
+			} else if (iavgscore + scoreleft >= minbestscore) 
+			{ 
+				minppl++; 
+				numsurprising--; 
+				continue; 
+			} 
+		}
+
+		stringstream s; 
+		s << "Case #" << count << ": " << minppl; 
+		
+		outfile << s.str() << endl; 
+	} 
+
+	// Closes the file 
+	inputfile.close(); 
+	outfile.close(); 
+
+	// Successful run 
+	return 0; 
+}
+
+

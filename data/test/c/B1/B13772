@@ -1,0 +1,82 @@
+/*#include <iostream>
+#include <cstdio>
+#include <cstring>
+
+using namespace std;
+
+#define maxn 10001
+
+int mode[6]={10,100,1000,10000,100000,1000000};
+int has[maxn];
+
+int main()
+{
+    freopen("in","r",stdin);
+    int t;
+    scanf("%d",&t);
+    for(int ca=1;ca<=t;ca++){
+        int a,b,sum=0;
+        scanf("%d%d",&a,&b);
+        for(int i=a,j;i<=b;i++){
+            j=0;
+            has[i] = 1;
+            while(i>mode[j])j++;
+            for(int k=0;k<j;k++){
+                int tem = (i%mode[k])*mode[j-k-1];
+                tem +=i/mode[k];
+                if(tem>mode[j-1]&&tem<=b&&has[tem]==0){
+                    sum++;
+                    has[tem]=1;
+                }
+            }
+        }
+        printf("Case #%d: %d\n",ca,sum);
+        memset(has,0,sizeof(has));
+    }
+    return 0;
+}
+*/
+#include <iostream>
+#include <cstdio>
+
+using namespace std;
+int bit[32];
+
+int main()
+{
+freopen("C-small-attempt0.in","r",stdin);
+freopen("C-small-attempt0.out","w",stdout);
+int ca,A,B,ans,cas=1;
+cin>>ca;
+while(ca--)
+{
+cin>>A>>B;
+ans=0;
+for(int i=A;i<=B;i++)
+{
+int cnt=0,tmp=i;
+while(tmp)
+{
+bit[cnt++]=tmp%10;
+tmp/=10;
+}
+int tmp1=i,tmp2=0;
+for(int j=0;j<cnt-1;j++)
+if(bit[j]!=0)
+{
+tmp1=tmp2=0;
+for(int k=j;k>=0;k--)
+tmp2=tmp2*10+bit[k];
+for(int k=cnt-1;k>j;k--)
+{
+tmp2*=10;
+tmp1=tmp1*10+bit[k];
+}
+// cout<<i<<" "<<tmp1+tmp2<<endl;
+if(tmp1+tmp2>=A&&tmp2+tmp1<=B&&tmp1+tmp2!=i) ans++;
+}
+}
+printf("Case #%d: %d\n",cas++,ans/2);
+}
+return 0;
+}

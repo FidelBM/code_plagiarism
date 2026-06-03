@@ -1,0 +1,73 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+#include <cmath>
+using namespace std;
+
+int p[8] = {0,0,1,2,3,12,60,360};
+int aaaaa[8] = {0,0,0,0,0,0,0,0};
+
+inline int rotate(int d, int a){
+	return (a%10)*d+a/10;
+}
+
+inline int counter(int d, int a, int dd, int n, int m){
+	int answer=1;
+	aaaaa[0] = a;
+	//cout << a;
+	for(int i=1; i<d; i++){
+		a = rotate(dd,a);
+		aaaaa[i] = a;
+		bool bad = false;
+		for(int j=0; j<i; j++){
+			if(a==aaaaa[j]){
+				bad = true;
+				break;
+			}
+		}
+		if(a>=n && a<=m && !bad){
+			answer++;
+			//cout << " " << a;
+		}
+	}
+	//cout <<"     " << p[answer] << endl;
+	return p[answer];
+}
+inline int pow10(int d){
+	int i=1; 
+	for(int x=0; x<d; x++){
+		i*=10;
+	}
+	return i;
+}
+inline int zzz(int n, int m){
+	int d = log10f(m)+1;
+	int dd = pow10(d-1);
+	double answer = 0;
+	//cout << "NEW PROBLEM" << endl;
+	for(int a=n; a<=m; a++){
+		//if(counter(d,a,dd,n,m)>0)cout << a << " " << counter(d,a,dd,n,m) <<endl;
+		answer+=counter(d,a,dd,n,m);
+	}
+	return answer/2;
+}
+
+int main(){
+	ifstream myfile;
+	ofstream out;
+	//myfile.open("input.txt");
+	myfile.open("C-large.in");
+	out.open("output.txt");
+	int T;
+	myfile >> T;
+	//cout << T << endl;
+	for(int i=0; i<T; i++){
+		int n, m;
+		myfile >> n >> m;
+		out << "Case #" << i+1 << ": " << zzz(n,m) << endl;
+		//system("PAUSE");
+	}
+	//system("PAUSE");
+	return 0;
+}

@@ -1,0 +1,38 @@
+#include<stdio.h>
+#include<stdlib.h>
+int main(){
+    int t;
+    int n,s,p,ans;
+    scanf("%d",&t);
+    for(int i=0;i<t;i++){
+        ans=0;
+        scanf("%d %d %d",&n,&s,&p);
+        for(int j=0;j<n;j++){
+            int score;
+            scanf("%d",&score);
+            int temp=score/3;
+            if(score%3==2){
+                if(temp>=p)ans++;
+                else if(temp+1>=p)ans++;
+                else if(temp+2>=p&&s>0){
+                    ans++;
+                    s--;
+                }
+            }
+            else if(score%3==1){
+                if(temp>=p)ans++;
+                else if(temp+1>=p)ans++;
+            }
+            else{
+                if(temp>=p)ans++;
+                else if(temp+1>=p&&s>0&&temp>0){
+                    ans++;
+                    s--;
+                }
+            }
+        }
+        printf("Case #%d: %d\n",i+1,ans);
+
+    }
+    return 0;
+}

@@ -1,0 +1,46 @@
+#include<iostream>
+#include<sstream>
+#include<map>
+using namespace std;
+
+stringstream ss;
+string text, m_text;
+map<string, bool> record;
+
+int isRecycled(long n, long a, long b)
+{
+	if(n<=10) return 0;
+	
+	long i, l, m;
+	
+	ss.clear();
+	ss<<n;
+	ss>>text;
+	l=text.length();
+	record.clear();
+	for(i=1;i<l;i++)
+	{
+		m_text=text.substr(l-i, i)+text.substr(0, l-i);
+		if(m_text[0]=='0') continue;
+		ss.clear();
+		ss<<m_text;
+		ss>>m;
+		if(m>n && m<=b) record[text+m_text] = 1;
+	}
+	return record.size();
+}
+
+int main()
+{
+	int n, m;
+	long a, b, i, j;
+	cin >> n;
+	for(m=1; m<=n; m++)
+	{
+		cin >> a >> b;
+		j=0;
+		for(i=a;i<=b;i++)
+			j+=isRecycled(i,a,b);
+		cout << "Case #" << m << ": " << j << endl;
+	}
+}

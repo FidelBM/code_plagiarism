@@ -1,0 +1,39 @@
+import java.io.*;
+import java.util.*;
+
+public class ProblemC {
+	public static void main(String[] args) {
+		try {
+			Set<Integer> alltuples = new HashSet<Integer>();
+
+			PrintWriter fout = new PrintWriter(new FileWriter("CJ"));
+			BufferedReader fin = new BufferedReader(new FileReader("C-large.in"));
+
+			String l;
+			String[] p;
+			Integer i, j, k, m, n, ans,tests = Integer.valueOf(fin.readLine());
+			for(i = 1; i <= tests; ++i) {
+				ans = 0;
+				p = fin.readLine().split(" ");
+				j = Integer.valueOf(p[0]);
+				k = Integer.valueOf(p[1]);
+				for(j = j; j < k; ++j) {
+					alltuples.clear();
+					l = j.toString();
+					for(m = 1; m < l.length(); ++m) {
+						n = Integer.valueOf(l.substring(m) + l.substring(0,m));
+						if(n > j && n <= k)
+							alltuples.add(n);
+					}
+					ans += alltuples.size();
+				}
+				fout.println("Case #" + i +": " + ans);
+			}
+
+			fin.close();
+			fout.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+}

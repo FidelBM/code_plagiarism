@@ -1,0 +1,71 @@
+package com.google.codejam.p2;
+
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+
+public class Problem2 {
+
+	private ArrayList<TestCase> cases = new ArrayList<TestCase>();
+	
+	public void loadInput() {
+		try{
+			FileInputStream fstream = new FileInputStream("input2.txt");
+			DataInputStream in = new DataInputStream(fstream);
+			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+			String strLine = br.readLine(); //read number of lines
+			while ((strLine = br.readLine()) != null) {
+				String[] info = strLine.split(" ");
+				int N = Integer.parseInt(info[0]);
+				int S = Integer.parseInt(info[1]);
+				int p = Integer.parseInt(info[2]);
+				ArrayList<Integer> scores = new ArrayList<Integer>();
+				for (int i=1; i<=N; i++)
+					scores.add(Integer.parseInt(info[2+i]));
+				cases.add(new TestCase(N, S, p, scores));
+			}
+			in.close();
+		}
+		catch (Exception e) { }
+	}
+	
+	public static boolean isAtLeastP(int score, int p, boolean usingSurprisingTriplet) {
+		int minus1 = (p-1<0?0:p-1);
+		int minus2 = (p-2<0?0:p-2);
+		if (score >= p+minus1+minus1)
+			return true;
+		if (usingSurprisingTriplet) {
+			if (score >= p+minus2+minus2)
+				return true;	
+		}
+		return false;
+	}
+	
+	public void getOutput() {
+		for (int i=0; i<cases.size(); i++) {
+			TestCase tc = cases.get(i);
+			int total = 0;
+			for (int score : tc.scores) {
+				if (isAtLeastP(score, tc.p, false))
+					total++;
+				else if (tc.S > 0) {
+					if (isAtLeastP(score, tc.p, true)) {
+						total++;
+						tc.S--;
+					}
+				}
+			}
+			System.out.println("Case #" + (i+1) + ": " + total);
+		}
+	}
+	
+	
+	public static void main(String args[]) {
+		Problem2 p = new Problem2();
+		p.loadInput();
+		p.getOutput();
+	}
+	
+}

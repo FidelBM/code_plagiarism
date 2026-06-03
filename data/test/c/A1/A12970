@@ -1,0 +1,19 @@
+/*
+ * OutputData.h
+ *
+ *  Created on: Mar 17, 2012
+ *      Author: dasc
+ */
+
+#ifndef OUTPUTDATA_H_
+#define OUTPUTDATA_H_
+
+#include <string>
+
+class OutputData
+{
+public:
+	int maximumNumber;
+};
+
+#endif /* OUTPUTDATA_H_ */

@@ -1,0 +1,63 @@
+#include <iostream>
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
+
+using namespace std;
+
+int A,B;
+bool arr[10000][10000];
+
+
+int make_pair(int a)
+{
+
+   int b,c,d,f, cnt=0;
+   
+   for(int i = 1; i <= log10(a); i++)
+   {
+
+      b = a % (int)pow(10,i);
+      c = a / pow(10,i);
+      d = log10(a);
+      f = b*pow(10,d-i+1)+c;
+      //cout << b << " : " << c << " : " << d << "\n";
+
+      if(A <= a && a < f && f <= B && !(arr[a][f] || arr[f][a]))
+      {
+         //cout << "(" << a << ", " << f << ")\tokey" << endl;
+         arr[a][f] = 1;
+         arr[f][a] = 1;
+         cnt++;
+      }
+      else
+      {
+         //cout << f << "\ttoo big" << endl;
+      }
+   }
+
+   return cnt;
+}
+
+int main() 
+{
+   int n, sum = 0;
+
+   cin >> n;
+
+   for(int t = 1; t <= n; t++)
+   {
+      cin >> A >> B;
+      memset(arr,0,100000000);
+      for(int i = 0; i <= B; i++)
+      {
+
+         sum += make_pair(i);
+
+      }
+
+      cout << "Case #" << t << ": " << sum << endl;
+      sum = 0;
+   }
+return 0;
+}

@@ -1,0 +1,108 @@
+#include<iostream>
+
+using namespace std;
+
+
+
+int main()
+{
+    int c,m,i,l,p,f;
+    cin>>c;
+    for(int i1=1;i1<=c;i1++)
+    {
+            cin>>l>>p;
+            f=0;
+    for(i=l;i<=p;i++)
+    {
+                        
+                        if(i<10)
+                        {
+                                f=0;
+                        }
+                        else if(i<100)
+                        {
+                            
+                           m=i;
+                           m=((m%10)*10)+(m/10);
+                           if(m>i && m<=p)
+                                  f++;  
+                           
+                           
+                        }
+                        else if(i<1000)
+                        {
+                             
+                              m=i;
+                             for(int j=0;j<2;j++)
+                             {
+                                     m=((m%10)*100)+(m/10);
+                                     if(m>i && m<=p)
+                                     
+                                         f++;
+                                            
+                             }
+                        }
+                        else if(i<10000)
+                        {
+                             
+                              m=i;
+                             for(int j=0;j<3;j++)
+                             {
+                                     m=((m%10)*1000)+(m/10);
+                                     if(m>i && m<=p)
+                                     
+                                         f++;
+                                            
+                             }
+                        }
+                        else if(i<100000)
+                        {
+                             
+                              m=i;
+                             for(int j=0;j<4;j++)
+                             {
+                                     m=((m%10)*10000)+(m/10);
+                                     if(m>i && m<=p)
+                                     
+                                         f++;
+                                            
+                             }
+                        }
+                        else if(i<1000000)
+                        {
+                             
+                              m=i;
+                             for(int j=0;j<5;j++)
+                             {
+                                     m=((m%10)*100000)+(m/10);
+                                     if(m>i && m<=p)
+                                     
+                                         f++;
+                                            
+                             }
+                        }
+                        else if(i<2000001)
+                        {
+                             
+                              m=i;
+                             for(int j=0;j<6;j++)
+                             {
+                                     m=((m%10)*1000000)+(m/10);
+                                     if(m>i && m<=p)
+                                     
+                                         f++;
+                                            
+                             }
+                        }
+                        
+                           
+    }
+    if(p<=2000)
+               cout<<"Case #"<<i1<<": "<<f<<endl;
+    else
+               cout<<"Case #"<<i1<<": "<<f-1<<endl;
+}
+    
+   // cin>>i;
+}
+

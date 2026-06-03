@@ -1,0 +1,119 @@
+#include "algo.h"
+#include <QString>
+#include <QDebug>
+#define max(a,b) ((a)<(b)?(b):(a))
+#define min(a,b) ((a)>(b)?(b):(a))
+#define sign(a) ((a)>0?1:((a)<0?-1:0))
+#define theOther(a) ((a)==ORANGE?BLUE:ORANGE)
+
+QMutex Algo::mutex;
+
+int numberOfDigits(int n)
+{
+    int nbD = 0;
+    float nfl = n;
+    while(nfl>=1)
+    {
+        nbD++;
+        nfl/=10;
+    }
+    return nbD;
+};
+
+void Algo::run()
+{
+   // Algo::mutex.lock();
+    int score = 0;
+    int minDigits=0;
+    float af = a;
+    int temp;
+    int cycleCount;
+    for(int i=a;i<=b;++i)
+    {
+        cycleCount = findCycle(i);
+        if(cycleCount>1)
+        {
+            temp = cycleCount*(cycleCount-1);
+            temp = temp>>1;
+            score+=temp;
+        }
+    }
+
+    qDebug()<<"score "<<score;
+
+
+
+    //Algo::mutex.unlock();
+
+
+    result = QString::number(score);
+}
+
+
+int Algo::findCycle(int n)
+{
+    //qDebug()<<"cycle "<<n;
+    QList<int>  list;
+
+    int o = n;
+    int nbD = 0;
+    float nfl = n;
+    while(nfl>=1)
+    {
+        nbD++;
+        nfl/=10;
+    }
+
+    list.push_back(n);
+    for(int i=0;i<nbD-1;++i)
+    {
+        n = cycle(n);
+        //qDebug()<<"test "<<n;
+        if(n>= a && n<o)// && numberOfDigits(n)==nbD)
+        {
+            //qDebug()<<o<<" rejette cause of : "<<n;
+            return 0;
+        }
+        if(n>=a && n<=b && !list.contains(n))
+        {
+            //qDebug()<<"found "<<n;
+            list.push_back(n);
+        }
+    }
+    /*
+    if(list.count()>1)
+    {
+        qDebug()<<"new Pairs";
+        foreach(int d,list)
+        {
+            qDebug()<<d;
+        }
+    } // */
+    return list.count();
+}
+
+int Algo::cycle(int n)
+{
+    int nbD = 0;
+    float nfl = n;
+    int p=1;
+
+
+    nbD++;
+    nfl/=10;
+    while(nfl>=1)
+    {
+        p*=10;
+        nbD++;
+        nfl/=10;
+    }
+    int r;
+    do{
+        r = n%10;
+        n=(int)((n-r)/10);
+    }while(r==0);
+    //qDebug()<<n<<" => : "<<(((int)((n-r)/10))+r*p);
+
+
+    return n+r*p;
+}

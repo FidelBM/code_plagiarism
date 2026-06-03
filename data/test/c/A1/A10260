@@ -1,0 +1,38 @@
+#ifndef ALGO_H
+#define ALGO_H
+#include <QList>
+#include <QThread>
+#include <QMutex>
+
+enum{ORANGE,BLUE};
+
+
+
+class Step
+{
+public:
+    int computer;
+    int button;
+};
+
+class Algo : public QThread
+{
+public:
+    Algo(int id) : id(id) { name = "Algo "+QString::number(id); }
+
+    void run();
+    QString result;
+    QString name;
+    int id;
+    static QMutex mutex;
+
+
+
+    int surprises;
+    int minScore;
+    QList<int> googlersScore;
+
+
+};
+
+#endif // ALGO_H

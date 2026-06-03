@@ -1,0 +1,65 @@
+#include<sstream>
+#include<string.h>
+#include<stdio.h>
+#include<cmath>
+#include<iostream>
+#include<string>
+#include<algorithm>
+#include<fstream>
+#include<set>
+#include<utility>
+using namespace std;
+
+int main ()
+{
+  ifstream in ("C-large.in");
+  ofstream out ("A2.out");
+  int T,A,B,Fact[10]={1,1,2,6,24,120,720,5040,40320,362880};
+  in>>T;
+  for (int i=1;i<T+1;++i)
+  {
+    if (i!=1)
+      out<<endl;
+    in>>A>>B;
+    int count=0;
+      bool * Arr=new bool[B-A+100];
+      memset(Arr,false,B-A+100);
+    for (int j=A;j<=B;++j)
+    {
+      int localCounter=0;
+      if (Arr[j-A])
+        continue;
+      Arr[j-A]=true;
+      stringstream ss;
+      ss<<j;
+      string temp=ss.str();
+      int number=j,size=temp.size();
+      temp+=temp;
+      number=j;
+      for (int k=1;k<size;++k)
+      {
+        number-=(int)pow(10.0,1.0*size-1)*(temp[k-1]-'0');
+        number*=10;
+        number+=temp[k-1]-'0';
+        if (temp[k]!='0'&&number!=j&&number>=A&&number<=B&&!Arr[number-A])
+        {
+          //out<<"Work:"<<number<<endl;;
+          localCounter++;
+          Arr[number-A]=true;
+        }
+      }
+      //if (localCounter==0)
+        //out<<"Doesn't Work:"<<j<<endl;
+      if (localCounter==1)
+      {
+        ++count;
+      }
+      else if (localCounter>1)
+      {
+        count+=Fact[localCounter+1]/(2*(localCounter-1));
+      }
+    }
+    out<<"Case #"<<i<<": "<<count;
+  }
+  return 0;
+}

@@ -1,0 +1,130 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package competition;
+
+/**
+ *
+ * @author Sriram
+ */
+//import static java.lang.System.*;
+import java.util.*;
+import java.io.*;
+
+public class RecycledNumbers_GCJ_2012{
+
+    public static void main(String args[]) throws Exception
+    {
+      Scanner in = new Scanner(new java.io.FileInputStream("f:\\input.in"));
+      PrintStream out = new PrintStream(new FileOutputStream("f:\\output.out"));
+      int T = in.nextInt();
+      for(int zz=0; zz<T;zz++)
+      {
+          int A,B;
+          A = in.nextInt();
+          B = in.nextInt();
+          HashSet<Integer> s = new HashSet<Integer>();
+          int count = 0;
+          for(int i=A;i<(B+1);i++)
+          {
+              int[] perm = rotations(i);
+              for(int e: perm)
+              {
+                  if((e>=A)&&(e<=B)&&(e>i))
+                  {
+                     s.add(e);
+                     count++;
+                  }
+              }
+          }
+          out.printf("Case #%d: %d\n",(zz+1),count);
+      }
+    }
+
+    static int[] rotations(int n) {
+        // Max places for small set: 4
+        // Max places for large set: 7
+        if((n/1000000)>0)
+        {
+            int a,b,c,d,e,f,g;
+            g = n%10;
+            n/=10;
+            f = n%10;
+            n/=10;
+            e = n%10;
+            n/=10;
+            d = n%10;
+            n/=10;
+            c = n%10;
+            n/=10;
+            b = n%10;
+            n/=10;
+            a = n%10;
+            return new int[]{(a*1000000+b*100000+c*10000+d*1000+e*100+f*10+g),(b*1000000+c*100000+d*10000+e*1000+f*100+g*10+a),(c*1000000+d*100000+e*10000+f*1000+g*100+a*10+b),(d*1000000+e*100000+f*10000+g*1000+a*100+b*10+c),(e*1000000+f*100000+g*10000+a*1000+b*100+c*10+d),(f*1000000+g*100000+a*10000+b*1000+c*100+d*10+e),(g*1000000+a*100000+b*10000+c*1000+d*100+e*10+f)};
+        }
+        if((n/100000)>0)
+        {
+            int a,b,c,d,e,f;
+            f = n%10;
+            n/=10;
+            e = n%10;
+            n/=10;
+            d = n%10;
+            n/=10;
+            c = n%10;
+            n/=10;
+            b = n%10;
+            n/=10;
+            a = n%10;
+            return new int[]{(a*100000+b*10000+c*1000+d*100+e*10+f),(b*100000+c*10000+d*1000+e*100+f*10+a),(c*100000+d*10000+e*1000+f*100+a*10+b),(d*100000+e*10000+f*1000+a*100+b*10+c),(e*100000+f*10000+a*1000+b*100+c*10+d),(f*100000+a*10000+b*1000+c*100+d*10+e)};
+        }
+        if(n/10000>0)
+        {
+          int a,b,c,d,e;
+          e = n%10;
+          n/=10;
+          d = n%10;
+          n/=10;
+          c = n%10;
+          n/=10;
+          b = n%10;
+          n/=10;
+          a = n%10;
+          return new int[]{(a*10000+b*1000+c*100+d*10+e),(b*10000+c*1000+d*100+e*10+a),(c*10000+d*1000+e*100+a*10+b),(d*10000+e*1000+a*100+b*10+c),(e*10000+a*1000+b*100+c*10+d)};
+        }
+        if((n/1000>0))
+        {
+        if (n == 1000) {
+            return new int[]{1000, 100, 10, 1};
+        }
+        int a,b,c,d;
+        d = n%10;
+        a = n/1000;
+        b = (n-(a*1000))/100;
+        c = ((n%100)-d)/10;
+        return new int[]{(a*1000+b*100+c*10+d),(b*1000+c*100+d*10+a),(c*1000+d*100+a*10+b),(d*1000+a*100+b*10+c)};
+        }
+        if ((n / 100) > 0) {
+            if (n == 100) {
+                return new int[]{100, 10, 1};
+            }
+            int x, y, z;
+            z = n%10;
+            x = n/100;
+            y = (n-(x*100)-z)/10;
+            return new int[]{(x * 100) +(y * 10) + z, (y * 100 + z * 10 + x), (z * 100 + x * 10 + y)};
+        }
+        if((n/10)>0)
+        {
+            if(n == 10)
+                return new int[]{10,1};
+            int x,y;
+            x = n/10;
+            y = n%10;
+            return new int[]{x*10+y,y*10+x};
+        }
+        return new int[]{n};
+
+    }
+}

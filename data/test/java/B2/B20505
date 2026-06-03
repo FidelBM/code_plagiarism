@@ -1,0 +1,298 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+
+
+public class RecycledNumberTest {
+
+	public static void main(String[] args) {
+		int numCase = 0;
+		int caseIndex = 0;
+		int[] minValues = null;
+		int[] maxValues = null;
+		
+		try {
+			FileReader reader = new FileReader("C:\\Users\\CheeMeng\\Downloads\\C-large.in");
+			BufferedReader br = new BufferedReader(reader);
+			String s = br.readLine();
+			numCase = new Integer(s).intValue();
+			minValues = new int[numCase];
+			maxValues = new int[numCase];
+			while((s = br.readLine()) != null) {
+				String s1[] = s.split(" ");
+				minValues[caseIndex] = new Integer(s1[0]).intValue();
+				maxValues[caseIndex] = new Integer(s1[1]).intValue();
+				caseIndex++;
+			} 
+			reader.close(); 
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+//		numCase = 7;
+//		minValues = new int[numCase];
+//		maxValues = new int[numCase];
+//		minValues[0] = 1;
+//		maxValues[0] = 9;
+//		minValues[1] = 10;
+//		maxValues[1] = 40;
+//		minValues[2] = 100;
+//		maxValues[2] = 500;
+//		minValues[3] = 1111;
+//		maxValues[3] = 2222;
+//		minValues[4] = 12345;
+//		maxValues[4] = 67890;
+//		minValues[5] = 111111;
+//		maxValues[5] = 222222;
+//		minValues[6] = 1111111;
+//		maxValues[6] = 1999999;
+
+		for (int i = 1; i <= numCase; i++)  {
+			System.out.println("Case #" + i + ": " + recycledTest(minValues[i - 1], maxValues[i - 1]));
+		}
+	}
+
+	
+	public static int recycledTest(int min, int max)  {
+		int count = 0;
+		int numDigits = (int) Math.ceil(Math.log10((float) max));
+		if (numDigits == 1)  {
+			return count;
+		}
+		int[] recycledNum = new int[numDigits - 1];
+		
+		if (numDigits == 2)  {
+			for (int a0 = 1; a0 <= 9; a0++)  {
+				for (int a1 = 0; a1 <= 9; a1++)  {
+					if (a0 < a1)  {
+						int actualNum = 10 * a0 + a1;
+						recycledNum[0] = 10 * a1 + a0;
+						if ((actualNum >= min) && (actualNum <= max) && (recycledNum[0] >= min) && (recycledNum[0] <= max) && (actualNum < recycledNum[0]))  {
+							count++;
+						}
+					}
+				}
+			}
+		}
+		else if (numDigits == 3)  {
+			for (int a0 = 1; a0 <= 9; a0++)  {
+				for (int a1 = 0; a1 <= 9; a1++)  {
+					for (int a2 = 0; a2 <= 9; a2++)  {
+						int actualNum = 100 * a0 + 10* a1 + a2;
+						recycledNum[0] = 100 * a1 + 10 * a2 + a0;
+						recycledNum[1] = 100 * a2 + 10 * a0 + a1;
+						if (a1 > 0)  {
+							if ((actualNum >= min) && (actualNum <= max) && (recycledNum[0] >= min) && (recycledNum[0] <= max) && (actualNum < recycledNum[0]))  {
+								count++;
+							}
+						}
+						if (a2 > 0)  {
+							if ((actualNum >= min) && (actualNum <= max) && (recycledNum[1] >= min) && (recycledNum[1] <= max) && (actualNum < recycledNum[1]))  {
+								if (recycledNum[1] != recycledNum[0])  {
+									count++;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		else if (numDigits == 4)  {
+			for (int a0 = 1; a0 <= 9; a0++)  {
+				for (int a1 = 0; a1 <= 9; a1++)  {
+					for (int a2 = 0; a2 <= 9; a2++)  {
+						for (int a3 = 0; a3 <= 9; a3++)  {
+							int actualNum = 1000 * a0 + 100 * a1 + 10 * a2 + a3;
+							recycledNum[0] = 1000 * a1 + 100 * a2 + 10 * a3 + a0;
+							recycledNum[1] = 1000 * a2 + 100 * a3 + 10 * a0 + a1;
+							recycledNum[2] = 1000 * a3 + 100 * a0 + 10 * a1 + a2;
+							if (a1 > 0)  {
+								if ((actualNum >= min) && (actualNum <= max) && (recycledNum[0] >= min) && (recycledNum[0] <= max) && (actualNum < recycledNum[0]))  {
+									count++;
+								}
+							}
+							if (a2 > 0)  {
+								if ((actualNum >= min) && (actualNum <= max) && (recycledNum[1] >= min) && (recycledNum[1] <= max) && (actualNum < recycledNum[1]))  {
+									if (recycledNum[1] != recycledNum[0])  {
+										count++;
+									}
+								}
+							}
+							if (a3 > 0)  {
+								if ((actualNum >= min) && (actualNum <= max) && (recycledNum[2] >= min) && (recycledNum[2] <= max) && (actualNum < recycledNum[2]))  {
+									if ((recycledNum[2] != recycledNum[0]) && (recycledNum[2] != recycledNum[1]))  {
+										count++;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		else if (numDigits == 5)  {
+			for (int a0 = 1; a0 <= 9; a0++)  {
+				for (int a1 = 0; a1 <= 9; a1++)  {
+					for (int a2 = 0; a2 <= 9; a2++)  {
+						for (int a3 = 0; a3 <= 9; a3++)  {
+							for (int a4 = 0; a4 <= 9; a4++)  {
+								int actualNum = 10000 * a0 + 1000 * a1 + 100 * a2 + 10 * a3 + a4;
+								recycledNum[0] = 10000 * a1 + 1000 * a2 + 100 * a3 + 10 * a4 + a0;
+								recycledNum[1] = 10000 * a2 + 1000 * a3 + 100 * a4 + 10 * a0 + a1;
+								recycledNum[2] = 10000 * a3 + 1000 * a4 + 100 * a0 + 10 * a1 + a2;
+								recycledNum[3] = 10000 * a4 + 1000 * a0 + 100 * a1 + 10 * a2 + a3;
+								if (a1 > 0)  {
+									if ((actualNum >= min) && (actualNum <= max) && (recycledNum[0] >= min) && (recycledNum[0] <= max) && (actualNum < recycledNum[0]))  {
+										count++;
+									}
+								}
+								if (a2 > 0)  {
+									if ((actualNum >= min) && (actualNum <= max) && (recycledNum[1] >= min) && (recycledNum[1] <= max) && (actualNum < recycledNum[1]))  {
+										if (recycledNum[1] != recycledNum[0])  {
+											count++;
+										}
+									}
+								}
+								if (a3 > 0)  {
+									if ((actualNum >= min) && (actualNum <= max) && (recycledNum[2] >= min) && (recycledNum[2] <= max) && (actualNum < recycledNum[2]))  {
+										if ((recycledNum[2] != recycledNum[0]) && (recycledNum[2] != recycledNum[1]))  {
+											count++;
+										}
+									}
+								}
+								if (a4 > 0)  {
+									if ((actualNum >= min) && (actualNum <= max) && (recycledNum[3] >= min) && (recycledNum[3] <= max) && (actualNum < recycledNum[3]))  {
+										if ((recycledNum[3] != recycledNum[0]) && (recycledNum[3] != recycledNum[1]) && (recycledNum[3] != recycledNum[2]))  {
+											count++;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		else if (numDigits == 6)  {
+			for (int a0 = 1; a0 <= 9; a0++)  {
+				for (int a1 = 0; a1 <= 9; a1++)  {
+					for (int a2 = 0; a2 <= 9; a2++)  {
+						for (int a3 = 0; a3 <= 9; a3++)  {
+							for (int a4 = 0; a4 <= 9; a4++)  {
+								for (int a5 = 0; a5 <= 9; a5++)  {
+									int actualNum = 100000 * a0 + 10000 * a1 + 1000 * a2 + 100 * a3 + 10 * a4 + a5;
+									recycledNum[0] = 100000 * a1 + 10000 * a2 + 1000 * a3 + 100 * a4 + 10 * a5 + a0;
+									recycledNum[1] = 100000 * a2 + 10000 * a3 + 1000 * a4 + 100 * a5 + 10 * a0 + a1;
+									recycledNum[2] = 100000 * a3 + 10000 * a4 + 1000 * a5 + 100 * a0 + 10 * a1 + a2;
+									recycledNum[3] = 100000 * a4 + 10000 * a5 + 1000 * a0 + 100 * a1 + 10 * a2 + a3;
+									recycledNum[4] = 100000 * a5 + 10000 * a0 + 1000 * a1 + 100 * a2 + 10 * a3 + a4;
+									if (a1 > 0)  {
+										if ((actualNum >= min) && (actualNum <= max) && (recycledNum[0] >= min) && (recycledNum[0] <= max) && (actualNum < recycledNum[0]))  {
+											count++;
+										}
+									}
+									if (a2 > 0)  {
+										if ((actualNum >= min) && (actualNum <= max) && (recycledNum[1] >= min) && (recycledNum[1] <= max) && (actualNum < recycledNum[1]))  {
+											if (recycledNum[1] != recycledNum[0])  {
+												count++;
+											}
+										}
+									}
+									if (a3 > 0)  {
+										if ((actualNum >= min) && (actualNum <= max) && (recycledNum[2] >= min) && (recycledNum[2] <= max) && (actualNum < recycledNum[2]))  {
+											if ((recycledNum[2] != recycledNum[0]) && (recycledNum[2] != recycledNum[1]))  {
+												count++;
+											}
+										}
+									}
+									if (a4 > 0)  {
+										if ((actualNum >= min) && (actualNum <= max) && (recycledNum[3] >= min) && (recycledNum[3] <= max) && (actualNum < recycledNum[3]))  {
+											if ((recycledNum[3] != recycledNum[0]) && (recycledNum[3] != recycledNum[1]) && (recycledNum[3] != recycledNum[2]))  {
+												count++;
+											}
+										}
+									}
+									if (a5 > 0)  {
+										if ((actualNum >= min) && (actualNum <= max) && (recycledNum[4] >= min) && (recycledNum[4] <= max) && (actualNum < recycledNum[4]))  {
+											if ((recycledNum[4] != recycledNum[0]) && (recycledNum[4] != recycledNum[1]) && (recycledNum[4] != recycledNum[2]) && (recycledNum[4] != recycledNum[3]))  {
+												count++;
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		else if (numDigits == 7)  {
+			for (int a0 = 1; a0 <= 1; a0++)  {
+				for (int a1 = 0; a1 <= 9; a1++)  {
+					for (int a2 = 0; a2 <= 9; a2++)  {
+						for (int a3 = 0; a3 <= 9; a3++)  {
+							for (int a4 = 0; a4 <= 9; a4++)  {
+								for (int a5 = 0; a5 <= 9; a5++)  {
+									for (int a6 = 0; a6 <= 9; a6++)  {
+										int actualNum = 1000000 * a0 + 100000 * a1 + 10000 * a2 + 1000 * a3 + 100 * a4 + 10 * a5 + a6;
+										recycledNum[0] = 1000000 * a1 + 100000 * a2 + 10000 * a3 + 1000 * a4 + 100 * a5 + 10 * a6 + a0;
+										recycledNum[1] = 1000000 * a2 + 100000 * a3 + 10000 * a4 + 1000 * a5 + 100 * a6 + 10 * a0 + a1;
+										recycledNum[2] = 1000000 * a3 + 100000 * a4 + 10000 * a5 + 1000 * a6 + 100 * a0 + 10 * a1 + a2;
+										recycledNum[3] = 1000000 * a4 + 100000 * a5 + 10000 * a6 + 1000 * a0 + 100 * a1 + 10 * a2 + a3;
+										recycledNum[4] = 1000000 * a5 + 100000 * a6 + 10000 * a0 + 1000 * a1 + 100 * a2 + 10 * a3 + a4;
+										recycledNum[5] = 1000000 * a6 + 100000 * a0 + 10000 * a1 + 1000 * a2 + 100 * a3 + 10 * a4 + a5;
+										if (a1 > 0)  {
+											if ((actualNum >= min) && (actualNum <= max) && (recycledNum[0] >= min) && (recycledNum[0] <= max) && (actualNum < recycledNum[0]))  {
+												count++;
+											}
+										}
+										if (a2 > 0)  {
+											if ((actualNum >= min) && (actualNum <= max) && (recycledNum[1] >= min) && (recycledNum[1] <= max) && (actualNum < recycledNum[1]))  {
+												if (recycledNum[1] != recycledNum[0])  {
+													count++;
+												}
+											}
+										}
+										if (a3 > 0)  {
+											if ((actualNum >= min) && (actualNum <= max) && (recycledNum[2] >= min) && (recycledNum[2] <= max) && (actualNum < recycledNum[2]))  {
+												if ((recycledNum[2] != recycledNum[0]) && (recycledNum[2] != recycledNum[1]))  {
+													count++;
+												}
+											}
+										}
+										if (a4 > 0)  {
+											if ((actualNum >= min) && (actualNum <= max) && (recycledNum[3] >= min) && (recycledNum[3] <= max) && (actualNum < recycledNum[3]))  {
+												if ((recycledNum[3] != recycledNum[0]) && (recycledNum[3] != recycledNum[1]) && (recycledNum[3] != recycledNum[2]))  {
+													count++;
+												}
+											}
+										}
+										if (a5 > 0)  {
+											if ((actualNum >= min) && (actualNum <= max) && (recycledNum[4] >= min) && (recycledNum[4] <= max) && (actualNum < recycledNum[4]))  {
+												if ((recycledNum[4] != recycledNum[0]) && (recycledNum[4] != recycledNum[1]) && (recycledNum[4] != recycledNum[2]) && (recycledNum[4] != recycledNum[3]))  {
+													count++;
+												}
+											}
+										}
+										if (a6 > 0)  {
+											if ((actualNum >= min) && (actualNum <= max) && (recycledNum[5] >= min) && (recycledNum[5] <= max) && (actualNum < recycledNum[5]))  {
+												if ((recycledNum[5] != recycledNum[0]) && (recycledNum[5] != recycledNum[1]) && (recycledNum[5] != recycledNum[2]) && (recycledNum[5] != recycledNum[3]) && (recycledNum[5] != recycledNum[4]))  {
+													count++;
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		return count;
+	}	
+}

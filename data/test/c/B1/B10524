@@ -1,0 +1,117 @@
+#include <cstdlib>
+#include <iostream>
+#include <algorithm>
+#include <utility>
+
+#include <vector>
+
+#include "counter.h"
+
+#define DEBUG 1
+
+using std::vector;
+using std::sort;
+using std::cout;
+using std::endl;
+using std::make_pair;
+using std::set;
+
+int Counter::CalcNumberFromDigits(vector<int> digits) {
+  int number = 0;
+  vector<int>::iterator it;
+  int multiplier=1;
+  for(it = (digits.end()-1); it != (digits.begin() - 1); --it) {
+    number += (*it) * multiplier;
+    multiplier = multiplier * 10;
+  }
+  return number;
+}
+
+set<int>*  Counter::permute_to_lowest(vector<int>* digits) {
+  set<int>* set_perm = new set<int>();
+  vector<int>::iterator it;
+  vector<int>::iterator save_pos;
+  bool found = false;
+  for(int lowest_num = 1; lowest_num <= 9 && !found; lowest_num++) {
+    for(it = digits->begin(); it != digits->end(); ++it) {
+      vector<int> tmp;
+      if((*it) == lowest_num) {
+    //    cout << "Found lowest numer " << (*it) << endl;
+        found = true;
+        vector<int>::iterator it_copy = it;
+        save_pos = it;
+        do {
+        //  cout << "Push back number " << (*it) << endl;
+          tmp.push_back((*it_copy));
+          it_copy++;
+        } while(it_copy != digits->end());
+
+        for(it_copy = digits->begin(); it_copy != save_pos; ++it_copy) {
+         // cout << "Push back number " << (*it) << endl;
+          tmp.push_back((*it_copy));
+        }
+        int number = CalcNumberFromDigits(tmp);
+        set_perm->insert(number);
+      }
+    }
+  }
+  return set_perm;
+}
+
+// transforms int into int vector, permutes the vector to the lowest number
+// and increases the counter
+void Counter::AddNumber(int number) {
+  int orig = number;
+  int permuted_number = 0;
+  int max = 1000000;
+  bool leading_zeros = true;
+  int dividable = 0;
+  // we can have at most 7 digits
+  int n_digits = 7;
+  vector<int> digits;
+  do {
+    dividable = (number / max);
+    number = number - (dividable * max);
+//    cout << "dividable = (number / max) : " << dividable << " = " << "(" << number << " / " << max << ")" << endl;
+    max = max/10;
+    if(dividable == 0 && leading_zeros)
+      n_digits--;
+    else {
+      leading_zeros = false;
+      digits.push_back(dividable);
+    }
+  } while(max != 0);
+
+//#ifdef DEBUG
+//  cout << "Number of digits for '" << number << "' is '" << n_digits<< "'" << endl;
+//#endif
+
+  set<int>* permuted_numbers = permute_to_lowest(&digits);
+
+//#ifdef DEBUG  
+//  cout << "Permuted digits of '" << number << "' are ";
+//#endif  
+  
+//#ifdef DEBUG  
+//  cout << endl;
+//#endif  
+
+  permuted_number = (*permuted_numbers->begin());
+
+
+  int count;
+  map<int,int>::iterator it_counter = sorted_digit_counter_.find(permuted_number);
+  if(it_counter == sorted_digit_counter_.end()) {
+    count = 1;
+  } else {
+//    cout << "Found combination of " << (*it_counter).first << ": " <<(*it_counter).second << endl;
+    count = (*it_counter).second + 1;
+    sorted_digit_counter_.erase(it_counter);
+  }
+  sorted_digit_counter_.insert(make_pair(permuted_number, count));
+
+}
+
+map<int,int>* Counter::GetDigitCounter() {
+    return &sorted_digit_counter_;
+}

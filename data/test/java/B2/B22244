@@ -1,0 +1,105 @@
+
+import java.io.*;
+import java.util.*;
+
+public class QualC{		
+		
+		private BufferedReader in;	
+		private StringTokenizer st;
+		private PrintWriter out;
+		
+		String rotate(String x){
+			return x.substring(1)+x.charAt(0);
+		}
+		void solve() throws IOException{
+			long t = System.currentTimeMillis();
+			int size = 2000001;
+			ArrayList<Integer>[]count = new ArrayList[size];
+			for (int i = 0; i < count.length; i++) {
+				count[i] = new ArrayList<Integer>();
+			}
+			for (int i = 10; i < count.length; i++) {
+				String m = i+"";
+				String n = m;
+				do{
+					n = rotate(n);
+					if(n.charAt(0) != '0' && Integer.parseInt(n) < i){
+						count[i].add(Integer.parseInt(n));
+					}
+				}while(!n.equals(m));
+				
+			}
+			System.out.println(System.currentTimeMillis()-t);
+			int kases = nextInt();
+			int kase = 0;
+			while(kases-->0){
+				kase++;
+				out.print("Case #"+kase+": ");
+				int a = nextInt();
+				int b = nextInt();				
+				int ans = 0;
+				for (int i = a+1; i <= b; i++) {
+					for (int j = 0; j < count[i].size(); j++) {
+						if(count[i].get(j)>=a) ans++;
+					}
+				}
+//				for (int n = a; n <= b; n++) {
+//					for (int m = n+1; m <= b; m++) {
+//						String x = n+"";
+//						String y = m+"";
+//						if(x.length() != y.length()) continue;
+//						String z = x+x;
+//						if(z.contains(y)) ans++;
+//					}
+//				}
+				out.println(ans);				
+			}
+		}
+			
+
+		QualC() throws IOException {
+			in = new BufferedReader(new FileReader("input.txt"));	
+			out = new PrintWriter(new FileWriter("output.txt"));
+			eat("");
+			solve();	
+			out.close();
+		}
+
+		private void eat(String str) {
+			st = new StringTokenizer(str);
+		}
+
+		String next() throws IOException {
+			while (!st.hasMoreTokens()) {
+				String line = in.readLine();
+				if (line == null) {
+					return null;
+				}
+				eat(line);
+			}
+			return st.nextToken();
+		}
+
+		int nextInt() throws IOException {
+			return Integer.parseInt(next());
+		}
+
+		long nextLong() throws IOException {
+			return Long.parseLong(next());
+		}
+
+		double nextDouble() throws IOException {
+			return Double.parseDouble(next());
+		}
+
+		public static void main(String[] args) throws IOException {
+			new QualC();
+		}
+
+		int gcd(int a,int b){
+			if(b>a) return gcd(b,a);
+			if(b==0) return a;
+			return gcd(b,a%b);
+		}
+
+}

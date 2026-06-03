@@ -1,0 +1,66 @@
+function qc() {
+    var numDigits = function(x) {
+        if (x >= 10000) {
+            if (x >= 10000000) {
+                if (x >= 100000000) {
+                    if (x >= 1000000000)
+                        return 10;
+                    return 9;
+                }
+                return 8;
+            }
+            if (x >= 100000) {
+                if (x >= 1000000)
+                    return 7;
+                return 6;
+            }
+            return 5;
+        }
+        if (x >= 100) {
+            if (x >= 1000)
+                return 4;
+            return 3;
+        }
+        if (x >= 10)
+            return 2;
+        return 1;
+    }
+    
+    var input = getInput();
+    input = input.split("\n");
+    var output = "";
+    for(i in input) {
+        if(i == 0 || input[i] == "")
+            continue;
+        
+        output += "Case #"+i+": ";
+        var params = input[i].split(" ");
+        var a = params[0];
+        var b = params[1];
+        var n = 0;
+        var q = Math.pow(10, 0);
+        var q2 = Math.pow(10, 1);
+        for(j = a; j <= b; j++) {
+            var t = j;
+            var l = numDigits(t);
+            if(j >= q2) {
+                var q = Math.pow(10, l-1);
+                var q2 = Math.pow(10, l);
+            }
+            var u = -1;
+            for(k = 1; k < l; k++) {
+                if(k !== 1 && u == j)
+                    continue;
+                
+                t = Math.floor(t/10) + (t % 10) * q;
+                u = t;
+                if(u > j && u <= b) {
+                    n++;
+                }
+            }
+        }
+        output += n + "\n";
+    }
+    setOutput(output);
+    return output;
+}

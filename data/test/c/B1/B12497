@@ -1,0 +1,69 @@
+#include <iostream>
+#include <sstream>
+#include <cmath>
+using namespace std;
+
+int main()
+{
+	int t;
+	cin>>t;
+	for (int ctr = 0; ctr < t; ctr++)
+	{
+		int fmap[10000] = {0}, rmap[10000] = {0};
+		int i;
+		int l=1111, u=2222;
+		cin>>l>>u;
+		
+		int n_digits=0;
+		int temp = l;
+		while(temp!=0)
+		{
+			n_digits++;
+			temp/=10;
+		}
+		for (i = l; i < u; i++)
+		{
+			int save = i;
+			int temp = save;
+			int count = 1;
+			for (int j = 0; j < n_digits-1; j++)
+			{
+				int x = temp%10;
+				temp = temp/10;
+				while (x == 0 && temp > 0 && j<n_digits-1)
+				{
+					x = temp%10;
+					temp = temp/10;
+					j++;
+				}
+				if(j == n_digits-1)
+					break;
+				int nt;
+				nt = x*pow(10, n_digits-1) + temp;
+				
+				if(nt >= l && nt <= u && nt > save)
+				{
+					fmap[i]++;
+					temp = nt;
+					//cout<<save<<" "<<nt<<endl;
+				}
+				else if(nt == save)
+				{
+					break;
+				}
+				else
+				{
+					temp = nt;
+				}
+			}
+		}
+		int sum=0;
+		for(i=l;i<=u;i++)
+		{
+			sum+=fmap[i];
+			//cout<<i<<" "<<fmap[i]<<endl;
+		}
+			
+		cout<<"Case #"<<ctr+1<<": "<<sum<<endl;
+	}
+}

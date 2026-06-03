@@ -1,0 +1,47 @@
+#include <fstream>
+#include <string>
+
+int main(int argc, char** argv)
+{
+	std::ifstream input("dancinginput.txt");
+	std::ofstream output("dancingoutput.txt");
+
+	unsigned cases = 0;
+	input >> cases;
+
+	std::string dummy;
+	std::getline(input, dummy);
+
+	for (unsigned caseIndex = 0; caseIndex < cases; ++caseIndex)
+	{
+		unsigned googlers = 0;
+		input >> googlers;
+
+		unsigned surprising = 0;
+		input >> surprising;
+
+		unsigned desiredScore = 0;
+		input >> desiredScore;
+
+		unsigned count = 0;
+		for (unsigned googler = 0; googler < googlers; ++googler)
+		{
+			unsigned combinedScore = 0;
+			input >> combinedScore;
+
+			if ((desiredScore == 0) || (combinedScore >= desiredScore * 3 - 2))
+			{
+				++count;
+			}
+			else if (combinedScore >= desiredScore * 3 - 4 && surprising > 0)
+			{
+				++count;
+				--surprising;
+			}
+		}
+		output << "Case #" << caseIndex + 1 << ": " << count << std::endl;
+	}
+
+	return 0;
+}
+

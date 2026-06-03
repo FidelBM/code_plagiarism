@@ -1,0 +1,179 @@
+//
+//  main.cpp
+//  codejam-recycle
+//
+//  Created by Rajat Kumar on 4/13/12.
+//  Copyright 2012 __MyCompanyName__. All rights reserved.
+//
+
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <stdlib.h>
+#include <stdio.h>
+#include <cstdlib>
+#include <sstream>
+using namespace std;
+
+
+string longToString(long i)
+{
+    stringstream ss;
+    string s;
+    ss << i;
+    s = ss.str();
+    
+    return s;
+}
+
+long recycle(string a,string b){
+    
+    
+    long low=atoi(a.c_str());
+    long high=atoi(b.c_str());
+    long ctr =0;
+    
+    for(long i=low; i<=high;i++)
+    {
+        long n=i;
+        string inp = longToString(n);
+        if(n<10)
+        {
+            //cout<<"none"<<endl;
+        }
+        
+        /**
+         else if(n<100)
+         {
+         string inp1="";
+         inp1 = inp1+inp[1]+inp[0];
+         long n1 = atoi(inp1.c_str());
+         // cout<<"n1 is "<<inp1<<endl;
+         if ((n1>n)&&(n1<=high)) {
+         ctr++;
+         cout<<n<<","<<n1<<endl;
+         }
+         }
+         
+         else if(n<1000)
+         {
+         string inp1="",inp2="";
+         inp1 = inp1+inp[2]+inp[0]+inp[1];
+         inp2 = inp2+inp[1]+inp[2]+inp[0];
+         
+         long n1 = atoi(inp1.c_str());
+         long n2 = atoi(inp2.c_str());
+         if ((n1>n)&&(n1<=high)) {
+         ctr++;
+         cout<<n<<","<<n1<<endl;
+         }
+         if ((n2>n)&&(n2<=high)) {
+         ctr++;
+         cout<<n<<","<<n2<<endl;
+         }
+         
+         }
+         
+         else if(n<10000)
+         {
+         string inp1="",inp2="",inp3="";
+         inp1 = inp1+inp[3]+inp[0]+inp[1]+inp[2];
+         inp2 = inp2+inp[2]+inp[3]+inp[0]+inp[1];
+         inp3 = inp3+inp[1]+inp[2]+inp[3]+inp[0];
+         
+         long n1 = atoi(inp1.c_str());
+         long n2 = atoi(inp2.c_str());
+         long n3 = atoi(inp3.c_str());
+         if ((n1>n)&&(n1<=high)) {
+         ctr++;
+         cout<<n<<","<<n1<<endl;
+         }
+         if ((n2>n)&&(n2<=high)) {
+         ctr++;
+         cout<<n<<","<<n2<<endl;
+         }
+         if ((n3>n)&&(n3<=high)) {
+         ctr++;
+         cout<<n<<","<<n3<<endl;
+         }
+         }**/
+        
+        else if(n<=2000000)
+        {
+            for(long j=0;j<inp.length();j++)
+            {
+                string inpr="";
+                long flag=j;
+                
+                string tempflag="";
+                for(int k=0;k<inp.length();k++)
+                {
+                    flag++;
+                    inpr = inpr + inp[flag];
+                    tempflag = tempflag + longToString(flag);
+                    
+                    if(flag>=inp.length()-1)
+                        flag=-1;
+                }
+                
+                long ntemp = atoi(inpr.c_str());
+                //cout<<ntemp<<endl;
+                if ((ntemp>n)&&(ntemp<=high)) {
+                    cout<<n<<','<<ntemp<<endl;
+                    ctr++;
+                    //cout<<"flag= "<<tempflag<<endl;
+                }
+            }
+            
+        }
+    }
+    
+    cout<<"ctr = "<<ctr<<endl;
+    return ctr;
+}
+
+
+int main (const int argc, const char * argv[])
+{
+    long t;
+    string n,a,b;
+    long casectr=1;
+    ifstream infile;
+    long lineIn;
+    infile.open("/Users/rajat/codejam/C-large.in.txt");
+    ofstream outfile;
+    long lineOut,countmax;
+    outfile.open("/Users/rajat/codejam/fileout-recycle-222.txt");
+    if (infile.is_open()){
+        cout<<"**************************"<<"\n";
+        
+        
+        long fl;
+        /**    char temp[100];
+         
+         infile.getline(temp, 100);
+         fl=strtof(temp,0);
+         **/
+        infile>>fl;
+        
+        
+        //s fl=10;
+        while(fl--)
+        {
+            infile>>a>>b;
+            
+            
+            long countmax=recycle(a,b);
+            
+            
+            lineOut = countmax;
+            cout<<"Case #"<<casectr<<": "<<lineOut<<endl;
+            
+            outfile<<"Case #"<<casectr<<": "<<lineOut<<"\n";
+            casectr++;
+        }
+    }
+    
+    return 0;
+}
+

@@ -1,0 +1,62 @@
+#include <iostream>
+#include <sstream>
+
+using namespace std;
+
+string itoa(int);
+int atoi(string);
+int pair_cnt(int,int);
+int num_pairs(int,int);
+
+int main()
+{
+	int n;
+	cin >> n;
+	for(int i = 1; i <=n; i++)
+	{
+		int a, b;
+		cin >> a >> b;
+		cout << "Case #" << i << ": " << num_pairs(a,b) << endl;
+	}
+}
+
+
+string itoa(int num)
+{
+	stringstream ss;
+	ss << num;
+	return ss.str();
+}
+
+int atoi(string str)
+{
+	int num;
+	stringstream ss(str);
+	ss >> num;
+	return num;
+}
+
+
+int pair_cnt(int ni, int mi)
+{
+	int cnt = 0;
+	string n = itoa(ni);
+	for(int i = 1; i < n.length(); i++)
+	{
+		string tmps = n.substr(i) + n.substr(0,i);
+		int tmpi = atoi(tmps);
+		if(tmpi <= mi && tmpi > ni)
+			cnt++;
+	}
+	return cnt;
+}
+
+int num_pairs(int a, int b)
+{
+	int cnt;
+	for(int i = a; i < b; i++)
+	{
+		cnt += pair_cnt(i,b);
+	}
+	return cnt;
+}

@@ -1,0 +1,80 @@
+#include "mainwindow.h"
+#include "ui_mainwindow.h"
+#include "inputreader.h"
+#include <QFileDialog>
+#include <QDebug>
+
+MainWindow::MainWindow(QWidget *parent) :
+    QMainWindow(parent),
+    ui(new Ui::MainWindow)
+{
+    ui->setupUi(this);
+    ui->lineEdit->setText("results");
+    connect(ui->actionOuvrir,SIGNAL(triggered()),this,SLOT(open()));
+    ui->progressBar->setValue(0);
+
+    open();
+}
+
+void MainWindow::open(void)
+{
+    //*
+    filename = QFileDialog::getOpenFileName(this, tr("Open File"),
+                                                     "",
+                                                     tr("Textes (*.*)"));
+   /*/
+    filename = "test.txt";
+   // */
+    if(filename.isNull())
+    {
+        return;
+    }
+
+    //read the file and generate Algos
+    algos = InputReader::read(filename);
+    //ui
+    ui->progressBar->setValue(0);
+    ui->progressBar->setMaximum(algos->count());
+
+    //initialise the output
+    Output * output = new Output(algos->count(),filename.left(filename.size()-4)+"-"+ui->lineEdit->text()+".txt");
+    output->start();
+    connect(output,SIGNAL(finished()),this,SLOT(clean()));
+
+    //start algos
+    QListIterator<Algo*> it(*algos);
+    Algo * algo;
+    while (it.hasNext())
+    {
+        algo = it.next();
+        algo->start();
+        connect(algo,SIGNAL(finished()),this,SLOT(algoFinish()));
+    }
+}
+
+void MainWindow::algoFinish(void)
+{
+    Output::mutex.lock();
+
+    Algo * algo = dynamic_cast<Algo *>(sender());
+    Output::results.insert(algo->id,algo->result);
+    Output::sync.release();
+
+    ui->progressBar->setValue(ui->progressBar->value()+1);
+    update();
+
+    Output::mutex.unlock();
+}
+
+void MainWindow::clean()
+{
+    qDebug()<<"Cleanning";
+    algos->clear();
+    delete algos;
+
+}
+
+MainWindow::~MainWindow()
+{
+    delete ui;
+}

@@ -1,0 +1,94 @@
+#include <map>
+#include <set>
+#include <cmath>
+#include <queue>
+#include <vector>
+#include <list>
+#include <string>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cassert>
+#include <numeric>
+#include <algorithm>
+#include <iostream>
+#include <sstream>
+#include <ctime>
+using namespace std;
+
+#define FOR(i,a,b) for (int i(a),_b(b); i <= _b; ++i)
+#define GETI(i) { string _s; getline(cin, _s); i = atoi(_s.c_str()); }
+#define GETDI(i, d) { string _s; getline(cin, _s, d); i = atoi(_s.c_str()); }
+
+//----------------------------------------------------------------------------
+int main() {
+  freopen("C-small-0.in", "rt", stdin);
+  freopen("C-small-0.out", "wt", stdout);
+
+  long result;
+
+  int T;
+  GETI(T);
+  FOR(TestCase, 1, T) {
+    result = 0;
+    long A, B;
+
+    GETDI(A,' ');
+    GETI(B);
+    //cout << "A=" << A << " B=" << B << endl;
+
+    FOR(n, A, B) 
+    {
+       // n as string = s_n
+       stringstream ss_n;
+       ss_n << n;
+       string s_n;
+       ss_n >> s_n;
+
+       // l is the cycle count
+       int l(ss_n.str().length());
+       --l;
+
+       // v_m is the result vector, v_m_s is the size of it
+       long v_m[8];
+       int v_m_s(0);
+
+       FOR(i, 1, l)
+       {
+         // recycle
+         s_n += s_n[0];
+         s_n.erase(0,1);
+
+         // m is the recycled n
+         stringstream ss_m;
+         ss_m << s_n;
+         long m;
+         ss_m >> m;
+
+         if (m <= B && m > n)
+         {
+           bool found(false);
+           FOR(j, 0, v_m_s-1)
+           {
+             if (v_m[j] == m)
+             {
+               found = true;
+               break;
+             }
+           }
+           if (!found)
+           {
+             //cout << "(" << n << "," << m << ")" << endl;
+             v_m[v_m_s++] = m;
+             ++result;
+           }
+         }
+       }
+    }
+
+    cout << "Case #" << TestCase << ": " << result << endl;
+  }
+
+  return EXIT_SUCCESS;
+}
+

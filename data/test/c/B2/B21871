@@ -1,0 +1,86 @@
+//============================================================================
+// Name        : Google-code-jam-qualification-round.cpp
+// Author      : Kashif Munir
+// Problem     : Problem C. Recycled Numbers (Large Input), Qualification round 2012
+// Description : C++, Ansi-style
+//============================================================================
+
+#include <iostream>
+#include <fstream>
+#include <cmath>
+using namespace std;
+
+int main()
+{
+	char buffer_string[10];
+
+	ifstream infile("input.txt");
+	ofstream outfile("output.txt");
+
+	int number_of_lines = 0;
+	infile >> number_of_lines;
+	infile.getline(buffer_string,110,'\n');
+
+	int case_num = 0;
+	int A = 0;
+	int B = 0;
+
+	int temp = 0;
+
+	while (number_of_lines > 0)
+	{
+		outfile << "Case #" << ++case_num << ": ";
+
+		int number_of_pairs = 0;
+
+		infile >> A;
+		infile >> B;
+		infile.getline(buffer_string,10,'\n');
+
+		int digits = 1;
+		for (int i = A; i < B; i++)
+		{
+			// count digits of i
+			int copy_i = i;
+			digits = 1;
+			while (copy_i / 10 != 0)
+			{
+				digits++;
+				copy_i = copy_i / 10;
+			}
+
+			if (digits == 2)
+			{
+				temp = ((i % 10) * 10) + (i / 10);
+
+				if ( (temp > i+1) && (temp <= B) )
+					number_of_pairs++;
+			}
+
+			else
+			{
+				int num1 = (int) pow(10.0,digits-1);
+				int num2 = 10;
+
+				while(num1 >= 10)
+				{
+					temp = ((i % num1) * num2) + (i / num1);
+					if ( (temp > i+1) && (temp <= B) )
+						number_of_pairs++;
+
+					num1 = num1 / 10;
+					num2 = num2 * 10;
+				}
+			}
+
+		}
+
+		outfile << number_of_pairs << endl;
+
+		number_of_lines--;
+	}
+
+	outfile.close();
+
+	return 0;
+}

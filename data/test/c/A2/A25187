@@ -1,0 +1,20 @@
+#ifndef Scores_h
+#define Scores_h
+
+#include <iostream>
+#include <string>
+
+class Scores
+{
+public:
+	Scores();
+	int findMaxP(std::string input);
+
+private:
+	int _n;
+	int _s;
+	int _p;
+	int _max;
+};
+
+#endif

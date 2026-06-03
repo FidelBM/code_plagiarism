@@ -1,0 +1,126 @@
+#include <iostream.h>
+#include<conio.h>
+#include<stdio.h>
+#include<fstream.h>
+#include<string.h>
+#include<stdlib.h>
+
+int array[8];
+int output=0,count=0;
+int m,n,r=0;
+void seperate(int num)
+{
+	int n=num,c;
+	while(n!=0)
+	{
+		n=n/10;
+		count++;
+	}
+	c=count;
+	while(num!=0)
+	{
+		array[--c]=num%10;
+		num=num/10;
+	}
+}
+void combine(int k)
+{
+int i=0,num=0;
+
+while(i<count)
+{
+	num=num*10+array[i];
+	i++;
+}
+
+if(num>=k&&num<=m)
+{
+	output++;
+}
+
+}
+int check(int l)
+{
+	int i=0,num=0;
+	while(i<count)
+	{
+		num=num*10+array[i];
+		i++;
+	}
+	if(num==l)
+		return 0;
+	else
+		return 1;
+
+}
+void combination(int k)
+{
+int a,c=0,flag=0;
+	for(int i=0;i<count;i++)
+	{
+		a=array[0];
+		for(int j=0;j<count-1;j++)
+		{
+			array[j]=array[j+1];
+			c++;
+		}
+		array[j]=a;
+		flag=check(k-1);
+		if(flag==1)
+			combine(k);
+		else
+			return;
+	}
+
+}
+void process(char buff[])
+{
+	char b[10][8];
+	int i=0,w[3];
+	char *p;
+	p=strtok(buff," ");
+	while(p!=NULL)
+	{
+		w[i]=atoi(p);
+		p=strtok(NULL," ");
+		i++;
+	}
+	n=w[0];
+	m=w[1];
+	cout<<"\nn:"<<n;
+	cout<<"\nm:"<<m;
+
+
+}
+
+int main()
+{
+	clrscr();
+	int T,a=0;
+	char t[10],buff[10];
+	ifstream ifile("input.txt");
+	ofstream ofile("output.txt",ios::out);
+	ifile.getline(t,'\n');
+	T=atoi(t);
+	cout<<"T:"<<T;
+		while(!ifile.eof()&&a<T)
+		{
+		ifile.getline(buff,'\n');
+		process(buff);
+		output=0;
+		for(int i=n;i<m;i++)
+		{
+			count=0;
+			seperate(i);
+			combination(i+1);
+		}
+		cout<<"\n"<<output<<"\n";
+		ofile<<"Case #"<<++a;
+		ofile<<": "<<output<<"\n";
+
+	}
+	ofile.close();
+	ifile.close();
+	getch();
+	return 0;
+}

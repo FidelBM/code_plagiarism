@@ -1,0 +1,305 @@
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+
+public class main {
+
+	public static void main(String[] args) {
+		// inputファイルを読み込み
+		BufferedReader bufferReader = null;
+		String str = "";
+		try {
+			bufferReader = new BufferedReader(new InputStreamReader(
+					new FileInputStream("/Users/yago/Documents/in.txt"),
+					"UTF-8"));
+			// 一行ずつ読み込み
+			int probs = 0;
+			while ((str = bufferReader.readLine()) != null) {
+				if (str.length() > 2) {
+					probs++;
+					calc(str, probs);
+				}
+			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		} finally {
+			try {
+				if (bufferReader != null) {
+					bufferReader.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
+
+	private static void calc(String str, int probNum) {
+		Integer n1, n2, ansCnt = 0, chgNum;
+		String[] strAry = str.split(" ");
+		n1 = Integer.valueOf(strAry[0]);
+		n2 = Integer.valueOf(strAry[1]);
+		
+		for (int i = n1; i <= n2; i++) {
+			String chgStr = "", bfrStr="";
+			if (String.valueOf(i).length() == 1)
+				break;
+			if (String.valueOf(i).length() == 2  && String.valueOf(i).charAt(1)!='0') {
+				chgStr += String.valueOf(i).charAt(1);
+				chgStr += String.valueOf(i).charAt(0);
+				chgNum = Integer.valueOf(chgStr);
+				if (chgNum <= n2 && chgNum > i){
+					//System.out.println(i+" "+chgNum);
+					ansCnt++;
+				}
+			}else if (String.valueOf(i).length() == 3){
+				if(String.valueOf(i).charAt(1)!='0') {
+					chgStr += String.valueOf(i).charAt(1);
+					chgStr += String.valueOf(i).charAt(2);
+					chgStr += String.valueOf(i).charAt(0);
+					chgNum = Integer.valueOf(chgStr);
+					if (chgNum <= n2 && chgNum > i){
+						//System.out.println(i+" "+chgNum);
+						ansCnt++;
+					}
+				}
+				chgStr = "";
+				if(String.valueOf(i).charAt(2)!='0') {
+					chgStr += String.valueOf(i).charAt(2);
+					chgStr += String.valueOf(i).charAt(0);
+					chgStr += String.valueOf(i).charAt(1);
+					chgNum = Integer.valueOf(chgStr);
+					if (chgNum <= n2 && chgNum > i){
+						//System.out.println(i+" "+chgNum);
+						ansCnt++;
+					}
+				}
+			}else if (String.valueOf(i).length() == 4){
+				chgStr = "";
+				if(String.valueOf(i).charAt(1)!='0') {
+					chgStr += String.valueOf(i).charAt(1);
+					chgStr += String.valueOf(i).charAt(2);
+					chgStr += String.valueOf(i).charAt(3);
+					chgStr += String.valueOf(i).charAt(0);
+					bfrStr=chgStr;
+					chgNum = Integer.valueOf(chgStr);
+					if (chgNum <= n2 && chgNum > i){
+						ansCnt++;
+					}
+				}
+				chgStr = "";
+				if(String.valueOf(i).charAt(2)!='0') {
+					chgStr += String.valueOf(i).charAt(2);
+					chgStr += String.valueOf(i).charAt(3);
+					chgStr += String.valueOf(i).charAt(0);
+					chgStr += String.valueOf(i).charAt(1);
+					chgNum = Integer.valueOf(chgStr);
+					if (chgNum <= n2 && chgNum > i){
+						ansCnt++;
+					}
+				}
+				chgStr = "";
+				if(String.valueOf(i).charAt(3)!='0') {
+					chgStr += String.valueOf(i).charAt(3);
+					chgStr += String.valueOf(i).charAt(0);
+					chgStr += String.valueOf(i).charAt(1);
+					chgStr += String.valueOf(i).charAt(2);
+					chgNum = Integer.valueOf(chgStr);
+					if (chgNum <= n2 && chgNum > i && !bfrStr.equals(chgStr)){
+						ansCnt++;
+					}
+				}
+			}else if (String.valueOf(i).length() == 5){
+				chgStr = "";
+				if(String.valueOf(i).charAt(1)!='0') {
+					chgStr += String.valueOf(i).charAt(1);
+					chgStr += String.valueOf(i).charAt(2);
+					chgStr += String.valueOf(i).charAt(3);
+					chgStr += String.valueOf(i).charAt(4);
+					chgStr += String.valueOf(i).charAt(0);
+					bfrStr=chgStr;
+					chgNum = Integer.valueOf(chgStr);
+					if (chgNum <= n2 && chgNum > i){
+						ansCnt++;
+					}
+				}
+				chgStr = "";
+				if(String.valueOf(i).charAt(2)!='0') {
+					chgStr += String.valueOf(i).charAt(2);
+					chgStr += String.valueOf(i).charAt(3);
+					chgStr += String.valueOf(i).charAt(4);
+					chgStr += String.valueOf(i).charAt(0);
+					chgStr += String.valueOf(i).charAt(1);
+					chgNum = Integer.valueOf(chgStr);
+					if (chgNum <= n2 && chgNum > i){
+						ansCnt++;
+					}
+				}
+				chgStr = "";
+				if(String.valueOf(i).charAt(3)!='0') {
+					chgStr += String.valueOf(i).charAt(3);
+					chgStr += String.valueOf(i).charAt(4);
+					chgStr += String.valueOf(i).charAt(0);
+					chgStr += String.valueOf(i).charAt(1);
+					chgStr += String.valueOf(i).charAt(2);
+					chgNum = Integer.valueOf(chgStr);
+					if (chgNum <= n2 && chgNum > i && !bfrStr.equals(chgStr)){
+						ansCnt++;
+					}
+				}
+				chgStr = "";
+				if(String.valueOf(i).charAt(4)!='0') {
+					chgStr += String.valueOf(i).charAt(4);
+					chgStr += String.valueOf(i).charAt(0);
+					chgStr += String.valueOf(i).charAt(1);
+					chgStr += String.valueOf(i).charAt(2);
+					chgStr += String.valueOf(i).charAt(3);
+					chgNum = Integer.valueOf(chgStr);
+					if (chgNum <= n2 && chgNum > i){
+						ansCnt++;
+					}
+				}
+			}else if (String.valueOf(i).length() == 6){
+				chgStr = "";
+				if(String.valueOf(i).charAt(1)!='0') {
+					chgStr += String.valueOf(i).charAt(1);
+					chgStr += String.valueOf(i).charAt(2);
+					chgStr += String.valueOf(i).charAt(3);
+					chgStr += String.valueOf(i).charAt(4);
+					chgStr += String.valueOf(i).charAt(5);
+					chgStr += String.valueOf(i).charAt(0);
+					bfrStr=chgStr;
+					chgNum = Integer.valueOf(chgStr);
+					if (chgNum <= n2 && chgNum > i){
+						ansCnt++;
+					}
+				}
+				chgStr = "";
+				if(String.valueOf(i).charAt(2)!='0') {
+					chgStr += String.valueOf(i).charAt(2);
+					chgStr += String.valueOf(i).charAt(3);
+					chgStr += String.valueOf(i).charAt(4);
+					chgStr += String.valueOf(i).charAt(5);
+					chgStr += String.valueOf(i).charAt(0);
+					chgStr += String.valueOf(i).charAt(1);
+					chgNum = Integer.valueOf(chgStr);
+					if (chgNum <= n2 && chgNum > i){
+						ansCnt++;
+					}
+				}
+				chgStr = "";
+				if(String.valueOf(i).charAt(3)!='0') {
+					chgStr += String.valueOf(i).charAt(3);
+					chgStr += String.valueOf(i).charAt(4);
+					chgStr += String.valueOf(i).charAt(5);
+					chgStr += String.valueOf(i).charAt(0);
+					chgStr += String.valueOf(i).charAt(1);
+					chgStr += String.valueOf(i).charAt(2);
+					bfrStr=chgStr;
+					chgNum = Integer.valueOf(chgStr);
+					if (chgNum <= n2 && chgNum > i && !bfrStr.equals(chgStr)){
+						ansCnt++;
+					}
+				}
+				chgStr = "";
+				if(String.valueOf(i).charAt(4)!='0') {
+					chgStr += String.valueOf(i).charAt(4);
+					chgStr += String.valueOf(i).charAt(5);
+					chgStr += String.valueOf(i).charAt(0);
+					chgStr += String.valueOf(i).charAt(1);
+					chgStr += String.valueOf(i).charAt(2);
+					chgStr += String.valueOf(i).charAt(3);
+					chgNum = Integer.valueOf(chgStr);
+					if (chgNum <= n2 && chgNum > i){
+						ansCnt++;
+					}
+				}
+				chgStr = "";
+				if(String.valueOf(i).charAt(5)!='0') {
+					chgStr += String.valueOf(i).charAt(5);
+					chgStr += String.valueOf(i).charAt(0);
+					chgStr += String.valueOf(i).charAt(1);
+					chgStr += String.valueOf(i).charAt(2);
+					chgStr += String.valueOf(i).charAt(3);
+					chgStr += String.valueOf(i).charAt(4);
+					chgNum = Integer.valueOf(chgStr);
+					if (chgNum <= n2 && chgNum > i && !bfrStr.equals(chgStr)){
+						ansCnt++;
+					}
+				}
+			}
+//			for (int j = i + 1; j <= n2; j++) {
+//				if (String.valueOf(j).length() == 1)
+//					break;
+//				if (String.valueOf(j).length() == 3) {
+//					if ((String.valueOf(j).charAt(0) == String.valueOf(i).charAt(1)
+//							&& String.valueOf(j).charAt(1) == String.valueOf(i).charAt(2) 
+//							&& String.valueOf(j).charAt(2) == String.valueOf(i).charAt(0))
+//							|| (String.valueOf(j).charAt(0) == String.valueOf(i).charAt(2)
+//							&& String.valueOf(j).charAt(1) == String.valueOf(i).charAt(0) 
+//							&& String.valueOf(j).charAt(2) == String.valueOf(i).charAt(1))) {
+//						// System.out.println(i+" "+j);
+//						ansCnt++;
+//					}
+//				} else if (String.valueOf(j).length() == 4) {
+//					if ((String.valueOf(j).charAt(0) == String.valueOf(i).charAt(1)
+//							&& String.valueOf(j).charAt(1) == String.valueOf(i).charAt(2) 
+//							&& String.valueOf(j).charAt(2) == String.valueOf(i).charAt(3) 
+//							&& String.valueOf(j).charAt(3) == String.valueOf(i).charAt(0))
+//							|| (String.valueOf(j).charAt(0) == String.valueOf(i).charAt(2)
+//							&& String.valueOf(j).charAt(1) == String.valueOf(i).charAt(3) 
+//							&& String.valueOf(j).charAt(2) == String.valueOf(i).charAt(0)
+//							&& String.valueOf(j).charAt(3) == String.valueOf(i).charAt(1))
+//							|| (String.valueOf(j).charAt(0) == String.valueOf(i).charAt(3)
+//							&& String.valueOf(j).charAt(1) == String.valueOf(i).charAt(0) 
+//							&& String.valueOf(j).charAt(2) == String.valueOf(i).charAt(1)
+//							&& String.valueOf(j).charAt(3) == String.valueOf(i).charAt(2))) {
+//						// System.out.println(i+" "+j);
+//						ansCnt++;
+//					}
+//				} else if (String.valueOf(j).length() == 5) {
+//					if ((String.valueOf(j).charAt(0) == String.valueOf(i).charAt(1)
+//							&& String.valueOf(j).charAt(1) == String.valueOf(i).charAt(2) 
+//							&& String.valueOf(j).charAt(2) == String.valueOf(i).charAt(3) 
+//							&& String.valueOf(j).charAt(3) == String.valueOf(i).charAt(4)
+//							&& String.valueOf(j).charAt(4) == String.valueOf(i).charAt(0))
+//							|| (String.valueOf(j).charAt(0) == String.valueOf(i).charAt(2)
+//							&& String.valueOf(j).charAt(1) == String.valueOf(i).charAt(3) 
+//							&& String.valueOf(j).charAt(2) == String.valueOf(i).charAt(4)
+//							&& String.valueOf(j).charAt(3) == String.valueOf(i).charAt(0)
+//							&& String.valueOf(j).charAt(4) == String.valueOf(i).charAt(1))
+//							|| (String.valueOf(j).charAt(0) == String.valueOf(i).charAt(3)
+//							&& String.valueOf(j).charAt(1) == String.valueOf(i).charAt(4) 
+//							&& String.valueOf(j).charAt(2) == String.valueOf(i).charAt(0)
+//							&& String.valueOf(j).charAt(3) == String.valueOf(i).charAt(1)
+//							&& String.valueOf(j).charAt(4) == String.valueOf(i).charAt(2))) {
+//						// System.out.println(i+" "+j);
+//						ansCnt++;
+//					}
+//				} else if (String.valueOf(j).length() == 6) {
+//					if ((String.valueOf(j).charAt(0) == String.valueOf(i).charAt(1)
+//							&& String.valueOf(j).charAt(1) == String.valueOf(i).charAt(2) 
+//							&& String.valueOf(j).charAt(2) == String.valueOf(i).charAt(3) 
+//							&& String.valueOf(j).charAt(3) == String.valueOf(i).charAt(4)
+//							&& String.valueOf(j).charAt(4) == String.valueOf(i).charAt(5)
+//							&& String.valueOf(j).charAt(5) == String.valueOf(i).charAt(0))
+//							|| (String.valueOf(j).charAt(0) == String.valueOf(i).charAt(2)
+//							&& String.valueOf(j).charAt(1) == String.valueOf(i).charAt(3) 
+//							&& String.valueOf(j).charAt(2) == String.valueOf(i).charAt(4)
+//							&& String.valueOf(j).charAt(3) == String.valueOf(i).charAt(5)
+//							&& String.valueOf(j).charAt(4) == String.valueOf(i).charAt(0)
+//							&& String.valueOf(j).charAt(5) == String.valueOf(i).charAt(1))
+//							|| (String.valueOf(j).charAt(0) == String.valueOf(i).charAt(3)
+//							&& String.valueOf(j).charAt(1) == String.valueOf(i).charAt(4) 
+//							&& String.valueOf(j).charAt(2) == String.valueOf(i).charAt(5)
+//							&& String.valueOf(j).charAt(3) == String.valueOf(i).charAt(0)
+//							&& String.valueOf(j).charAt(4) == String.valueOf(i).charAt(1)
+//							&& String.valueOf(j).charAt(5) == String.valueOf(i).charAt(2))) {
+//						// System.out.println(i+" "+j);
+//						ansCnt++;
+//					}
+//				}
+//			}
+		}
+
+		System.out.println("Case #" + probNum + ": " + ansCnt);
+	}
+}

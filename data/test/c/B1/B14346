@@ -1,0 +1,84 @@
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <vector>
+#include <algorithm>
+#include <sstream>
+
+using namespace std;
+
+
+typedef pair < int , int > pii;
+typedef vector < int > vi;
+typedef long long LL;
+
+
+#define REP(i, a) for (int i = 0; i < a; i++)
+#define FOR(i, a, b) for (int i = a; i <= b; i++)
+#define mp make_pair
+#define F first
+#define S second
+#define pb push_back
+#define CLEAR(x, val) memset(x, val, sizeof(x))
+
+
+int tc, a, b;
+
+string sub(string str, int a, int b) {
+	string ret = "";
+	FOR(i, a, b)
+		ret += str[i];
+	return ret;
+}
+
+bool is_recycled_pair(int m, int n) {
+	stringstream sin;
+	sin << m;
+	string a;
+	sin >> a;
+	
+	stringstream ssin;
+	ssin << n;
+	string b;
+	ssin >> b;
+	
+	
+	if (a.length() != b.length()) {
+		return 0;
+	}
+	
+	int len = a.length();
+	
+	for (int i = 0; i < len - 1; i++) {
+		string x = sub(a, i + 1, len - 1) + sub(a, 0, i);
+		//cout << "X = " << x << endl;
+		if (x == b)
+			return 1;
+	}
+	return 0;
+}
+
+
+int main () {
+	
+	//cout << is_recycled_pair(12345, 34512) << endl;
+	
+	scanf("%d", &tc);
+	
+	int ans = 0;
+	
+	FOR(i, 1, tc) {
+		scanf("%d %d", &a, &b);
+		ans = 0;
+		FOR(j, a, b) {
+			FOR(k, j + 1, b) {
+				if (is_recycled_pair(j, k))
+					ans++;
+			}
+		}
+		
+		printf("Case #%d: %d\n", i, ans);
+	}
+	
+}

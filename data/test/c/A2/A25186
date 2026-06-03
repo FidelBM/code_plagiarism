@@ -1,0 +1,79 @@
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <vector>
+#include "Scores.h"
+
+using namespace std;
+
+Scores::Scores()
+{
+}
+
+int Scores::findMaxP(string input)
+{
+	stringstream sstring(input);
+	string temp;
+	sstring >> temp;
+	_n = atoi(temp.c_str());
+	sstring >> temp;
+	_s = atoi(temp.c_str());
+	sstring >> temp;
+	_p = atoi(temp.c_str());
+
+	_max = 0;
+	
+	int min;
+
+	vector<int> mod1;
+	vector<int> mod2;
+	vector<int> mod0;
+
+	for (int i = 0; i < _n; i++)
+	{
+		sstring >> temp;
+		int value = atoi(temp.c_str());
+		if (value % 3 == 1)
+		{
+			mod1.push_back(value / 3);
+		}
+		else if (value % 3 == 2)
+		{
+			mod2.push_back(value / 3);
+		}
+		else
+			mod0.push_back(value / 3);
+	}
+
+	int s = _s;
+
+	for (int i = 0; i < mod2.size(); i++)
+	{
+		if (mod2[i] == _p - 2 && s > 0 && mod2[i] > 0)
+		{
+			s--;
+			_max++;
+		}
+		else if (mod2[i] >= _p - 1)
+			_max++;
+	}
+
+	for (int i = 0; i < mod1.size(); i++)
+	{
+		if (mod1[i] >= _p - 1)
+			_max++;
+	}
+
+	for (int i = 0; i < mod0.size(); i++)
+	{
+		if (mod0[i] == _p - 1 && s > 0 && mod0[i] > 0)
+		{
+			s--;
+			_max++;
+		}
+		else if (mod0[i] >= _p)
+			_max++;
+	}
+
+	return _max;
+}

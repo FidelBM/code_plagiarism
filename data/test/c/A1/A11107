@@ -1,0 +1,60 @@
+#include <iostream>
+#include <cstring>
+#include <cstdio>
+#include <cstdlib>
+#define maxn 4
+using namespace std;
+
+int t[maxn];
+int n,s,p,ans;
+
+void dfs(int num,int cts,int ctp)
+{
+    if (num == n)
+    {
+        if (cts == s)
+        {
+            if (ans < ctp) ans = ctp;
+        }
+        return ;
+    }
+    for (int i = 0; i <= t[num]; ++i)
+    {
+        for (int j = i; j <= t[num] - i; ++j)
+        {
+            int k = t[num] - i - j;
+            if (abs(i - j) > 2 || abs(i - k) > 2 || abs(j - k) > 2)
+            continue ;
+            //printf(">>%d %d %d %d\n",i,j,k,num);
+            int M = max(max(i,j),k);
+            if (M >= p) ctp++;
+            int f = 0;
+            if (abs(i - j) == 2) f = 1;
+            if (abs(i - k) == 2) f = 1;
+            if (abs(j - k) == 2) f = 1;
+            if (f == 1) cts++;
+            //if (M >= p && f ==1)
+            //printf(">>%d %d %d\n",i,j,k);
+            dfs(num + 1,cts,ctp);
+            if (f == 1) cts--;
+            if (M >= p) ctp--;
+        }
+    }
+}
+int main()
+{
+    freopen("B-small-attempt0.in","r",stdin);
+    freopen("out.txt","w",stdout);
+    int i,tt,cas = 1;
+    scanf("%d",&tt);
+    while (tt--)
+    {
+        scanf("%d%d%d",&n,&s,&p);
+        for (i = 0; i < n; ++i)
+        scanf("%d",&t[i]);
+        ans = 0;
+        dfs(0,0,0);
+        printf("Case #%d: %d\n",cas++,ans);
+    }
+    return 0;
+}

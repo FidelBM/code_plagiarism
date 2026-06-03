@@ -1,0 +1,62 @@
+#include<iostream.h>
+#include<fstream.h>
+#include<stdlib.h>
+#include<string.h>
+#include<conio.h>
+int main()
+{
+	fstream fin,fout;
+	fin.open("C-small.in",ios::in);
+	fout.open("C-small.out",ios::out);
+	int T,A,B,m,n;
+	clrscr();
+	fin>>T;
+	for(int i=0;i<T;i++)
+	{
+	   int cnt=0,max=1,max2,max1;
+	   fin>>A;
+	   fin>>B;
+	   fout<<"Case #"<<i+1<<": ";
+	   if(A/10==B/10 && B%10!=0)
+	   {
+		fout<<cnt;
+		//cout<<cnt<<endl;
+		fout<<"\n";
+		continue;
+	   }
+	   for(n=A;n<B;n++)
+	   {
+	      for(max=1;max<=n;max=max*10);
+	      max1=max/10;
+	      for(m=n+1;m<=max&&m<=B;m++)
+	      {
+		max2=max1;
+		if(m/10==n/10 && m%10!=0)
+			continue;
+		int tmp=m,tm=10,res=0;
+		while(tm<=max1)
+		{
+		   int r,q;
+		   r=tmp%tm;
+		   q=tmp/tm;
+		   res=r*max2+q;
+		   if(res==n)
+		   {
+			cnt++;
+			break;
+		   }
+		   tm=tm*10;
+		   max2=max2/10;
+
+		}
+	      }
+	   }
+
+	   fout<<cnt;
+	   //cout<<cnt<<endl;
+	   fout<<"\n";
+	}
+	fin.close();
+	fout.close();
+	return(0);
+}

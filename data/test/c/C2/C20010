@@ -1,0 +1,45 @@
+#ifndef ALGO_H
+#define ALGO_H
+#include <QList>
+#include <QThread>
+#include <QMutex>
+
+enum{EMPTY='.',ME='X',MIRROR='#'};
+
+
+class Point
+{
+public:
+    double col;
+    double row;
+};
+
+class Algo : public QThread
+{
+public:
+    Algo(int id) : id(id) { name = "Algo "+QString::number(id); }
+
+    void run();
+    QString result;
+    QString name;
+    int id;
+    static QMutex mutex;
+
+
+
+    int height;
+    int width;
+    int fogg;
+    char tab[31][31];
+    Point me;
+    Point mef;
+    QList<Point> mirrors;
+    bool reflette(Point mir, int f);
+    bool rayTrace(int p1,int p2);
+    bool isCorner(int,int);
+    double distance(Point p1,Point p2);
+    double distance(int p1,int p2);
+    char imSpace(int,int);
+};
+
+#endif // ALGO_H

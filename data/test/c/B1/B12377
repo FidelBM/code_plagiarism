@@ -1,0 +1,85 @@
+//SORU
+//PROGRAM C++
+
+/*
+	ID: semihbasrik
+	LANG: C++
+	TASK:
+*/
+#include<iostream>
+#include<fstream>
+#include<algorithm>
+#include<queue>
+#include<stack>
+#include<map>
+#include<set>
+#include<list>
+#include<cstdio>
+#include<cstring>
+#include<string>
+#include<cmath>
+#include<cstdlib>
+#include<vector>
+#include<climits>
+#define mp make_pair
+#define pb push_back
+#define st first
+#define nd second
+#define wait system("pause");
+#define lint long long int
+#define ABS(a)	 ( (a)>0 ? (a) : -(a) )
+#define KARE(a)	 ( (a)*(a) )
+#define MAX(a,b) ( (a)>(b) ? (a) : (b) )
+#define MIN(a,b) ( (a)<(b) ? (a) : (b) )
+#define INF		 INT_MAX
+#define cin fin
+#define cout fout
+using namespace std;
+
+ifstream fin("C-small-attempt0.in");
+ofstream fout("C-small-attempt0.out");
+
+lint T,A,B,BS[1005];
+string str1,str2;
+
+bool rp(lint x,lint y){
+	str1=str2="";
+	while(x){
+		str1+=(char)('0'+x%10),x/=10;
+		str2+=(char)('0'+y%10),y/=10;
+	}
+	str1+=str1;
+	return str1.find(str2)!=string::npos;
+}
+
+lint solve(){
+	lint i,j,res=0;
+	for(i=A;i<=B;i++)
+		for(j=i+1;j<=B && BS[j]<=BS[i];j++)
+			if( BS[i]==BS[j] && rp(i,j) )
+				res++;
+	return res;
+}
+
+void read(){
+	lint i,j;
+	cin>>T;
+	for(i=1;i<=T;i++){
+		cin>>A>>B;
+		cout<<"Case #"<<i<<": "<<solve()<<endl;
+	}
+//	wait;
+}
+
+void bas(){
+	int i;
+	for(i=1;i<=9;i++)		BS[i]=1;
+	for(i=10;i<=99;i++)		BS[i]=2;
+	for(i=100;i<=999;i++)	BS[i]=3;
+	BS[1000]=4;
+}
+
+int main(){
+	bas();
+	read();
+}

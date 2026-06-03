@@ -1,0 +1,125 @@
+#include <assert.h>
+#include <ctype.h>
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <time.h>
+#include <algorithm>
+#include <numeric>
+#include <functional>
+#include <bitset>
+#include <vector>
+#include <list>
+#include <set>
+#include <map>
+#include <queue>
+#include <stack>
+#include <deque>
+#include <string>
+#include <sstream>
+#include <iostream>
+#include <limits.h>
+#include <valarray>
+using namespace std;
+
+int N, S, p, res;
+vector<int> input;
+vector<bool> vis;
+
+struct triplet {
+	int x, y, z;
+	int best, score;
+	triplet() : x(0), y(0), z(0) {}
+	triplet(int _x, int _y, int _z)
+		: x(_x), y(_y), z(_z) {
+			best = max(x, max(y, z));
+			score = x + y + z;
+	}
+	bool operator < (const triplet &t) const {
+		if (x != t.x) return x < t.x;
+		if (y != t.y) return y < t.y;
+		return z < t.z;
+	}
+};
+
+vector<triplet> ordinary;
+vector<triplet> surprising;
+
+inline void generate() {
+	for (int i = 0; i <= 10; ++i)
+		for (int j = 0; j <= 10; ++j)
+			for (int k = 0; k <= 10; ++k) {
+				if (abs(i - j) <= 2 && abs(i - k) <= 2 && abs(j - k) <= 2) {
+					triplet nowT = triplet(i, j, k);
+					if (abs(i - j) == 2 || abs(i - k) == 2 || abs(j - k) == 2)
+						surprising.push_back(nowT);
+					else
+						ordinary.push_back(nowT);
+				}
+			}
+}
+
+bool contains(int score) {
+	for (int i = 0; i < input.size(); ++i)
+		if (!vis[i] && input[i] == score) {
+			vis[i] = true;
+			return true;
+		}
+	return false;
+}
+
+void getSurprisingBest() {
+	for (int i = 0; i < surprising.size(); ++i) {
+		if (S == 0 || N == 0) return;
+		if (surprising[i].best >= p) {
+			if (contains(surprising[i].score)) {
+				++::res;
+				--S;
+				--N;
+			}
+		}
+	}
+}
+
+void getSurprising() {
+	for (int i = 0; i < surprising.size(); ++i) {
+		if (S == 0 || N == 0) return;
+		if (contains(surprising[i].score)) {
+			--S;
+			--N;
+		}
+	}
+}
+
+void getOrdinaryBest() {
+	for (int i = 0; i < ordinary.size(); ++i) {
+		if (N == 0) return;
+		if (ordinary[i].best >= p) {
+			if (contains(ordinary[i].score)) {
+				++::res;
+				--N;
+			}
+		}
+	}
+}
+
+int main() {
+	freopen("in.txt", "r", stdin);
+	freopen("out.txt", "w", stdout);
+	generate();
+	int T; scanf("%d", &T);
+	for (int c = 1; T--; ++c) {
+		scanf("%d%d%d", &N, &S, &p);
+		input = vector<int>(N);
+		vis = vector<bool>(N, false);
+		for (int i = 0; i < N; ++i)
+			scanf("%d", &input[i]);
+		::res = 0;
+		getSurprisingBest();
+		getSurprising();
+		getOrdinaryBest();
+		printf("Case #%d: %d\n", c, res);
+	}
+	return 0;
+}

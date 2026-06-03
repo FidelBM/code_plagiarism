@@ -1,0 +1,47 @@
+#include<iostream>
+#include<cstdio>
+#include<string>
+#include<cctype>
+#include<cstring>
+#include<sstream>
+
+using namespace std;
+
+int recycled(long long int a,long long int b)
+{
+string s,st;
+stringstream s2;
+s2<<a;
+s=s2.str();
+stringstream s3;
+s3<<b;
+st=s3.str();
+s=s+s;
+if(s.find(st)!=string::npos)
+return 1;
+else
+return 0;
+}
+int main()
+{
+long long int a,b,i,j;
+int t,ch=0;
+cin>>t;
+while(t--)
+{
+          ch++;
+          long long int r=0;
+scanf("%lld%lld",&a,&b);
+for(i=a;i<=b;i++)
+{
+for(j=i+1;j<=b;j++)
+{
+r=r+recycled(i,j);
+}
+}
+printf("Case #%d: %lld\n",ch,r);
+}
+return 0;
+}
+
+

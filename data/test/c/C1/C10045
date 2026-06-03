@@ -1,0 +1,70 @@
+#include "inputreader.h"
+#include <QFile>
+#include <QTextStream>
+#include <QtDebug>
+#include "algo.h"
+#include <QListIterator>
+InputReader::InputReader()
+{
+
+}
+
+
+QList<Algo*> * InputReader::read(QString filename)
+{
+
+    QList<Algo*> * algos = new QList<Algo*>();
+    Algo * algo;
+
+    int nbCase;
+
+    QFile file(filename);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+         return algos;
+
+    QTextStream in(&file);
+    QChar tempChar;
+    Point tempPoint;
+
+
+    in>>nbCase;
+
+    for(int case_idx=0;case_idx<nbCase;case_idx++)
+    {
+        algo = new Algo(case_idx);
+        algos->push_back(algo);
+
+        in>>algo->height;
+        in>>algo->width;
+        in>>algo->fogg;
+        in.readLine();
+
+        for(int idx=0;idx<algo->height;idx++)
+        {
+            for(int idx2=0;idx2<algo->width;idx2++)
+            {
+                in>>tempChar;
+                if(tempChar==QChar('X')) {
+                    algo->tab[idx][idx2] = ME;
+                    algo->me.col = idx2;
+                    algo->me.row = idx;
+                    algo->mef.col = idx2 + 0.5;
+                    algo->mef.row = idx + 0.5;
+                }
+                else if(tempChar==QChar('.')) {  algo->tab[idx][idx2] = EMPTY; }
+                else if(tempChar==QChar('#')) {
+                    algo->tab[idx][idx2] = MIRROR;
+                    tempPoint.col = idx2; tempPoint.row = idx;
+                    algo->mirrors.push_back(tempPoint);
+                }
+
+                //qDebug()<<algo->tab[idx][idx2];
+
+            }
+            in.readLine();
+        }
+
+    }
+
+    return algos;
+}

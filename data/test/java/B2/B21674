@@ -1,0 +1,61 @@
+import java.io.*;
+import java.util.*;
+
+public class CodeJamCLarge {
+	public static void main (String[] args) throws IOException {
+		int i, j, k;
+		long startTime = System.currentTimeMillis();
+		File inFile  = new File("C-large.in");  // File to read from
+		File outFile = new File("C-large.out");
+		
+		BufferedReader reader = new BufferedReader(new FileReader(inFile));
+		BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
+	
+		HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
+		String line = null;
+		line = reader.readLine();
+		int cases = Integer.parseInt(line);
+		int counter = 1;
+		
+        while ((line=reader.readLine()) != null) {
+        	int A,B;
+        	int pairs = 0;        	
+        	String[] node = line.split(" ");
+        	A = Integer.parseInt(node[0]);
+        	B = Integer.parseInt(node[1]);
+        	
+        	//char[] num = new char[node[0].length()];
+        	for(i = A; i <= B; i++) {
+        		String iStr = String.valueOf(i);
+        		String newNum;
+        		String newNum2;
+        		for(j = 1; j < node[0].length(); j++) {  			
+        			newNum = iStr.substring(j);
+        			newNum2 = newNum.concat(iStr.substring(0, j));
+        			int n = Integer.parseInt(newNum2);
+        			if(n > i && n <= B) {        				
+        				if(map.containsKey(i) && map.get(i) == n) {
+        					;
+        				} else {
+        					map.put(i, n);
+        					pairs++;
+        				}
+        				
+        				
+        			}
+        		}
+        		
+        	}
+        	map.clear();
+        	//System.out.println("Case #"+counter+": "+pairs);
+        	writer.write("Case #"+counter+": "+pairs);        	
+        	writer.newLine();
+        	counter++;        		
+        }
+        
+        writer.close();       
+        long endTime   = System.currentTimeMillis();
+        long totalTime = endTime - startTime;
+        System.out.println("Total Time: " + totalTime);		
+	}
+ }

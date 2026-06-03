@@ -1,0 +1,43 @@
+#include <cstdio>
+#include <cstdlib>
+using namespace std;
+int Tests, n, m, d[15], C, x, y;
+int b[2000005], p;
+int main()
+{
+//	freopen("C0.in", "r", stdin);
+//	freopen("C.out", "w", stdout);
+	scanf("%d", &Tests);
+	int ca = 0;
+	while (Tests--)
+	{
+		++ca;
+		printf("Case #%d: ", ca);
+		scanf("%d%d", &n, &m);
+		C = 0;
+		for (int i = n; i <= m; i++)
+		{
+			++p;
+			x = i;
+			d[0] = 0;
+			while (x)
+			{
+				d[++d[0]] = x % 10;
+				x =(int) x / 10;
+			}
+			for (int j = 1; j < d[0]; j++)
+			{
+				y = 0;
+				for (int k = d[0]; k; k--) y = y * 10 + d[(k - j - 1 + d[0]) % d[0] + 1];
+				if (y > i && y <= m && b[y] != p)
+				{
+					++C;
+					b[y] = p;
+				}
+			}
+		}
+		printf("%d\n", C);
+	}
+	return 0;
+}
+

@@ -1,0 +1,99 @@
+package com.mohit.codejam;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+public class DancingGooglers {
+
+	public static void main(String[] args) {
+		try {
+			int noOfTests = 0;
+			int noGooglers = 0;
+			int surprises = 0;
+			int expScore = 0;
+			int totalScore = 0;
+			int withoutSurprise = 0;
+			int withSurprise = 0;
+
+			int judgesScore[] = new int[3];
+			int temp = 0;
+
+			FileInputStream fis = new FileInputStream("input.txt");
+			DataInputStream din = new DataInputStream(fis);
+			BufferedReader br = new BufferedReader(new InputStreamReader(din));
+
+			FileWriter fstream = new FileWriter("out.txt");
+			BufferedWriter out = new BufferedWriter(fstream);
+
+			String strLine;
+			strLine = br.readLine();
+			if (strLine == null || strLine == "")
+				return;
+
+			strLine = strLine.trim();
+			noOfTests = Integer.parseInt(strLine);
+
+			int testNumber = 1;
+
+			while (noOfTests > 0) {
+				strLine = br.readLine();
+				if (strLine == null || strLine == "" || strLine == "\n")
+					break;
+				strLine = strLine.trim().toLowerCase();
+
+				String[] records = strLine.split(" ");
+				noGooglers = Integer.parseInt(records[0]);
+				surprises = Integer.parseInt(records[1]);
+				expScore = Integer.parseInt(records[2]);
+
+				withoutSurprise = 0;
+				withSurprise = 0;
+
+				// loop to get the scores of Googlers
+				for (int i = 0; i < noGooglers; i++) {
+					// logic to find score such that difference between them is
+					// not more than 1
+					totalScore = Integer.parseInt(records[2 + i + 1]);
+					judgesScore[0] = totalScore / 3;
+					judgesScore[1] = (totalScore - judgesScore[0]) / 2;
+					judgesScore[2] = totalScore - judgesScore[0]
+							- judgesScore[1];
+
+					// sort the judges score
+					for (int k = 0; k < 3; k++) {
+						for (int l = k + 1; l < 3; l++) {
+							if (judgesScore[k] > judgesScore[l]) {
+								temp = judgesScore[k];
+								judgesScore[k] = judgesScore[l];
+								judgesScore[l] = temp;
+							}
+						}
+					}
+					if (judgesScore[2] >= expScore)
+						withoutSurprise++;
+					else if (judgesScore[2] == (expScore - 1)
+							&& (totalScore - judgesScore[2] > 0)
+							&& (judgesScore[1] == judgesScore[2]))
+						withSurprise++;
+
+				}
+				if (withSurprise > surprises)
+					withSurprise = surprises;
+
+				out.write("Case #" + testNumber + ": "
+						+ (withoutSurprise + withSurprise) + "\n");
+				testNumber++;
+			}
+			br.close();
+			out.close();
+		} catch (IOException e) {
+			System.out.print(e.getMessage());
+		}
+	}
+
+}

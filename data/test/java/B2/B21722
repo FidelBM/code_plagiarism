@@ -1,0 +1,59 @@
+
+
+//Author KNIGHT0X300 
+
+import java.util.Scanner;
+import java.util.TreeSet;
+
+
+
+
+public class Main {
+    
+    public static void main(String[] args) {
+       Scanner s=new Scanner(System.in);
+     TreeSet<Integer> ts=new TreeSet<Integer>();
+       int[] A1=new int[8];
+      A1[0]=1; A1[1]=10; A1[2]=100; A1[3]=1000; A1[4]=10000; A1[5]=100000; A1[6]=1000000; A1[7]=10000000;
+       int t=s.nextInt();
+     long time = System.nanoTime();  
+       for(int i=0;i<t;i++)
+       {  int tot=0;
+           int A=s.nextInt();
+           int B=s.nextInt();
+               for(int j=B;j>A;j--)
+         {  int y=j ;
+         ts.clear();
+            int sz= (int)Math.floor(Math.log10(j));
+             
+         for(int k=1;k<sz+1;k++)
+         {  
+             int p=j%(int)A1[k];
+             y= (int) (Math.floor(j/A1[k])+p*(int)A1[sz+1-k]);
+          
+         
+             if((y<j)&&(y>=A)){
+                 if(!ts.contains(y))
+                  tot++;ts.add(y);}
+        
+             }
+         
+         }
+         
+         
+         
+         
+           
+           
+           
+           
+           
+           
+        System.out.println("Case #"+(i+1)+": "+tot);
+                      
+          
+       }
+       
+ System.out.println("Finished in: " + (System.nanoTime() - time) / Math.pow(10, 6) + "ms");
+    }
+}

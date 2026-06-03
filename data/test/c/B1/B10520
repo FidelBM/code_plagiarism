@@ -1,0 +1,25 @@
+#ifndef COUNTER_H
+#define COUNTER_H
+
+#include <map>
+#include <vector>
+#include <set>
+
+using std::map;
+using std::vector;
+using std::set;
+
+class Counter {
+  public:
+    // transforms int into int array, sorts the array and increases the counter
+    void AddNumber(int number);
+    map<int,int>* GetDigitCounter();
+  private:
+    // that's a set which has sorted digits of a number as the
+    // key and a count of occurrence as a value
+    map<int,int> sorted_digit_counter_;
+    set<int>* permute_to_lowest(vector<int>* digits);
+    int CalcNumberFromDigits(vector<int> digits);
+};
+
+#endif // COUNTER_H

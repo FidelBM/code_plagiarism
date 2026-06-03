@@ -1,0 +1,61 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+
+using namespace std;
+
+int power10(int d)
+{
+  int y = 1;
+  for(int i=0; i < d; ++i)
+    y *= 10;
+  return y;
+}
+
+int main()
+{
+  int cases, output, a, b, digits, current;
+  bool notin;
+  
+  ifstream myfile("C-large.in");
+  ofstream answer;
+  answer.open ("answerC.out");
+  
+  myfile >> cases;
+  
+  for(int i=0; i < cases; ++i)
+  {
+    output = 0;
+	digits = -1;
+	myfile >> a >> b;
+	
+	current = a;
+	while(current > 0)
+	{
+	  ++digits;
+	  current /= 10;
+	}
+	
+    answer << "Case #" << i+1 << ": ";
+	for(int k=a; k <= b; ++k)
+	{
+	  current = k;
+	  vector<int> v;
+	  for(int m=0; m < digits; ++m)
+	  {
+	    current = current%10*power10(digits) + current/10;
+		notin = true;
+		for(int s=0; s < v.size(); ++s)
+		  if(v.at(0) == current)
+		    notin = false;
+		if(current > k && current <= b && notin)
+		  ++output;
+		v.push_back(current);
+	  }
+	}
+	answer << output << endl;
+  }
+  
+  answer.close();
+  return 0;
+}

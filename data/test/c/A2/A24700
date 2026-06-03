@@ -1,0 +1,116 @@
+// B.cpp : Defines the entry point for the console application.
+//
+
+#pragma warning(disable:4786)
+#pragma warning(disable:4996)
+#include <list>
+#include <string>
+#include <set>
+#include <map>
+#include <iostream>
+
+using namespace std;
+
+#define VERBOSE
+
+#include "B.h"
+
+const char *szWorkingDir = "C:\\devc\\CodeJam_2012\\Qualification\\B\\Debug\\temp\\data\\";
+
+//const char *szFile_in = "B_test_in.txt";
+//const char *szFile_out = "B_test_out.txt";
+
+//const char *szFile_in = "B-small-attempt0.in";
+//const char *szFile_out = "B-small-attempt0.out";
+
+const char *szFile_in = "B-large.in";
+const char *szFile_out = "B-large.out";
+
+
+int main(int argc, char *argv[])
+{
+	char szFilename_in[256];
+	char szFilename_out[256];
+	sprintf(szFilename_in, "%s%s", szWorkingDir, szFile_in);
+	sprintf(szFilename_out, "%s%s", szWorkingDir, szFile_out);
+
+	printf("file in: %s\n", szFilename_in);
+	printf("file out: %s\n", szFilename_out);
+
+	read_file((char *)szFilename_in, szFilename_out);
+	
+	return 0;
+}
+
+
+void read_file(char *szFile_in, char *szFile_out)
+{
+	FILE *fp_in;
+	FILE *fp_out;
+
+	if ((fp_in=fopen(szFile_in, "r"))==NULL)
+	{
+		printf("kann File %s nicht oeffnen\n", szFile_in);
+		exit(-1);
+	}
+	if ((fp_out=fopen(szFile_out, "w"))==NULL)
+	{
+		printf("kann File %s nicht oeffnen (w)\n", szFile_out);
+		exit(-1);
+	}
+
+	int nT, nN, nS, np;
+	
+	int i, j;
+
+	int nMin_surp_for_p;
+	int nMin_for_p;
+	int nt;
+	int nNum_t_for_p;
+	
+	// num. samples
+	fscanf(fp_in, "%d", &nT);
+	for (i=0; i<nT; i++)
+	{
+
+		fscanf(fp_in, "%d%d%d", &nN, &nS, &np);
+#ifdef VERBOSE
+		printf("\nN: %d, S: %d, p: %d\n", nN, nS, np);
+#endif
+		nMin_surp_for_p = 3*np-4;
+		if (nMin_surp_for_p<0)
+			nMin_surp_for_p=0;
+		nMin_for_p = 3*np-2;
+		if (nMin_for_p<0)
+			nMin_for_p=0;
+		nNum_t_for_p = 0;
+		
+		for (j=0; j<nN; j++)
+		{
+			fscanf(fp_in, "%d", &nt);			
+#ifdef VERBOSE
+			printf("  t[%d]: %d\n", j, nt);
+#endif
+			if (nt==0 && np>0)
+				continue;
+			if (nt>=nMin_for_p)
+				nNum_t_for_p++;
+			else if (nt>=nMin_surp_for_p && nS>0)
+			{
+				nS--;
+				nNum_t_for_p++;
+			}			
+		}
+				
+#ifdef VERBOSE
+		printf("case %d: %d\n", i+1, nNum_t_for_p);
+#endif
+
+		fprintf(fp_out, "Case #%d: %d\n", i+1, nNum_t_for_p);
+
+		fflush(fp_out);
+	}
+
+	fclose(fp_in);
+	fclose(fp_out);
+}

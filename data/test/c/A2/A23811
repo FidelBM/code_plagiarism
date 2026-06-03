@@ -1,0 +1,93 @@
+#pragma once
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+#include <map>
+#include <algorithm>
+using namespace std;
+
+class Dancing
+{
+public:
+	void Solve(const string& inputFileName, const string& outputFileName)
+	{
+		fstream inFile(inputFileName, ios::in);
+		string curLine;
+		inFile >> curLine;
+		int totalLines = atoi(curLine.c_str());
+		vector<int> result(totalLines);
+
+		for(size_t i = 0; i < totalLines; ++i)
+		{
+			int N, S, p;
+			inFile >> N >> S >> p;
+			vector<int> scores(N);
+			for(size_t j = 0; j < N; ++j)
+			{
+				inFile >> scores[j];
+			}
+
+			result[i] = CalcMaxScore(N, S, p, scores);
+		}
+
+		ofstream outFile(outputFileName);
+		for(size_t i = 0; i < result.size(); ++i)
+		{
+			outFile << "Case #" << i + 1 << ": " << result[i] << endl;
+		}
+		return;
+	}
+
+	int CalcMaxScore(int N, int S, int p, const vector<int>& scores)
+	{
+		int currentSurprises = S;
+		int maxScore = 0;
+		for(size_t i = 0; i < scores.size(); ++i)
+		{
+			int avgScore = scores[i] / 3;
+			if(avgScore >= p)
+			{
+				maxScore++;
+				continue;
+			}
+
+			if(avgScore + 2 < p)
+			{
+				continue;
+			}
+
+			if(scores[i] %3 == 1 && avgScore + 1 >= p)
+			{
+				maxScore++;
+				continue;
+			}
+			
+			if(scores[i] %3 == 2 && avgScore + 1 >= p)
+			{
+				maxScore++;
+				continue;
+			}
+
+			if(currentSurprises == 0)
+			{
+				continue;
+			}
+
+			if(scores[i] % 3 == 0 && avgScore + 1 >= p && avgScore != 0)
+			{
+				maxScore++;
+				currentSurprises--;
+				continue;
+			}
+
+			if(scores[i] % 3 == 2 && avgScore + 2 >= p)
+			{
+				maxScore++;
+				currentSurprises--;
+				continue;
+			}
+		}
+		return maxScore;
+	}
+};

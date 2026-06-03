@@ -1,0 +1,73 @@
+import java.io.*;
+import java.util.Scanner;
+
+public class C {
+
+public static void main(String[] args) throws FileNotFoundException, IOException {
+     Scanner sc = new Scanner(new FileReader("input.txt"));
+     PrintWriter pw = new PrintWriter(new FileWriter("output.txt"));
+
+        int noOfCases = sc.nextInt();
+
+for (int caseNum = 0; caseNum < noOfCases; caseNum++){
+	int A = sc.nextInt();
+	int B = sc.nextInt();
+	int result =0;
+	int numDigits = numdigits(A);
+	if(A<10){
+     pw.print("Case #" + (caseNum + 1) + ": 0");
+	}
+	else if(A<100){
+		
+		for (int i = A; i <= B; i++) {
+			if(A<=shift(i, 1) && shift(i, 1)<=B  && i != shift(i, 1)){
+				result++;
+			}
+		}
+		pw.print("Case #" + (caseNum + 1) + ": "+ result/2);
+	}
+	else {
+		for (int i = A; i <= B; i++) {
+			int	iterator = i;
+			for(int j=0; j< numDigits; j++){
+						
+			if(A<=shift(iterator, numDigits) && shift(iterator, numDigits)<=B  && i <= shift(iterator, numDigits)){			
+				if(i == shift(iterator, numDigits) )
+				{
+					break;
+				}
+				result++;
+				//System.out.println(result+ " " +i+ " " + shift(iterator, numDigits));
+			}
+			iterator = shift(iterator, numDigits);
+		}
+		}
+		pw.print("Case #" + (caseNum + 1) + ": "+ result);
+	}
+	
+	if(caseNum < noOfCases-1)
+     	pw.println("");
+}
+     
+
+     pw.flush();
+     pw.close();
+     sc.close();
+}
+
+public static int shift(int number, int numdigits){
+    int multiplier = (int) Math.pow(10.0, (double)numdigits);
+	
+	int r = number % 10;
+	int result = number/10;
+	result = result + multiplier * r;
+	return result;	
+}
+
+public static int numdigits(int number){
+	int numdigits = (int) Math.log10((double)number); // would return numdigits - 1
+    
+    return numdigits;
+}
+
+}

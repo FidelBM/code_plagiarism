@@ -1,0 +1,65 @@
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+#include <iostream>
+
+using namespace std;
+int st[]={10, 100, 1000, 10000, 100000, 1000000};
+
+inline int bit(int x)
+{
+    int t=1;
+    for (; x; t++, x/=10);
+    return t;
+}
+
+inline int rcc(int x, int t)
+{
+    return x/10+x%10*t;
+}
+
+int A, B;
+int cnt[10];
+
+bool none(int x)
+{
+    for (int i=1; i<=cnt[0]; ++i)
+    {
+        if(cnt[i]==x)return false;
+    }
+    return true;
+}
+
+int main ()
+{
+    int cas;
+    freopen ("333.in", "r", stdin);
+    freopen ("33.out", "w", stdout);
+    scanf("%d", &cas);
+    for (int I=1; I<=cas; ++I)
+    {
+        scanf ("%d%d", &A, &B);
+        int t=bit(A), tt;
+        int ans=0;
+        for (int i=A; i<=B; ++i)
+        {
+            memset (cnt, 0, sizeof(cnt));
+            tt=i;
+            for (int j=0; j<t; ++j)
+            {
+                tt=rcc(tt, st[t-3]);
+                //printf("%d %d %d\n", i, t, tt);
+                if(tt>i && tt<=B)
+                {
+                    if(none(tt))
+                    {
+                        ans++;
+                        cnt[++cnt[0]]=tt;
+                    }
+                }
+            }
+        }
+        printf("Case #%d: %d\n", I, ans);
+    }
+    return 0;
+}

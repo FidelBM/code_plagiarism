@@ -1,0 +1,63 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <fstream>
+#include <sstream>
+
+using namespace std;
+
+int f1( int t, int s, int p, vector<int> v )
+{
+	int k = 0, m = 0, n;
+	for( int i = 0; i < t; i++ ) {
+		if( v[i] / 3 >= p ) {
+			k++;
+		} else {
+			n = v[i] % 3;
+			if( n == 0 ) {
+				if( v[i] / 3 + 1 >= p && v[i] / 3 - 1 >= 0 ) {
+					m++;
+				}
+			} else if( n == 1 ) {
+				if( v[i] / 3 + 1 >= p ) {
+					k++;
+				}
+			} else if( n == 2 ) {
+				if( v[i] / 3 + 1 >= p ) {
+					k++;
+				} else if( v[i] / 3 + 2 >= p && v[i] / 3 >= 0 ) {
+					m++;
+				}
+			}
+		}
+	}
+	if( m > s )
+		return s + k;
+	return m + k;
+}
+
+int main( int argc, char **argv )
+{
+	string str;
+	stringstream ss;
+	int t, n, s, p, temp;
+	vector <int> v;
+	ifstream fin(argv[1]);
+	fin >> n;
+	getline( fin, str );
+	for( int k = 1; k <= n; k++ ) {
+		getline( fin, str );
+		ss << str;
+		cout << "Case #" << k << ": ";
+		ss >> t >> s >> p;
+		for( int i = 0; i < t; i++ ) {
+			ss >> temp;
+			v.push_back( temp );
+		}
+		cout << f1( t, s, p, v);
+		v.clear();
+		ss.clear();
+		cout << endl;
+	}
+	return 0;
+}

@@ -1,0 +1,42 @@
+#include <stdio.h>
+
+int main()
+{
+	int t, tt ;
+	int a, b, i, tmp, j ;
+	int result = 0 ;
+	int bcnt ;
+	int pw ;
+	
+	scanf( "%d", &tt ) ;
+	for ( t = 1 ; t <= tt ; ++t )
+	{
+		result = 0 ;
+		scanf( "%d %d", &a, &b ) ;
+		
+		i = a ;
+		bcnt = 0 ;
+		pw = 1 ;
+		while ( i )
+		{
+			pw *= 10 ;
+			++bcnt ;
+			i /= 10 ;
+		}
+		pw /= 10 ;
+		
+		for ( i = a ; i <= b ; ++i )
+		{
+			tmp = i ;
+			for ( j = 0 ; j < bcnt - 1 ; ++j )
+			{
+				tmp = ( tmp % 10 ) * pw + tmp / 10 ;
+				if ( tmp >= a && tmp <= b && tmp > i )
+					++result ;
+			}
+		}
+		
+		printf( "Case #%d: %d\n", t, result ) ;
+	}
+	return 0 ;
+}

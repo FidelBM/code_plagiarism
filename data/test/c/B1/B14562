@@ -1,0 +1,50 @@
+#include<iostream>
+#include<stdio.h>
+int p[6]={1,10,100,1000,10000,100000};
+int main()
+{
+ int count,num1,num,upper,A,B,k,digit,j=0,T,orig,len=0,cas;
+ freopen("input.txt","r",stdin);
+ freopen("output.txt","w",stdout);
+ scanf("%d",&T);
+ for(cas=1; cas<=T; cas++)
+ {
+  int map[1001]={0};
+  count=0;
+  scanf("%d%d",&A,&B);
+
+  for(j=A; j<=B; j++)
+  {
+
+   if(map[j]==0)
+   {
+    map[j]=-1;
+    orig=j;
+    len=0;
+    while(orig!=0)
+    {
+      orig=orig/10;
+      len++;
+    }//end while
+    num=j;
+    upper=len-1;
+    for(k=0; k<upper; k++)
+    { 
+     digit=num%p[k+1];
+     digit=digit*p[upper-k];
+     num1=num/p[k+1];
+     digit+=num1;
+     if(digit==j)
+	;
+     else if(digit<=B && digit/p[upper]!=0 && digit>=A && map[digit]==0 )
+     {
+
+	count++;
+     }//endif
+    }//end for
+   }//end if
+  }//end for
+  printf("Case #%d: %d\n",cas,count);
+ }
+ return 0;
+}

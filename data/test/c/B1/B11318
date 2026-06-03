@@ -1,0 +1,72 @@
+// CodeJam2011.cpp : Defines the entry point for the console application.
+//
+
+#include "stdafx.h"
+#include <fstream>
+#include <string>
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+  int numCases = 0;
+  const string fileName = "C-small-attempt1";
+
+  ifstream inputFile((fileName + ".in").c_str());
+  ofstream outputFile((fileName + ".out").c_str());
+    
+  string temp;
+  getline(inputFile, temp);
+  numCases = atoi(temp.c_str());
+
+  for (int caseNumber = 1; caseNumber <= numCases; ++caseNumber)
+  {
+	string num_pair;
+    getline(inputFile, num_pair);
+	
+	int n_start;
+	int n_end;
+	sscanf( num_pair.c_str(),"%d %d",&n_start, &n_end);
+	
+	int pair_count = 0;
+	for( int num = n_start; num < n_end; num++ )
+	{
+		vector<int> previous;
+		char s_buf[32];
+		sprintf(s_buf,"%d",num);
+		string s_num(s_buf);
+		for( unsigned int num_digit = 1; num_digit < s_num.length(); num_digit++ )
+		{
+			string s_result = s_num.substr(num_digit);
+			s_result.append(s_num, 0, num_digit);
+			int n_result = atoi(s_result.c_str());
+			if(n_result > num && n_result <= n_end) 
+			{
+				bool already_found = false;
+				for( unsigned int i = 0; i < previous.size(); i++)
+				{
+					if(previous[i] == n_result) { already_found = true; }
+				}
+				if(! already_found)
+				{
+					previous.push_back(n_result);
+					pair_count++;
+				}
+				 
+			}
+		}
+	}
+
+    // Output the results
+    outputFile << "Case #" << caseNumber << ": " << pair_count << "\n";
+  }
+
+  // Close the streams
+  inputFile.close();
+  outputFile.close();
+
+  return 0;
+}
+

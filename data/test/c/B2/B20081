@@ -1,0 +1,69 @@
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+int mnum(int *a, int p, int q)
+{
+    if (a[p]==0) return 0;
+    int num=a[p];
+    for (int i=p+1; i<=q; i++)
+    {
+        num *= 10;
+        num += a[i];
+    }
+    return num;
+}
+
+int checkC(int x,int lim)
+{
+	int *a = new int[16];
+	int X=x;
+	int r=0,count=0;
+
+	while (x!=0)
+	{
+		a[r] = x%10;
+		++r;
+		x=x/10;
+	}
+
+	for (int i=0; i<r/2; i++)
+	{
+		swap(a[i],a[r-i-1]);
+	}
+
+	for (int i=0; i<r; i++)
+	{
+		a[r+i] = a[i];
+	}
+
+    for (int i=1; i<r; i++)
+	{
+        if (X<mnum(a,i,r+i-1) && mnum(a,i,r+i-1)<=lim) count++;
+    }
+
+	delete[] a;
+	return count;
+}
+
+int main()
+{
+    ofstream fout("C-large.out");
+    ifstream fin("C-large.in");
+    int A[52],B[52];
+    int T;
+    int count;
+    fin>>T;
+    for (int i=1;i<=T;i++) fin>>A[i]>>B[i];
+
+    for (int r=1;r<=T;r++)
+    {
+        count = 0;
+        for (int i=A[r]; i<B[r]; i++)
+            count += checkC(i,B[r]);
+
+        fout<<"Case #"<<r<<": "<<count<<"\n";
+    }
+
+    return 0;
+}

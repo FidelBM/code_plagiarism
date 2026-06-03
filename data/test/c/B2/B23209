@@ -1,0 +1,63 @@
+/*
+Author:MarsChenly
+Date:2012.04.14
+*/
+
+#include<iostream>
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<algorithm>
+
+using namespace std;
+
+const int maxn(2000005);
+
+int num[maxn];
+int a[maxn][10];
+
+void find(int n)
+{
+	int x = 1,y = 1;
+	while (y <= n)
+		y = y * 10;
+	
+	while (x <= n) 
+	{
+		x = x * 10;
+		int m  = n / x + (y / x) * (n % x);
+		if (m < n)
+		{
+			a[n][++num[n]] = m;
+		}
+	}
+}
+
+int main()
+{
+	freopen("C.in","r",stdin);
+	freopen("C_Large.out","w",stdout);
+	int task;
+	scanf("%d",&task);
+	for (int i = 1; i <= 2000000; i++)
+	{
+		find(i);
+	}
+	
+	for (int cnt = 1; cnt <= task; cnt++)
+	{
+		long long ans = 0;
+		int A,B;
+		scanf("%d %d",&A,&B);
+		for (int m = A; m <= B; m++)
+		{
+			for (int i = 1; i<= num[m]; i++)
+			{
+				int n = a[m][i];
+				if (n >= A) ans++;
+			}
+		}
+		printf("Case #%d: %lld\n",cnt,ans);
+	}
+	return 0;
+}

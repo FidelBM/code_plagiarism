@@ -1,0 +1,71 @@
+#include<stdio.h>
+
+using namespace std;
+
+int main()
+{
+
+ int t,a,b,i,j,k,n,r,cnt,m,x;
+
+ scanf("%d",&t);
+
+ x = 1;
+
+ while(t--)
+ {
+	scanf("%d%d",&a,&b);
+
+	m = a;
+	cnt = 0;
+
+	while(m<=b)
+	{
+		n = m;	
+		r = n;
+		//printf("%d\n",m);
+
+		while(1)
+		{
+			if((n%10==0 && n/100==0) || n%100==0 || n%1000==0)
+				break;
+		
+			k = n%10;
+	
+			if(k==0)
+			{
+				k = n%100;
+				j = n/100;
+
+				n = k*10 + j;
+			}
+			else
+			{
+				j = n/10;
+				if(j<10)
+					n = k*10 + j; 
+				else
+					n = k*100 + j;
+			}
+
+			if(j==0 || n==r)
+				break;
+	
+			if(n>r && n<=b)
+				cnt++;
+		}
+
+		m++;
+	}
+
+	printf("Case #%d: %d\n",x,cnt);
+	x++;
+
+ }
+
+}
+		
+
+
+		
+			
+

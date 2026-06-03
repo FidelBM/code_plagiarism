@@ -1,0 +1,73 @@
+#include <iostream>
+#include <map>
+#include <cstring>
+#include <cstdio>
+#include <algorithm>
+using namespace std;
+
+int ar[4][1000][4];
+int ni[4],s,p;
+struct pa{
+	int sur,up;
+};
+pa pi;
+void calc(int b,int i){
+	int a;
+	for(a=0;a<=10;a++){
+		if(3*a==b){ ar[i][ni[i]][0]=a; ar[i][ni[i]][1]=a; ar[i][ni[i]][2]=a; ni[i]++; }
+		if(3*a-1==b && a-1>=0) { ar[i][ni[i]][0]=a; ar[i][ni[i]][1]=a; ar[i][ni[i]][2]=a-1; ni[i]++; }
+		if(3*a-2==b){  
+			if(a-1>=0){ ar[i][ni[i]][0]=a; ar[i][ni[i]][1]=a-1; ar[i][ni[i]][2]=a-1; ni[i]++; }
+			if(a-2>=0){ ar[i][ni[i]][0]=a; ar[i][ni[i]][1]=a; ar[i][ni[i]][2]=a-2; ni[i]++; }
+		}
+		if(3*a-3==b && a-2>=0){ ar[i][ni[i]][0]=a; ar[i][ni[i]][1]=a-1; ar[i][ni[i]][2]=a-2; ni[i]++; }
+		if(3*a-4==b && a-2>=0){ ar[i][ni[i]][0]=a; ar[i][ni[i]][1]=a-2; ar[i][ni[i]][2]=a-2; ni[i]++; }
+	}
+}
+
+pa check(int i,int j,int k){
+	pa u;
+	u.sur=0; u.up=0;
+	if(ar[0][i][0]>=p) u.up++; 
+	if(ar[1][j][0]>=p) u.up++; 
+	if(ar[2][k][0]>=p) u.up++;
+	
+	if(ar[0][i][0]-ar[0][i][2]>=2) u.sur++; 
+	if(ar[1][j][0]-ar[1][j][2]>=2) u.sur++; 
+	if(ar[2][k][0]-ar[2][k][2]>=2) u.sur++;
+	return u;
+}
+int main(){
+	freopen("test.in","r",stdin);
+	freopen("test.out","w",stdout);
+	int a,b,c,d,e,n,t,ti;
+	cin>>t;
+	for(int cr=1;cr<=t;cr++){
+		cin>>n>>s>>p;
+		ni[0]=0; ni[1]=0; ni[2]=0;
+		ti=0;
+		for(a=0;a<n;a++){
+			cin>>b;
+			calc(b,a);
+			/*cout<<b<<endl;
+			for(c=0;c<ni[a];c++) cout<<ar[a][c][0]<<" "<<ar[a][c][1]<<" "<<ar[a][c][2]<<endl;*/
+		}
+		if(n!=3){
+			for(a=n;a<3;a++) {
+				ni[a]=1;
+				ar[a][0][0]=-5; ar[a][0][1]=-5; ar[a][0][2]=-5;
+			}
+		}
+		for(a=0;a<ni[0];a++){
+			for(b=0;b<ni[1];b++){
+				for(c=0;c<ni[2];c++){
+					pi=check(a,b,c);
+					if(pi.sur==s){ /*cout<<a<<" "<<b<<" "<<c<<" "<<pi.up<<endl;*/ ti=max(ti,pi.up); }
+				}
+			}
+		}
+		cout<<"Case #"<<cr<<": "<<ti<<endl;
+	}
+	return 0;
+}
+	

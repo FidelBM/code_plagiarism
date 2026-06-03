@@ -1,0 +1,57 @@
+#include <cstdio>
+#include <iostream>
+#include <sstream>
+
+using namespace std;
+
+void rotate(string &str) {	
+	if(str.size() == 0)
+		return;
+	
+	char ch = str[str.size()-1];
+	str.erase(str.end()-1);
+	str.insert(str.begin(), ch);
+}
+
+int main() {
+	int T;
+	scanf("%d", &T);
+	
+	
+	for(int t=0; t!=T; t++) {
+		
+		long long int count = 0;
+		
+		int A, B;
+		scanf("%d %d", &A, &B);
+		
+		for(int i=A; i<=B; i++) {
+		//	if(i%10000 == 0)
+		//		printf("%d\n", i);
+			
+			stringstream ss1;
+			ss1 << i;
+			string str;
+			ss1 >> str;
+			//break;
+			while(true) {
+				rotate(str);
+				int num;
+				stringstream ss;
+				ss << str;
+				ss >> num;
+				
+				//break;
+				
+				if(num == i)
+					break;
+				
+				if(num > i && num <= B)
+					count++;
+			}
+		}
+		
+		printf("Case #%d: %lld\n", t+1, count);
+		
+	}
+}

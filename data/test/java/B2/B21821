@@ -1,0 +1,47 @@
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Scanner;
+
+public class C2 {
+	
+	public static void main(String[] args) {
+		
+		Scanner in = new Scanner(System.in);
+		
+		int T = in.nextInt(); in.nextLine();		
+		
+		//for each test case
+		for (int i = 1; i <= T; i++)
+		{
+			int A = in.nextInt();
+			int B = in.nextInt();
+			
+			int result = 0;
+			
+			for (int n = A; n <= B - 1; n++)
+			{
+				String strN = "" + n;
+				int length = strN.length();
+				List<Integer> foundNewNums = new LinkedList<Integer>();
+				
+				for (int j = 1; j < length; j++)
+				{
+					String newNum = "";
+							
+					for (int k = 0; k < length; k++)
+						newNum += strN.charAt((j + k) % length);
+					
+					int newNumInt = new Integer(newNum);
+					
+					if (newNumInt > n && newNumInt <= B && !foundNewNums.contains(newNumInt))
+					{
+						foundNewNums.add(newNumInt);
+						result++;
+					}
+				}
+			}
+			
+			System.out.format("Case #%d: %d\n", i, result);
+		}
+	}
+}

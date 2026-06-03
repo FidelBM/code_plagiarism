@@ -1,0 +1,58 @@
+#include <iostream>
+#include <fstream>
+//#include <ostream>
+
+#include <stdio.h>
+#include <cstdlib>
+#include <cmath>
+#include <string>
+#include <vector>
+#include <queue>
+#include <stack>
+#include <stdint.h>
+
+struct Handler
+{
+	//std::vector<Location> myAnts;
+	std::ofstream fileOut;
+	std::ifstream fileIn;
+	std::ofstream debugOut;
+	
+	Handler() 
+	{
+		debugOut.open("debug.txt");
+	};
+	~Handler() 
+	{
+		debugOut.close();
+	};
+
+	inline void openIn(const std::string &filename)
+    {
+		fileIn.open(filename.c_str());
+    };
+
+	inline void openOut(const std::string &filename)
+    {
+		fileOut.open(filename.c_str());
+    };
+	
+    //closes the ofstream
+    inline void close()
+    {
+        fileIn.close();
+		fileOut.close();
+    };
+	
+	inline void closeIn()
+    {
+        fileIn.close();
+    };
+	
+	inline void closeOut()
+    {
+		fileOut.close();
+    };
+	
+};
+

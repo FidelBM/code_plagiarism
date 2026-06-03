@@ -1,0 +1,104 @@
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<algorithm>
+#include<set>
+using namespace std;
+#define N 33
+int tArr[N];
+bool b_mCan[N];
+typedef unsigned long _UL;
+
+multiset<int> _set1,_set2;
+
+void solve( int n,int s,int p ){
+	/*
+	_set1.clear();
+	_set2.clear();
+	memset(b_mCan,0,sizeof(b_mCan));
+	for( int i=p;i<=10;++i ){
+		if( 3*i-3 > -1 ) b_mCan[ 3*i-3 ] = 1;
+		if( 3*i-2 > -1 ) b_mCan[3*i-2] = 1;
+		if( 3*i-1 > -1 ) b_mCan[ 3*i-1 ] = 1;
+		if( 3*i-4 > -1 ) b_mCan[ 3*i-4 ] = 1;
+		if( 3*i > -1 ) b_mCan[ 3*i ] = 1;
+	}
+	*/
+	int maxRet = 0;
+	for( _UL i = 0UL;i<(1<<n);++i ){
+		int flag = 0;
+		for( int j=0;j<n;++j ) if( (i>>j)&1UL ) ++flag;
+		if( flag == s ){
+			int ret = 0;
+			for( int j=0;j<n;++j ){
+				int cnt = tArr[j]/3;
+				if( 0 == tArr[j] || 1 == tArr[j] ){
+					if( 0 == tArr[j] ){
+						if( (i>>j)&1UL ) break; // 强制不存在 
+						else{
+							if( cnt >= p ) ++ret;
+						}
+					}else{
+						if( (i>>j)&1UL ) break; // 强制不存在 
+						else{
+							if( cnt>=p || cnt+1>=p ) ++ret;
+						}
+					}
+					continue;
+				}
+				else
+				{
+					
+				if( 0 == tArr[j]%3 ){
+					if( (i>>j)&1UL ){
+						if( cnt-1 >= p || cnt >= p || cnt+1 >= p ) ++ret;
+					}else{
+						if( cnt >= p ) ++ret;
+					}
+				}else{
+					if( 1 == tArr[j]%3 ){
+						if( (i>>j)&1UL ){
+							if( cnt-1 >= p || cnt+1 >= p ) ++ret;
+						}else{
+							if( cnt >= p || cnt+1 >= p ) ++ret;
+						}
+					}else{
+						if( (i>>j)&1UL ){
+							if( cnt >= p || cnt+2 >= p ) ++ret;
+						}else{
+							if( cnt >= p || cnt+1 >=p ) ++ret;
+						}
+					}
+				}
+				
+				}
+			}
+			if( ret > maxRet ) maxRet = ret;
+		}
+	}
+	printf("%d\n",maxRet);
+}
+
+int main(){
+	int t;
+	//freopen("b2.out","w",stdout);
+	scanf("%d",&t);
+	for( int _case = 0;_case<t;++_case ){
+		int n,s,p;
+		scanf("%d%d%d",&n,&s,&p);
+		for( int i=0;i<n;++i ){
+			scanf("%d",tArr+i);
+		}
+		printf("Case #%d: ",_case+1);
+		solve(n,s,p);
+	}
+	return 0;
+}
+/*
+4
+3 1 5 15 13 11
+3 0 8 23 22 21
+2 1 1 8 0
+6 2 8 29 20 8 18 18 21
+3 1 7 23 17 17
+*/

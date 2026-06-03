@@ -1,0 +1,56 @@
+// CodeJam2012B.cpp : Defines the entry point for the console application.
+//
+
+#include "stdafx.h"
+#include <fstream>
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <algorithm>
+#include <map>
+using namespace std;
+//							   0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+//int minScoreForPWithoutSuprise[0, 1, 4, 
+int minScoreForPWithoutSurprise(int p) {return 3*p-2;}
+int minScoreForPWithSurprise(int p) {return 3*p-4;}
+
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+		std::ifstream infile("B-small.in");	
+		std::ofstream outfile("B-small.out");
+		cout<<setprecision(7);
+
+
+		int totalCases = 0;
+
+		infile>>totalCases;
+
+
+		for (int i = 1;i<=totalCases;i++)
+		{
+			int dancers,minimumPerformance,surpriseScores;
+			int qualifiedScorers = 0;
+			int dancersScore;
+			infile>>dancers>>surpriseScores>>minimumPerformance;
+			for (int j = 0;j<dancers;j++)
+			{
+				infile>>dancersScore;
+				if (dancersScore>=minScoreForPWithoutSurprise(minimumPerformance))
+				{
+					qualifiedScorers++;
+				}
+				else if (surpriseScores >0 && dancersScore>=minScoreForPWithSurprise(minimumPerformance) && minimumPerformance>1) 
+				{
+					qualifiedScorers++;
+					surpriseScores--;
+				}
+			}
+			outfile<<"Case #"<<i<<": "<<qualifiedScorers<<endl;
+
+
+		}
+		return 0;
+
+}

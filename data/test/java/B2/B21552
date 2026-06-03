@@ -1,0 +1,88 @@
+import java.util.ArrayList;
+import java.util.LinkedList;
+
+public class RecycledNumbers {
+	static String[] zeros = { "0", "00", "000", "0000", "00000", "000000" };
+
+	public static void solve(String fname) {
+		Read r = new Read();
+		r.Read(fname);
+		int numOfTestCases = r.noOfTestCases;
+		int[] numbers = r.nums;
+		String finalAnser = "";
+		for (int i = 0; i < numOfTestCases; i++) {
+			String answer = "";
+			int firstNum = numbers[2 * i];
+			int secondNum = numbers[2 * i + 1];
+			
+			int lastNumIndex = (int) (secondNum / Math.pow(10, ((secondNum+"").length())-1));
+			lastNumIndex++;
+			String large="";
+			for (int k = 9; k >=lastNumIndex; k--) {
+				//check large number
+				
+					large=large+" "+k;
+				
+				
+			}
+			// int mid = ((secondNum-firstNum)/2)+1;
+			int noOfans = 0;
+			for (int j = firstNum; j < secondNum; j++) {
+				String numb = j + "";
+				int firstIndex = -1;
+				int lastIndex = -1;
+
+				for (int k = zeros.length - 1; k >= 0; k--) {
+					// check zeros 
+					if (numb.contains(zeros[k])) {
+						firstIndex = numb.indexOf(zeros[k]);
+						//first index of 0 eg in 201000 it will be 3
+						lastIndex = firstIndex + zeros[k].length() - 1;
+						//last index = 3+(3-1) = 5 
+					}
+				}
+			
+			
+
+				// /LinkedList<Integer> number = new LinkedList<Integer>();
+				for (int k = 0; (k < numb.length()) ; k++) {
+					if(k>=firstIndex&& (k <= lastIndex)&&(!large.contains(numb.charAt(k)+""))){
+					//	System.out.println(k);
+					}else{
+					String first = numb.substring(0, k);
+					String last = numb.substring(k, numb.length());
+				//	int la = Integer.parseInt(last);
+					String newNumb = last + first;
+				//	int biggest = (int) (la * Math.pow(10, numb.length()- last.length()));
+		
+						int numbC = Integer.parseInt(newNumb);
+						if ((numbC <= secondNum) && (numbC > j)) {
+							noOfans++;
+						}
+					
+				}
+				}
+				int x = 0;
+				// int k=0;
+				// while(!number.isEmpty()){
+				// x=(int) (x+number.removeLast()*Math.pow(10, k));
+				// k++;
+				// }
+
+			}
+			
+			answer = "Case #" + (i + 1) + ": " + noOfans;
+		//	System.out.println(answer);
+			finalAnser = finalAnser + answer + "\n";
+
+		}
+		r.write("out", finalAnser);
+		System.out.println(finalAnser);
+	}
+	public static void main(String[] args) {
+
+		solve("test");
+		// String n = "10002";
+		// System.out.println(n.lastIndexOf('0'));
+	}
+}

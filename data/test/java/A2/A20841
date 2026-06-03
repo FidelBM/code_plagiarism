@@ -1,0 +1,63 @@
+import java.util.*;
+import static java.lang.Math.*;
+
+public class Bsmall {
+	public static void main(String[] args){
+		Scanner input = new Scanner(System.in);
+
+		//````````````````````````````````````````````````````````````````````
+		// Read in how many cases there will be, and print a new line
+		int T = input.nextInt();
+		input.skip("\n");
+		System.out.println();
+
+		//```````````````````````````````````````````````````````````````````
+		// For each line calculate max number of googlers with score p
+		for(int caseNumber = 1; caseNumber <= T; caseNumber++){
+			// Read in N, the number of Googlers
+			int N = input.nextInt();
+
+			//Read in S, the number of surprising triplets
+			int S = input.nextInt();
+
+			// Read in p
+			int p = input. nextInt();
+
+			// Read in the next N integers and count how many googlers have a best
+			// result of at least p
+			int count = 0;
+			for (int i =0; i < N; i++) {
+				int totalValue = input.nextInt();
+				int j = totalValue / 3;
+				int k = (totalValue - j) / 2;
+				int l = totalValue - (j + k);
+
+				// Test to see if l >= p
+				// If not, see if it can be made into a special triplet with l < p
+				if(l >= p){
+					count += 1;
+					continue;
+				}
+				else if (S > 0) {
+					int a = j - 1;
+					int b = l + 1;
+					if (a >= 0 && b >= 0 && a <= 10 && b <= 10 && b - a < 3 && b >= p) {
+						count += 1;
+						S = S -1;
+						continue;
+					}
+					a = k - 1;
+					b = l + 1;
+					if (a >= 0 && b >= 0 && a <= 10 && b <= 10 && b - a < 3 && b >= p) {
+						count += 1;
+						S = S -1;
+						continue;
+					}
+				}
+			}
+
+			// Print results
+			System.out.format("Case #%d: %d\n", caseNumber, count);
+		}
+	}
+}

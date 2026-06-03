@@ -1,0 +1,64 @@
+#include <iostream> 
+#include <fstream> 
+#include <cstdlib>
+#include <map>
+#include <string.h>
+#include <utility>
+#include <vector>
+
+#include "loader.h"
+#include "counter.h"
+
+using std::cout;
+using std::endl;
+using std::map;
+using std::pair;
+using std::vector;
+
+int main(int argc, char** argv) {
+
+  int bla=1;
+  if(argc == 1) {
+    exit(1);
+  }
+
+  for(int i=1; i < argc; i=i+3) {
+    string input_file(argv[i]);
+    Loader* loader = Loader::LoadFile(input_file);
+
+    vector<pair<int,int> >* ranges =  loader->GetRanges();
+
+    for(vector<pair<int,int> >::iterator range_it = ranges->begin();
+        range_it != (ranges->end() - 1); ++range_it) {
+
+      Counter counter;
+      for(int j=(*range_it).first; j <= (*range_it).second; j++) {
+        counter.AddNumber(j);
+    /*    counter.AddNumber(12345);
+        counter.AddNumber(54123);
+        counter.AddNumber(45123);
+        counter.AddNumber(34512);
+        counter.AddNumber(12345);
+        counter.AddNumber(23451);
+        counter.AddNumber(34512);
+        counter.AddNumber(34521);
+        counter.AddNumber(45123);*/
+
+      }
+      int count_recycled = 0;
+      map<int,int>* count = counter.GetDigitCounter();
+      for(map<int,int>::iterator it = count->begin(); it != count->end(); it++) {
+//        cout << "Count for permuted number " << (*it).first << ": " << (*it).second << endl;
+        int num_perm = (*it).second;
+        int rec_pairs = 0;
+        if(num_perm != 1) {
+          for(int k = num_perm; k >= 1; k--) {
+            rec_pairs += num_perm-k;
+          }
+        }
+        count_recycled += rec_pairs;
+      }
+      cout << "Case #" << bla++ << ": " << count_recycled << endl;
+    }
+  }
+}

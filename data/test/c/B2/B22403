@@ -1,0 +1,36 @@
+#include<stdio.h>
+#include<malloc.h>
+
+int main()
+{
+int t,tt,a1,b;
+scanf("%d",&t);tt=t;
+while(t--)
+{
+int *a,c=0,c1=0;
+a=(int *)malloc(2000002*sizeof(int));
+int j;
+for(j=0;j<2000002;j++)a[j]=0;
+scanf("%d",&a1);scanf("%d",&b);
+printf("Case #%d: ",tt-t);
+
+int i,m,n;
+m=a1;n=1;
+while(m){m=m/10;n*=10;}n=n/10;
+
+for(i=a1;i<b;i++)
+{
+if(a[i]==1)continue;
+c1=0;
+m=n*(i%10)+i/10;
+while(m!=i){if(i<m&&m<=b)if(a[m]!=1){a[m]=1;c1++;}m=n*(m%10)+m/10;}
+c+=(c1*(c1+1))/2;
+
+}// for...
+
+
+printf("%d\n",c);
+
+}
+return 0;
+}

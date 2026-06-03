@@ -1,0 +1,43 @@
+#ifndef TESTOBJ_H
+#define TESTOBJ_H
+
+#include <iostream>
+#include <fstream>
+
+using namespace std;
+
+class TestObj
+{
+    public:
+        TestObj() {}
+        virtual ~TestObj() {}
+
+        void Run() {
+            const char* fname = InputFileName();
+            ifstream in(fname);
+            ofstream out("output.txt");
+
+            if (in.good()) {
+                int num;
+                in >> num;
+                int count;
+                char line[3];
+                in.getline(line, 3);  // skip line end
+                //string line;
+                for (count = 0; count < num; ++count) {
+                    out << "Case #" << count + 1 << ": ";
+                    Process(in, out, count);   // process one case
+                    out << endl;
+                }
+            }
+            in.close();
+            out.close();
+        }
+
+    protected:
+        virtual const char* InputFileName() = 0;
+        virtual void Process(ifstream& in, ofstream& out, int count) = 0;
+    private:
+};
+
+#endif // TESTOBJ_H

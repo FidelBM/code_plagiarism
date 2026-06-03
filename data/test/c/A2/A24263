@@ -1,0 +1,15 @@
+#include <iostream>
+
+#include "include/Tongues.h"
+#include "include/Dance.h"
+
+using namespace std;
+
+int main()
+{
+    //TestObj* test = new Tongues;
+    TestObj* test = new Dance;
+    test->Run();
+    delete test;
+    return 0;
+}

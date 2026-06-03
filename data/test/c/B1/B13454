@@ -1,0 +1,52 @@
+#ifndef __INPUT_H__
+#define __INPUT_H__
+
+#include <iostream>
+#include <string>
+#include <list>
+#include <cstdlib>
+#include <fstream>
+#include <algorithm>
+#include <vector>
+#include <sstream>
+
+struct Case
+{
+	std::vector<int> upper;
+	std::vector<int> lower;
+};
+
+typedef std::list<Case> caseList;
+
+static const int MAX_UPPER_BOUND = 4000;
+static const int MIN_LOWER_BOUND = 1;
+
+class Input
+{
+public:
+   Input(std::string const & filename);
+
+   ~Input(){}
+
+   bool parseFile();
+
+   bool const &failed(){ return m_failed;}
+
+   void processCases();
+
+   int countRecycled( Case const &incase);
+
+   void combos(std::vector<int> const & in, int const & base,  int const & max, int const & min);
+
+   int convertToInt(std::vector<int> const & in);
+
+
+private:
+   int                 m_numExamples;
+   std::string         m_filename;
+   bool                m_failed;
+   caseList            m_cases;
+   std::vector<int>    m_mask;
+   
+};
+#endif

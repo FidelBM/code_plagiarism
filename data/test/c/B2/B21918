@@ -1,0 +1,60 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <set>
+#include <map>
+#include <list>
+
+#include "Integer.h"
+#include "Rational.h"
+
+using namespace std;
+
+int main(void) {
+  int iTest, nTests; cin >> nTests;
+
+  vector<bool> found(2000001);
+
+  for (iTest = 1; iTest <= nTests; ++iTest) {
+    cerr << iTest << "/" << nTests << "\n";
+
+    Integer totalPairs = 0;
+    
+    string sA, sB;
+    int i, A, B;
+    cin >> sA >> sB;
+    A = atoi(sA.c_str()); B = atoi(sB.c_str());
+    int n = sA.length();
+    int mu = 1;
+    for (i = 1; i < n; ++i)
+      mu *= 10;
+
+    for (i = A; i <= B; ++i)
+      found[i] = false;
+
+    for (i = A; i <= B; ++i)
+      if (!found[i]) {
+	int count = 0;
+
+	set<int> recycles;
+
+	while (true) {
+	  if (recycles.find(i)!=recycles.end()) break;
+	  if (i >= A && i <= B) { ++count; found[i] = true; recycles.insert(i); }
+	  i = (i / 10) + (i % 10)*mu;
+	}
+
+	totalPairs += count*(count-1)/2;
+      }
+
+
+    cout << "Case #" << iTest << ": ";
+
+    cout << totalPairs;
+
+    cout << "\n";
+    
+  }
+
+  return 0;
+}

@@ -1,0 +1,46 @@
+#include "inputreader.h"
+#include <QFile>
+#include <QTextStream>
+#include <QtDebug>
+#include "algo.h"
+#include <QListIterator>
+InputReader::InputReader()
+{
+
+}
+
+
+QList<Algo*> * InputReader::read(QString filename)
+{
+
+    QList<Algo*> * algos = new QList<Algo*>();
+    Algo * algo;
+    int nbCase, nbSteps;
+
+    QFile file(filename);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+         return algos;
+
+    QTextStream in(&file);
+
+
+
+    QString computer;
+    int button;
+    Step step;
+
+    in>>nbCase;
+
+    for(int case_idx=0;case_idx<nbCase;case_idx++)
+    {
+        algo = new Algo(case_idx);
+        algos->push_back(algo);
+
+        in>>algo->a;
+        in>>algo->b;
+
+
+    }
+
+    return algos;
+}

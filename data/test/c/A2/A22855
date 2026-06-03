@@ -1,0 +1,23 @@
+/*
+ * Solver.h
+ *
+ *  Created on: Mar 17, 2012
+ *      Author: dasc
+ */
+
+#ifndef SOLVER_H_
+#define SOLVER_H_
+
+#include <vector>
+#include "InputData.h"
+#include "OutputData.h"
+
+class Solver {
+public:
+	Solver();
+	virtual ~Solver();
+
+	void Solve(std::vector<InputData> &inputs, std::vector<OutputData> &outputs);
+};
+
+#endif /* SOLVER_H_ */

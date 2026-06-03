@@ -1,0 +1,24 @@
+#ifndef SCORE_H
+#define SCORE_H
+
+#include <iostream>
+
+using namespace std;
+
+class Score {
+public:
+	Score();
+	Score(int a, int b, int c);
+	bool hasBestScore(int type);
+	void setBestScore(bool b, int type);
+	static const int _BESTSCORE_NORMAL = 0;
+	static const int _BESTSCORE_SURPRISE = 1;
+private:
+	int _score1;
+	int _score2;
+	int _score3;
+	bool _normal;
+	bool _surprise;
+};
+
+#endif //SCORE_H

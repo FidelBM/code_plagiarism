@@ -1,0 +1,41 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+
+using namespace std;
+
+int main(void) {
+    int numLines = 0;
+    cin >> numLines;
+
+    int num = 1;
+
+    while (true) {
+        int num1 = 0, num2 = 0;
+        cin >> num1 >> num2;
+
+        const int numDigits = log10(num2);
+
+        if (cin.fail())
+            break;
+
+        int count = 0;
+
+        for (int i = num1; i <= num2; i++) {
+            int n = i;
+            for (int j = 0; j < numDigits ; j++) {
+                //cout << n << endl;
+                int r = n % 10;
+                n /= 10;
+                n += r * pow(10, numDigits);
+                if (n > i && n <= num2) {
+                    //cout << i << ", " << n << endl;
+                    count++;
+                }
+            }
+        }
+
+        cout << "Case #" << num << ": " << count << endl;
+        num++;
+    }
+}

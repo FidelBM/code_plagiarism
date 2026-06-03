@@ -1,0 +1,174 @@
+#include <iostream>
+#include <cstdio>
+using namespace std;
+int main() {
+ freopen("3i.txt","r",stdin);
+   freopen("ol3.txt","w",stdout);
+    int t,a,b,i,c=1,ans,j,x1,x2,x3,x4,x5,x6,x7,l1,l2,l3,l4,l5,l6,l7,test;
+    scanf("%d",&test);
+    while(test--)
+    {
+        ans=0;
+        scanf("%d%d",&a,&b);
+        if(b<10){
+        printf("Case #%d: %d\n",c++,ans);}
+       else if (b<100){
+        for(i=a;i<b;++i)
+        {
+            t=i;
+            x1=t%10;
+            t/=10;
+            x2=t%10;
+            l1=x1*10+x2;
+            if(l1<=b&&l1>i)
+                    ans++;
+            }
+        printf("Case #%d: %d\n",c++,ans);
+        }
+        else if(b<1000){
+            ans=0;
+        for(i=a;i<b;++i)
+        {
+            t=i;
+            x1=t%10;
+            t/=10;
+            x2=t%10;
+            t/=10;
+            x3=t%10;
+            l1=x1*100+x3*10+x2;
+            l2=x2*100+x1*10+x3;
+            if(l1<=b&&l1>i)
+                    ans++;
+            if(l2<=b&&l2>i)
+                    ans++;
+            }
+         printf("Case #%d: %d\n",c++,ans);
+        }
+        else if(b<10000){
+        for(i=a;i<b;++i)
+        {
+            t=i;
+            x1=t%10;
+            t/=10;
+            x2=t%10;
+            t/=10;
+            x3=t%10;
+            t/=10;
+            x4=t%10;
+
+            l1=x1*1000+x4*100+x3*10+x2;
+            l2=x2*1000+x1*100+x4*10+x3;
+            l3=x3*1000+x2*100+x1*10+x4;
+            if(l1<=b&&l1>i)
+                    ans++;
+            if(l2<=b&&l2>i&&l2!=l1)
+                    ans++;
+             if(l3<=b&&l3>i&&l3!=l1)
+                    ans++;
+            }
+            printf("Case #%d: %d\n",c++,ans);
+        }
+        else if(b<100000){
+        for(i=a;i<b;++i)
+        {
+            t=i;
+            x1=t%10;
+            t/=10;
+            x2=t%10;
+            t/=10;
+            x3=t%10;
+            t/=10;
+            x4=t%10;
+            t/=10;
+            x5=t%10;
+
+            l1=x1*10000+x5*1000+x4*100+x3*10+x2;
+            l2=x2*10000+x1*1000+x5*100+x4*10+x3;
+            l3=x3*10000+x2*1000+x1*100+x5*10+x4;
+            l4=x4*10000+x3*1000+x2*100+x1*10+x5;
+            if(l1<=b&&l1>i)
+                    ans++;
+            if(l2<=b&&l2>i&&l2!=l1)
+                    ans++;
+             if(l3<=b&&l3>i&&l3!=l1)
+                    ans++;
+            if(l4<=b&&l4>i&&l4!=l1)
+                    ans++;
+            }
+         printf("Case #%d: %d\n",c++,ans);
+        }
+        else if(b<1000000){
+        for(i=a;i<b;++i)
+        {
+            t=i;
+            x1=t%10;
+            t/=10;
+            x2=t%10;
+            t/=10;
+            x3=t%10;
+            t/=10;
+            x4=t%10;
+            t/=10;
+            x5=t%10;
+            t/=10;
+            x6=t%10;
+
+            l1=x1*100000+x6*10000+x5*1000+x4*100+x3*10+x2;
+            l2=x2*100000+x1*10000+x6*1000+x5*100+x4*10+x3;
+            l3=x3*100000+x2*10000+x1*1000+x6*100+x5*10+x4;
+            l4=x4*100000+x3*10000+x2*1000+x1*100+x6*10+x5;
+            l5=x5*100000+x4*10000+x3*1000+x2*100+x1*10+x6;
+            if(l1<=b&&l1>i)
+                    ans++;
+            if(l2<=b&&l2>i&&l2!=l1)
+                    ans++;
+             if(l3<=b&&l3>i&&l3!=l1)
+                    ans++;
+            if(l4<=b&&l4>i&&l4!=l1)
+                    ans++;
+            if(l5<=b&&l5>i&&l5!=l1)
+                    ans++;
+            }
+         printf("Case #%d: %d\n",c++,ans);
+        }
+         else {
+        for(i=a;i<b;++i)
+        {
+            t=i;
+            x1=t%10;
+            t/=10;
+            x2=t%10;
+            t/=10;
+            x3=t%10;
+            t/=10;
+            x4=t%10;
+            t/=10;
+            x5=t%10;
+            t/=10;
+            x6=t%10;
+            t/=10;
+            x7=t%10;
+            l1=x1*1000000+x7*100000+x6*10000+x5*1000+x4*100+x3*10+x2;
+            l2=x2*1000000+x1*100000+x7*10000+x6*1000+x5*100+x4*10+x3;
+            l3=x3*1000000+x2*100000+x1*10000+x7*1000+x6*100+x5*10+x4;
+            l4=x4*1000000+x3*100000+x2*10000+x1*1000+x7*100+x6*10+x5;
+            l5=x5*1000000+x4*100000+x3*10000+x2*1000+x1*100+x7*10+x6;
+            l6=x6*1000000+x5*100000+x4*10000+x3*1000+x2*100+x1*10+x7;
+            if(l1<=b&&l1>i)
+                    ans++;
+            if(l2<=b&&l2>i&&l2!=l1)
+                    ans++;
+             if(l3<=b&&l3>i&&l3!=l1)
+                    ans++;
+            if(l4<=b&&l4>i&&l4!=l1)
+                    ans++;
+            if(l5<=b&&l5>i&&l5!=l1)
+                    ans++;
+            if(l6<=b&&l6>i&&l6!=l1)
+                    ans++;
+            }
+         printf("Case #%d: %d\n",c++,ans);
+        }
+    }
+    return 0;
+}

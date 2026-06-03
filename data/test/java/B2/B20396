@@ -1,0 +1,96 @@
+import java.util.Scanner;
+import java.io.*;
+import java.util.HashSet;
+import java.util.LinkedList;
+
+
+public final class problem2 {
+
+	public static HashSet <String> hash;
+	
+	public static String decode(int min, int max){
+		int total = 0;
+		hash = new HashSet <String>();
+		
+		try{
+			//FileWriter fw = new FileWriter("final1.txt");
+			
+			for(int i = min ; i <= max ; i++){
+				String n = Integer.toString(i);
+				int len = n.length();
+				n = n.concat(n);
+				
+				int count = 0;
+				for(int j = 0 ; j <= len ; j++){
+					String tmp = n.substring(j, j+len);
+					
+					if(tmp.charAt(0) != '0'){
+						int m = Integer.valueOf(tmp);
+						
+						if(m >= min && m <= max){
+							if(!hash.contains(tmp)){
+								hash.add(tmp);
+								count++;
+								//fw.write(tmp + "\n");
+							}
+						}
+					}
+				
+				}
+				
+				if(count > 1)
+					count = count * (count - 1) / 2;
+				else
+					count = 0;
+				
+				total += count;
+			
+			}
+			//fw.write(total);
+			//fw.close();
+			
+			
+		}catch(Exception e){}
+		
+		return Integer.toString(total);
+		
+	}
+
+
+	
+	public static void main(String[] args){
+
+		try{
+			//Scanner sc = new Scanner(new File("yo.txt"));
+			Scanner sc = new Scanner(new File("C-large.in"));
+			FileWriter fw = new FileWriter("Large.txt");
+		
+		
+			String tmp = sc.nextLine();
+			int step = Integer.valueOf(tmp);
+		
+			int counter = 1;
+			while(sc.hasNextLine()){
+				//System.out.print("Case #" + counter + ": "); 
+				
+				String s = sc.nextLine();
+				Scanner ssc = new Scanner(s);
+				int A = ssc.nextInt();
+				int B = ssc.nextInt();
+				
+				
+				//System.out.println(A + " " + B); 
+				String xx = decode(A, B);
+				System.out.println("Case #" + counter + ": " + xx);
+				fw.write("Case #" + counter + ": " + xx);
+				fw.write("\n");
+				counter++;
+				if(step < counter)
+					break;
+			}
+			fw.close();
+		}catch(Exception e){}
+		
+	}
+	
+}

@@ -1,0 +1,298 @@
+#include <iostream>
+#include <fstream>
+#include <stdlib.h>
+#include <sstream>
+
+using namespace std;
+
+class triplet
+{
+  public:
+  int a,b,c,sum,high;
+  bool sup;
+};
+
+ifstream in("input.in");
+ofstream out("output.out");
+int n, s, p;
+string tmp;
+triplet tr[200];
+
+
+
+/*void eset()
+{
+    int scr[100];
+    bool supr[100];
+    bool psb[100];
+    bool psp[100];
+    stringstream str;
+    int d,e, pst;
+    getline(in, tmp);
+    str << tmp;
+    str >> n;
+    str >> s;
+    str >> p;
+    if (p!=0)
+    {
+    for (int i=1; i<=n; i++)
+    {
+        str>> scr[i];
+        supr[i]=false;
+        psb[i]=false;
+        psp[i]=false;
+
+        d=scr[i]-p;
+        if (scr[i]>=6)
+        {
+            psp[i]=true;
+        }
+        if ((scr[i]/p==3) && (scr[i] % p==0))
+        {
+            psb[i]=true;
+            supr[i]=false;
+            psp[i]=false;
+        }
+        if ((abs(d/2-p)<=2) && (d/2<p) && (d>=2))
+        {
+            if ((d % 2)==0)
+            {
+                e=d/2;
+                if (abs(e-p)<=2)
+                {
+                    psb[i]=true;
+                    if (abs(e-p)==2)
+                    {
+                        supr[i]=true;
+                    }
+                    if (abs(e-p)==1)
+                    {
+                        psp[i]=true;
+                    }
+                }
+            }
+            else
+            {
+                e=d/2;
+                psb[i]=true;
+                if (abs(e-p)==2)
+                {
+                    supr[i]=true;
+                }
+            }
+        }
+        pst=p;
+        while (d/2>p && p<10 && !psb[i])
+        {
+            p++;
+            supr[i]=false;
+            psb[i]=false;
+            psp[i]=false;
+            d=scr[i]-p;
+            if (scr[i]>=6)
+            {
+                psp[i]=true;
+            }
+            if ((scr[i]/p==3) && (scr[i] % p==0))
+            {
+                psb[i]=true;
+                supr[i]=false;
+                psp[i]=false;
+            }
+            if ((abs(d/2-p)<=2) && (d/2<p))
+            {
+                if ((d % 2)==0)
+                {
+                    e=d/2;
+                    if (abs(e-p)<=2)
+                    {
+                        psb[i]=true;
+                        if (abs(e-p)==2)
+                        {
+                            supr[i]=true;
+                        }
+                        if (abs(e-p)==1)
+                        {
+                            psp[i]=true;
+                        }
+                    }
+                }
+                else
+                {
+                    e=d/2;
+                    psb[i]=true;
+                    if (abs(e-p)==2)
+                    {
+                        supr[i]=true;
+                    }
+                }
+            }
+        }
+        p=pst;
+        }
+
+    int possible=0;
+    int suprising=0;
+    int it;
+    for (int i=1; i<=n; i++)
+    {
+        if (psb[i])
+        {
+            possible++;
+            cout <<i << " ";
+        }
+        if (supr[i])
+        {
+            suprising++;
+        }
+    }
+    if (suprising>s)
+    {
+        while (suprising>s)
+        {
+            possible--;
+            suprising--;
+        }
+    }
+        out << possible;
+        }
+    else
+    {
+        out<<0;
+    }
+    /*if (suprising<s)
+    {
+        while (suprising<s)
+        {
+            it=1;
+            while ((it<=n) && !(psp[it] && !psb[it]))
+            {
+                it++;
+            }
+            if (it<=n)
+            {
+                suprising--;
+                psp[it]=false;
+            }
+            else
+            {
+                while ((it<=n) && !(psp[it]))
+                {
+                    it++;
+                }
+                suprising--;
+                possible--;
+                psp[it]=false;
+            }
+        }
+    }*/
+
+void eset2()
+{
+    string temp;
+    string a;
+    ifstream tin("tr.in");
+
+    for (int i=1; i<=179;i++)
+    {
+        tin >> a;
+        cout << a;
+        tin >> tr[i].a;
+        tin >> tr[i].b;
+        tin >> tr[i].c;
+        tin >> tr[i].sum;
+        tin >> tr[i].high;
+        tin >> tr[i].sup;
+    }
+
+
+    int scr[100];
+    bool supr[100];
+    bool psb[100];
+    bool psp[100];
+    stringstream str;
+    int d,e, pst;
+    getline(in, tmp);
+    str << tmp;
+    str >> n;
+    str >> s;
+    str >> p;
+    if (p!=0)
+    {
+    for (int i=1; i<=n; i++)
+    {
+        str >> scr[i];
+        supr[i]=false;
+        psb[i]=false;
+        psp[i]=false;
+        for (int j=1; j<=179; j++)
+        {
+            if (tr[j].sum==scr[i])
+            {
+                if (tr[j].high>=p)
+                {
+                    psb[i]=true;
+                }
+                if (tr[i].sup)
+                {
+                    if (psp[i]==false)
+                    {
+                        supr[i]=true;
+                    }
+                }
+                else
+                {
+                    if (supr[i])
+                    {
+                        psp[i]=true;
+                        supr[i]=false;
+                    }
+                }
+            }
+        }
+    }
+
+    int possible=0;
+    int suprising=0;
+    int it;
+    for (int i=1; i<=n; i++)
+    {
+        if (psb[i])
+        {
+            possible++;
+            cout << i << " ";
+        }
+        if (supr[i])
+        {
+            suprising++;
+        }
+    }
+    if (suprising>s)
+    {
+        while (suprising>s)
+        {
+            possible--;
+            suprising--;
+        }
+    }
+        out << possible;
+    }
+    else
+    {
+        out << 0;
+    }
+
+}
+
+int main()
+{
+    int t;
+    in >> t;
+    getline(in,tmp);
+    for (int c=1; c<=t; c++)
+    {
+        out << "Case #" << c << ": ";
+        eset2();
+        out << endl;
+    }
+}

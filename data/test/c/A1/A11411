@@ -1,0 +1,77 @@
+// CodeJam2011.cpp : Defines the entry point for the console application.
+//
+
+#include "stdafx.h"
+#include <fstream>
+#include <string>
+
+using namespace std;
+
+const int max_variance = 2;
+const int surprising = 2;
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+  int numCases = 0;
+  const string fileName = "B-small-attempt0";
+
+  ifstream inputFile((fileName + ".in").c_str());
+  ofstream outputFile((fileName + ".out").c_str());
+    
+  string temp;
+  getline(inputFile, temp);
+  numCases = atoi(temp.c_str());
+
+  for (int caseNumber = 1; caseNumber <= numCases; ++caseNumber)
+  {
+	string scores;
+    getline(inputFile, scores);
+	char c_scores[512];
+	char* context = NULL;
+	size_t length = scores.copy(c_scores,scores.length(),0);
+	c_scores[length] = '\0';
+	int num_dancers = atoi(strtok_s( c_scores, " ", &context));
+	int num_surprise_scores = atoi(strtok_s(NULL, " ", &context));
+	int target_score = atoi(strtok_s(NULL, " ", &context));
+
+	int e_without  = 0;
+	int e_with     = 0;
+	int ineligible = 0;
+
+	int e_without_thresh = 3*target_score - 2*(surprising-1);
+	int e_with_thresh    = 3*target_score - 2*max_variance;
+	if (e_without_thresh < 0 ) e_without_thresh = 0;
+	if (e_with_thresh    < 0 ) e_with_thresh    = 0;
+
+	char* c_score = strtok_s(NULL, " ", &context);
+	while(c_score != NULL)
+	{
+		int n_score = atoi(c_score);
+		if( n_score >= e_without_thresh )   { e_without++; }
+		else if( n_score >= e_with_thresh ) 
+		{ 
+			if( n_score >= surprising) e_with++; 
+		}
+		else { ineligible++; }
+		c_score = strtok_s(NULL, " ", &context);
+	}
+
+	int checksum = e_without + e_with + ineligible;
+	int max_high_scores = e_without;
+	
+	if ( e_with >= num_surprise_scores )
+		max_high_scores+= num_surprise_scores;
+	else
+		max_high_scores+= e_with;
+	
+    // Output the results
+    outputFile << "Case #" << caseNumber << ": " << max_high_scores << "\n";
+  }
+
+  // Close the streams
+  inputFile.close();
+  outputFile.close();
+
+  return 0;
+}
+

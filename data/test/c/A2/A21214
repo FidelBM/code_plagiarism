@@ -1,0 +1,52 @@
+#include "GoogleDancers.h"
+
+
+GoogleDancers::GoogleDancers(void)
+{
+}
+
+int GoogleDancers::getAnswer()
+{
+	vector<int> vCopyScores = m_vDancerScores;
+	int iAnswer = 0;
+	
+	if( m_iBestResult == 0 ) return m_nTestData;
+
+	remove(vCopyScores, 0);
+
+	for( int i=0; i<vCopyScores.size(); i++ ){
+		if( vCopyScores[i] >= (m_iBestResult*3-2) ){
+			vCopyScores.erase( vCopyScores.begin() + i);
+			i--;
+			iAnswer++;
+		}
+	}
+
+	remove(vCopyScores, 1);
+
+	int nSurprising = m_nSurprising;
+	for( int i=0; i<vCopyScores.size() && nSurprising > 0; i++ ){
+		if( vCopyScores[i] >= (m_iBestResult*3-4) ){
+			vCopyScores.erase( vCopyScores.begin() + i);
+			i--;
+			iAnswer++;
+			nSurprising--;
+		}
+	}
+
+	return iAnswer;
+}
+
+void GoogleDancers::remove( vector<int>& vScores, int iScore )
+{
+	for( int i=0; i<vScores.size(); i++){
+		if( vScores[i] == iScore ){
+			vScores.erase( vScores.begin() + i );
+			i--;
+		}
+	}
+}
+
+GoogleDancers::~GoogleDancers(void)
+{
+}

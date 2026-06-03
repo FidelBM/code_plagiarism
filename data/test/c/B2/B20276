@@ -1,0 +1,80 @@
+#include<iostream>
+#include<sstream>
+#include<string>
+#include<vector>
+#include<algorithm>
+#include<set>
+#include<map>
+#include<cassert>
+#include<cstdio>
+#include<cstring>
+#include<ctime>
+#include<sstream>
+
+#define DEBUGLEVEL
+#ifdef DEBUGLEVEL
+#define printf_debug(fmt, args...) fprintf(stderr, fmt, ##args)
+#else
+#define printf_debug(fmt, args...)
+#endif
+
+typedef long long llong;
+
+using namespace std;
+
+int A, B;
+
+string int_to_str(int n) {
+    stringstream s;
+    s << n;
+    return s.str();
+}
+
+int str_to_int(string str) {
+    atoi(str.c_str());    
+}
+
+int get_all_for(int n) {
+    string str_n = int_to_str(n);
+    int add = 0;
+    for(int i = 0; i < str_n.size(); i++) {
+        rotate(str_n.begin(), str_n.end() - 1, str_n.end());
+        int m = str_to_int(str_n);
+        if(n < m && m <= B) {
+            add++;
+        }
+    }
+    return add;
+}
+
+//bool is_recycled_pair(int n, int m) {
+//    stringstream s;
+//    s << n;
+//    string str_n = s.str();
+//    s.str("");
+//    s << m;
+//    string str_m = s.str();
+//    if(str_n.size() == str_m.size()) {
+//        for(int i = 0; i < str_n.size(); i++) {
+//            rotate(str_n.begin(), str_n.end() - 1, str_n.end());
+//            if(str_n == str_m) return true;
+//        }
+//    }
+//    return false;
+//}
+
+int main() {
+    freopen("C.in", "r", stdin);
+    freopen("C.out", "w", stdout);
+    int T;
+    cin >> T;
+    for(int t = 0; t < T; t++) {
+        int answer = 0;
+        cin >> A >> B;
+        for(int n = A; n <= B; n++) {
+            answer += get_all_for(n);
+        }
+        cout << "Case #" << t + 1 << ": " << answer << endl;
+    }
+    return 0;
+}

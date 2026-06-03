@@ -1,0 +1,96 @@
+// C.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+
+#include <vector>
+#include <list>
+#include <map>
+#include <set>
+#include <deque>
+#include <algorithm>
+#include <functional>
+#include <numeric>
+#include <utility>
+#include <sstream>
+#include <iostream>
+#include <iomanip>
+#include <cstdio>
+#include <cmath>
+#include <cstdlib>
+#include <ctime>
+#include <string>
+#include <functional>
+#include <fstream>
+using namespace std;
+
+long long count_cycle(int num, int a, int b, int ccnt, int scale, set<int> & set_used)
+{
+	long long ret = 0;
+	set<int> ss;
+
+	ss.insert(num);
+	for(int i=0; i<=ccnt; i++)
+	{
+		num = num /10 + num%10*scale;
+		if(num >=a && num <=b)
+		{
+			ss.insert(num);
+			set_used.insert(num);
+		}
+	}
+	
+	if(ss.size()>1)
+	{
+		ret = ss.size()*(ss.size()-1)/2;
+	}
+
+	return ret;
+}
+
+int main()
+{
+	char chline[10000];
+	ifstream inf(L"in.txt");
+	ofstream outf(L"out.txt");
+
+	inf.getline(chline,10000);
+	istringstream iss(chline);
+
+	int cnt;
+	iss>>cnt;
+	for(int zi=0; zi<cnt; zi++)
+	{
+		long long ans = 0;
+		set<int> set_used;
+
+		inf.getline(chline,10000);
+		istringstream iss_l(chline);
+		int a,b;
+		iss_l>>a>>b;
+
+		int ccnt = -1;
+		int t = a;
+		while(t>0)
+		{
+			ccnt++;
+			t /= 10;
+		}
+		int scale = pow(10.0, ccnt);
+
+		for(int i=a; i<=b; i++)
+		{
+			if(set_used.find(i) != set_used.end())
+				continue;
+			
+			ans += count_cycle(i, a, b, ccnt, scale, set_used);
+		}
+
+		outf<<"Case #"<<zi+1<<": "<<ans<<endl;
+	}
+
+	inf.close();
+	outf.close();
+	return 0;
+}
+

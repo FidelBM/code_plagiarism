@@ -1,0 +1,175 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+
+using namespace std;
+
+int main(void)
+{
+	int n, a, b, count, trans;
+	ofstream file;
+	ifstream in;
+	file.open("file.txt"); //open a file
+	in.open("input.txt");
+
+	in >> n;
+
+	for (int i = 0; i < n; i++)
+	{
+		in >> a >> b;
+		count = 0;
+		if (b > 9)
+		{
+			for (int t = a; t < b; t++)
+			{
+				if (t < 100)
+				{
+					trans = (t % 10) * 10 + t / 10;
+					if (trans > t && trans <= b)
+					{
+						count++;
+					}
+				}
+				else if (t < 1000)
+				{
+					trans = (t % 10) * 100 + t / 10;
+					if (trans > t && trans <= b)
+					{
+						count++;
+					}
+
+					trans = (t % 100) * 10 + t / 100;
+					if (trans > t && trans <= b)
+					{
+						count++;
+					}
+				}
+				else if (t < 10000)
+				{
+					trans = (t % 10) * 1000 + t / 10;
+					if (trans > t && trans <= b)
+					{
+						count++;
+					}
+
+					trans = (t % 100) * 100 + t / 100;
+					if (trans > t && trans <= b)
+					{
+						count++;
+					}
+
+					trans = (t % 1000) * 10 + t / 1000;
+					if (trans > t && trans <= b && t / 100 != t % 100)
+					{
+						count++;
+					}
+				}
+				else if (t < 100000)
+				{
+					trans = (t % 10) * 10000 + t / 10;
+					if (trans > t && trans <= b)
+					{
+						count++;
+					}
+
+					trans = (t % 100) * 1000 + t / 100;
+					if (trans > t && trans <= b)
+					{
+						count++;
+					}
+
+					trans = (t % 1000) * 100 + t / 1000;
+					if (trans > t && trans <= b)
+					{
+						count++;
+					}
+
+					trans = (t % 10000) * 10 + t / 10000;
+					if (trans > t && trans <= b)
+					{
+						count++;
+					}
+				}
+				else if (t < 1000000)
+				{
+					trans = (t % 10) * 100000 + t / 10;
+					if (trans > t && trans <= b)
+					{
+						count++;
+					}
+
+					trans = (t % 100) * 10000 + t / 100;
+					if (trans > t && trans <= b)
+					{
+						count++;
+					}
+
+					trans = (t % 1000) * 1000 + t / 1000;
+					if (trans > t && trans <= b)
+					{
+						count++;
+					}
+
+					trans = (t % 10000) * 100 + t / 10000;
+					if (trans > t && trans <= b)
+					{
+						count++;
+					}
+
+					trans = (t % 100000) * 10 + t / 100000;
+					if (trans > t && trans <= b && t / 1000 != t % 1000)
+					{
+						count++;
+					}
+				}
+				else if (t < 10000000)
+				{
+					trans = (t % 10) * 1000000 + t / 10;
+					if (trans > t && trans <= b)
+					{
+						count++;
+						
+					}
+
+					trans = (t % 100) * 100000 + t / 100;
+					if (trans > t && trans <= b)
+					{
+						count++;
+						
+					}
+
+					trans = (t % 1000) * 10000 + t / 1000;
+					if (trans > t && trans <= b)
+					{
+						count++;
+						
+					}
+
+					trans = (t % 10000) * 1000 + t / 10000;
+					if (trans > t && trans <= b)
+					{
+						count++;
+						
+					}
+
+					trans = (t % 100000) * 100 + t / 100000;
+					if (trans > t && trans <= b)
+					{
+						count++;
+						
+					}
+
+					trans = (t % 1000000) * 10 + t / 1000000;
+					if (trans > t && trans <= b)
+					{
+						count++;
+						
+					}
+				}
+			}
+		}
+		file << "Case #" << i + 1 << ": " << count << endl;
+	}
+	file.close(); 
+    return 0;
+}

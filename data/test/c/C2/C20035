@@ -1,0 +1,688 @@
+// Sergey Kolomenkin <kolomenkin.development+codejam@gmail.com>
+// Belarus, Minsk, 2011
+//------------------------------------------------------
+//#define USE_BI	// use NTL big integer library, http://www.shoup.net/ntl/
+#include "common.h"
+
+#define FILE_PREFIX		"D"
+#define PROBLEM_NAME	"HallOfMirrors"
+
+const int nDefaultTestType = 1; // 0 - data from task, 1 - Small Test, 2 - Big Test
+const bool bDefaultPracticeMode = false;
+const int nDefaultAttempt = 0;
+
+//------------------------------------------------------
+
+typedef int32 tResult;
+typedef string tElement;
+
+#ifdef _DEBUG
+#define HIST
+#endif
+
+//------------------------------------------------------
+
+// int NOD(int a, int b)
+// {
+// 	const int mi = min(a,b);
+// 	const int ma = max(a,b);
+// 	if(mi == 0)
+// 		return ma;
+// 	return NOD(mi, ma % mi);
+// }
+
+typedef __int64 sc; // scalar
+
+inline sc NOD(sc a, sc b)
+{
+	return abs264(nod(a, b));
+}
+
+//------------------------------------------------------
+
+struct Tuple
+{
+	sc a;
+	sc b;
+
+	Tuple(sc a0 = 0, sc b0 = 0)
+	{
+		a = a0;
+		b = b0;
+	}
+
+	inline void Norm()
+	{
+		const sc n = NOD(a, b);
+		a /= n;
+		b /= n;
+	}
+
+	inline void NormSign()
+	{
+		if(b < 0)
+		{
+			a = -a;
+			b = -b;
+		}
+	}
+
+	inline void Add(const Tuple& o)
+	{
+		const sc a1 = a * o.b + b * o.a;
+		b *= o.b;
+		a = a1;
+	}
+
+	inline void Sub(const Tuple& o)
+	{
+		const sc a1 = a * o.b - b * o.a;
+		b *= o.b;
+		a = a1;
+	}
+
+	inline void Mul(const Tuple& o)
+	{
+		a *= o.a;
+		b *= o.b;
+	}
+
+	inline void Div(const Tuple& o)
+	{
+		a *= o.b;
+		b *= o.a;
+	}
+
+	inline bool LessThanZero() const
+	{
+		return a != 0 && ((a < 0) ^ (b < 0));
+	}
+	inline bool GreaterThanZero() const
+	{
+		return a != 0 && !((a < 0) ^ (b < 0));
+	}
+
+	bool operator <(const Tuple& o) const
+	{
+		Tuple t = *this;
+		t.Sub(o);
+		return t.LessThanZero();
+	}
+
+	bool operator >(const Tuple& o) const
+	{
+		Tuple t = *this;
+		t.Sub(o);
+		return t.GreaterThanZero();
+	}
+};
+
+struct Coord
+{
+	Tuple x;
+	Tuple y;
+
+	Coord()
+	{
+		x.b = 1;
+		y.b = 1;
+	}
+
+	inline void NormAll()
+	{
+		x.Norm();
+		y.Norm();
+		x.NormSign();
+		y.NormSign();
+	}
+
+	inline void Sub(const Coord& o)
+	{
+		x.Sub(o.x);
+		y.Sub(o.y);
+		x.Norm(); // is it necessary?
+		y.Norm(); // is it necessary?
+	}
+
+	inline void Add(const Coord& o)
+	{
+		x.Add(o.x);
+		y.Add(o.y);
+		x.Norm(); // is it necessary?
+		y.Norm(); // is it necessary?
+	}
+
+	inline void AddAbs(const Coord& o)
+	{
+		Coord t = o;
+		t.x.a = abs264(t.x.a);
+		t.x.b = abs264(t.x.b);
+		t.y.a = abs264(t.y.a);
+		t.y.b = abs264(t.y.b);
+		x.Add(t.x);
+		y.Add(t.y);
+		x.Norm(); // is it necessary?
+		y.Norm(); // is it necessary?
+	}
+
+	Tuple Diagon() const
+	{
+		Tuple dx = x;
+		Tuple dy = y;
+		dx.Mul(dx);
+		dy.Mul(dy);
+		dx.Add(dy);
+		dx.Norm();
+		return dx;
+	}
+};
+
+//------------------------------------------------------
+
+struct MyData
+{
+	Coord start;
+	Coord now;
+	Tuple direction;
+	//Tuple already_went;
+	Coord went;
+	sc		D2; // D*D
+	Tuple directionOrig;
+	int nCrossed;
+
+// 	inline bool Visible() const
+// 	{
+// 		return D2 >= already_went.a*already_went.a + already_went.b*already_went.b;
+// 	}
+	inline bool Visible() const
+	{
+		Tuple x2 = went.x;
+		x2.Mul(went.x);
+		Tuple y2 = went.y;
+		y2.Mul(went.y);
+		x2.Add(y2);
+		x2.Norm();
+		return D2 * x2.b >= x2.a;
+	}
+};
+
+//------------------------------------------------------
+
+vector<tElement> g_v;
+int g_H = 0;
+int g_W = 0;
+MyData d;
+
+#define MAX_HIST 20
+MyData dHist[MAX_HIST];
+
+//------------------------------------------------------
+
+bool GetNextXCoord(Coord& next)
+{
+	next = Coord();
+
+	// Find next X coord cross:
+	if(d.direction.a == 0)
+	{
+		// never
+		return false;
+	}
+
+	if(d.direction.a > 0)
+	{
+		next.x.a = d.now.x.a/d.now.x.b + 1;
+		next.x.b = 1;
+	}
+	else //if(d.direction.a < 0)
+	{
+		next.x.a = (d.now.x.a+d.now.x.b-1)/d.now.x.b - 1;
+		next.x.b = 1;
+	}
+	ASSERT(next.x.a > 0 && next.x.a < g_W);
+
+	Tuple DY = next.x;
+	DY.Sub(d.now.x);
+	DY.Div(d.direction);
+	next.y = d.now.y;
+	next.y.Add(DY);
+	next.NormAll();
+	return true;
+}
+
+//------------------------------------------------------
+
+bool GetNextYCoord(Coord& next)
+{
+	next = Coord();
+
+	// Find next Y coord cross:
+	if(d.direction.b == 0)
+	{
+		// never
+		return false;
+	}
+
+	if(d.direction.b > 0)
+	{
+		next.y.a = d.now.y.a/d.now.y.b + 1;
+		next.y.b = 1;
+	}
+	else //if(d.direction.b < 0)
+	{
+		next.y.a = (d.now.y.a+d.now.y.b-1)/d.now.y.b - 1;
+		next.y.b = 1;
+	}
+	ASSERT(next.y.a > 0 && next.y.a < g_H);
+
+	Tuple DX = next.y;
+	DX.Sub(d.now.y);
+	DX.Mul(d.direction);
+	next.x = d.now.x;
+	next.x.Add(DX);
+	next.NormAll();
+	return true;
+}
+
+//------------------------------------------------------
+
+bool GetNextMiddle(Coord& next)
+{
+	next = d.start; // Coord();
+
+	// Find next middle (X):
+
+// 	next.x.a = 2*d.now.x.a/d.now.x.b + 1;
+// 	next.x.b = 2;
+// 	next.y.a = 2*d.now.y.a/d.now.y.b + 1;
+// 	next.y.b = 2;
+
+// 	if(d.start.x.a != next.x.a || d.start.y.a != next.y.a)
+// 	{
+// 		// not a final square
+// 		return false;
+// 	}
+
+	Coord diff = next;
+	diff.x.Sub(d.now.x);
+	diff.y.Sub(d.now.y);
+	diff.NormAll();
+
+// 	ASSERT(diff.x.b == 2);
+// 	ASSERT(diff.y.b == 2);
+
+	Tuple distance = diff.Diagon();
+	if(distance > Tuple(1,2)) // half of diagonal in square
+	{
+		// too far
+		return false;
+	}
+
+	Tuple dir2(diff.x.a*diff.y.b, diff.y.a*diff.x.b);
+	if(dir2.a != 0 || dir2.b != 0)
+		dir2.Norm();
+	if(d.direction.a != dir2.a || d.direction.b != dir2.b)
+	{
+		// not the same vector
+		return false;
+	}
+
+	return true;
+}
+
+//------------------------------------------------------
+
+inline int IsEmpty(char ch)
+{
+	return (ch == '.' || ch == 'X') ? 1 : 0;
+}
+
+//------------------------------------------------------
+
+void ProcessBorder()
+{
+	if(d.now.x.b == 1 && d.now.y.b == 1)
+	{
+		// We are at the coord cross
+		const int x = (int)d.now.x.a;
+		const int y = (int)d.now.y.a;
+		ASSERT(x > 0 && x < g_W);
+		ASSERT(y > 0 && y < g_H);
+		char ch1 = g_v[y-1][x-1];
+		char ch2 = g_v[y-1][x];
+		char ch3 = g_v[y][x-1];
+		char ch4 = g_v[y][x];
+
+		int nEmpty = IsEmpty(ch1) + IsEmpty(ch2) + IsEmpty(ch3) + IsEmpty(ch4);
+		ASSERT(nEmpty > 0);
+		if(nEmpty == 4) // all are empty
+			return;
+		if(nEmpty == 1)
+		{
+			// internal corner
+			d.direction.a = -d.direction.a;
+			ASSERT(d.direction.a != 0);
+			d.direction.b = -d.direction.b;
+			ASSERT(d.direction.b != 0);
+			return;
+		}
+
+		char chDirected = 0;
+		if(d.direction.a < 0 && d.direction.b < 0) chDirected = ch1;
+		if(d.direction.a >= 0 && d.direction.b < 0) chDirected = ch2;
+		if(d.direction.a < 0 && d.direction.b >= 0) chDirected = ch3;
+		if(d.direction.a >= 0 && d.direction.b >= 0) chDirected = ch4;
+
+		if(nEmpty == 3)
+		{
+			if(!IsEmpty(chDirected))
+			{
+				// destroy!
+				d.went.x = Tuple(999, 1);
+				d.went.y = Tuple(999, 1);
+			}
+			return;
+		}
+		if(nEmpty == 2)
+		{
+			if(IsEmpty(chDirected))
+			{
+				//  X.
+				//  .X
+				return;
+			}
+			if((IsEmpty(ch1) && IsEmpty(ch2)) || (IsEmpty(ch3) && IsEmpty(ch4)))
+			{
+				// horizontal wall
+				d.direction.b = -d.direction.b;
+				ASSERT(d.direction.b != 0);
+				return;
+			}
+			if((IsEmpty(ch1) && IsEmpty(ch3)) || (IsEmpty(ch2) && IsEmpty(ch4)))
+			{
+				// vertical wall
+				d.direction.a = -d.direction.a;
+				ASSERT(d.direction.a != 0);
+				return;
+			}
+		}
+		ASSERT(false);
+	}
+	else if(d.now.x.b == 1)
+	{
+		// X coord passing...
+		const int x = (int)d.now.x.a;
+		const int y = (int)(d.now.y.a / d.now.y.b);
+		ASSERT(x > 0 && x < g_W);
+		ASSERT(y > 0 && y < g_H);
+		char ch1 = g_v[y][x-1];
+		char ch2 = g_v[y][x];
+		if(IsEmpty(ch1) && IsEmpty(ch2))
+			return;
+		ASSERT(IsEmpty(ch1) || IsEmpty(ch2));
+		d.direction.a = -d.direction.a;
+		ASSERT(d.direction.a != 0);
+	}
+	else if(d.now.y.b == 1)
+	{
+		// Y coord passing...
+		const int x = (int)(d.now.x.a / d.now.x.b);
+		const int y = (int)d.now.y.a;
+		ASSERT(x > 0 && x < g_W);
+		ASSERT(y > 0 && y < g_H);
+		char ch1 = g_v[y-1][x];
+		char ch2 = g_v[y][x];
+		if(IsEmpty(ch1) && IsEmpty(ch2))
+			return;
+		ASSERT(IsEmpty(ch1) || IsEmpty(ch2));
+		d.direction.b = -d.direction.b;
+		ASSERT(d.direction.b != 0);
+	}
+	else
+	{
+		ASSERT(false);
+	}
+}
+
+//------------------------------------------------------
+
+bool check_direction()
+{
+start:
+	if(!d.Visible())
+		return false; // too long route...
+	ASSERT(d.nCrossed < 10000);
+#ifdef HIST
+	if(d.nCrossed < MAX_HIST)
+	{
+		dHist[d.nCrossed] = d;
+	}
+#endif
+	if(d.nCrossed == 1)
+	{
+		int dbg = 1;
+	}
+
+	Coord nextX;
+	Coord nextY;
+	Coord nextM;
+
+	bool bFoundX = GetNextXCoord(nextX);
+	bool bFoundY = GetNextYCoord(nextY);
+	bool bFoundM = GetNextMiddle(nextM);
+
+	Coord distX = nextX; if(bFoundX) distX.Sub(d.now);
+	Coord distY = nextY; if(bFoundY) distY.Sub(d.now);
+	Coord distM = nextM; if(bFoundM) distM.Sub(d.now);
+
+	if(bFoundM)
+	{
+		d.went.AddAbs(distM);
+		return d.Visible();
+	}
+
+	Tuple diagX = distX.Diagon();
+	Tuple diagY = distY.Diagon();
+	if((diagX < diagY && bFoundX && bFoundY) || (bFoundX && !bFoundY))
+	{
+		// X is nearer:
+		d.went.AddAbs(distX);
+		//Coord prevNow = d.now;
+		d.now = nextX;
+		ProcessBorder();
+		d.nCrossed++;
+		//return check_direction();
+		goto start;
+	}
+	else
+	{
+		ASSERT(bFoundY);
+		// Y is nearer:
+		d.went.AddAbs(distY);
+		d.now = nextY;
+		ProcessBorder();
+		d.nCrossed++;
+		//return check_direction();
+		goto start;
+	}
+
+	ASSERT(false);
+	return false;
+}
+
+//------------------------------------------------------
+
+tResult problem(const int Ti, const int H, const int W, const int M, const int D,
+		const vector<tElement>& v)
+{
+	tResult res = 0;
+	if(Ti == 0)
+		printf("");
+
+	g_v = v;
+	g_H = H;
+	g_W = W;
+
+	{
+		forn(y, H)
+			forn(x, W)
+		{
+			if(v[y][x] == 'X')
+			{
+				d.start.x = Tuple(x * 2 + 1, 2);
+				d.start.y = Tuple(y * 2 + 1, 2);
+				break;
+			}
+		}
+	}
+	if(d.start.x.a == 0)
+		return -1;
+	d.D2 = D*D;
+	d.start.NormAll();
+
+	forab(dx, -D, D)
+	{
+		forab(dy, -D, D)
+		{
+			if(NOD(dx, dy) != 1)
+				continue;
+			d.now = d.start;
+			d.direction = Tuple(dx, dy);
+			d.directionOrig = d.direction;
+			d.went = Coord();
+			d.nCrossed = 0;
+
+#ifdef HIST
+			forn(k, MAX_HIST)
+				dHist[k] = MyData();
+#endif
+
+			if(Ti == 4 && dx == 3 && dy == 1)
+			{
+				int dbg = 1;
+			}
+
+			bool bFound = check_direction();
+			if(bFound)
+			{
+				res++;
+			}
+		}
+	}
+
+	return res;
+}
+
+//------------------------------------------------------
+
+int process(const string& sFileIn, const string& sFileOut)
+{
+	FILE* fin = NULL; FOPEN(fin, sFileIn.c_str(), "rb");
+	FILE* fout = NULL; FOPEN(fout, sFileOut.c_str(), "wb+");
+
+	int T = 0;	// test count
+	int i = 0;	// test index (1..T)
+	int j = 0;
+
+	int x1 = nod(5, 3);
+	int x2 = nod(-5, 3);
+	int x3 = nod(5, -3);
+	int x4 = nod(-5, -3);
+	sc y1 = NOD(0, 0);
+	sc y2 = NOD(0, 5);
+	sc y3 = NOD(5, 0);
+	sc y4 = NOD(0, -5);
+	sc y5 = NOD(-5, 0);
+
+	fscanf(fin, "%d\n", &T);
+
+	for(i = 1; i <= T; i++)
+	{
+		int H = 0;
+		int W = 0;
+		int M = 0;
+		int D = 0;
+		fscanf(fin, "%d %d %d\n", &H, &W, &D);
+		printf("test #%d, H = %d, W = %d, D = %d\n", i, H, W, D);
+
+		if(i == 0)
+			printf("");
+
+		vector<tElement> v;
+		v.resize(H);
+		for(j = 0; j < H; j++)
+		{
+			//fscanf(fin, "%d", &v[j]);
+			char buf[1000] = "";
+			fgets(buf, 999, fin);
+			v[j] = buf;
+		}
+
+		if(i == 0)
+			printf("");
+
+		const tResult res = problem(i, H, W, M, D, v);
+		printf("test #%d, res = %s\n\n", i, ToStr(res).c_str());
+		fprintf(fout, "Case #%d: %s\n", i, ToStr(res).c_str());
+	}
+
+	fclose(fin);
+	fclose(fout);
+	printf("\nProcessed file: \"%s\" => \"%s\"\n", sFileIn.c_str(), sFileOut.c_str());
+	return T;
+}
+
+//------------------------------------------------------
+
+int main(int argc, char* argv[])
+{
+	const time_t t1 = clock();
+
+	const int nTestType = argc > 1 ? atoi(argv[1]) : nDefaultTestType;
+	const int nAttempt = argc > 2 ? atoi(argv[2]) : nDefaultAttempt;
+	const bool bPracticeMode = bDefaultPracticeMode;
+
+	const string sSmallPractice = bPracticeMode ? "-practice" : "-attempt" + ToStr(nAttempt);
+	const string sBigPractice = bPracticeMode ? "-practice" : "";
+	const string sFileIn0 = "test-practice.in";
+	const string sFileOut0 = "test-practice.out";
+	//const string sFileOut0Desired = "test-practice-desired.out";
+	const string sFileIn1 = FILE_PREFIX "-small" + sSmallPractice + ".in";
+	const string sFileOut1 = FILE_PREFIX "-small" + sSmallPractice + ".out";
+	const string sFileIn2 = FILE_PREFIX "-large" + sBigPractice + ".in";
+	const string sFileOut2 = FILE_PREFIX "-large" + sBigPractice + ".out";
+
+	printf("Problem %s. %s (%s, attempt %d%s)\n", FILE_PREFIX, PROBLEM_NAME,
+		nTestType == 0 ? "manual tests" : nTestType == 1 ? "Small Test" : "Big Test", nAttempt,
+		bPracticeMode ? ", practice" : "");
+
+	int res = 0;
+	try
+	{
+		switch(nTestType)
+		{
+		case 0:
+			res = process(sFileIn0, sFileOut0);
+			break;
+		case 1:
+			res = process(sFileIn1, sFileOut1);
+			break;
+		case 2:
+			res = process(sFileIn2, sFileOut2);
+			break;
+		default:
+			printf("ERROR! Unknown test data index!\n");
+			res = 1;
+		}
+	}
+	catch (std::exception &e)
+	{
+		printf("ERROR! Unhandled std exception: %s: %s!\n", typeid(e).name(), e.what());
+	}
+
+	const time_t t2 = clock();
+	printf("Work got %.2f seconds (%.3f sec/test).\n", ld(t2-t1)/1000.0, ld(t2-t1)/(1000.0*ld(res?res:1)));
+	return 0;
+}
+
+//------------------------------------------------------

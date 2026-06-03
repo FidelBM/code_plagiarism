@@ -1,0 +1,46 @@
+#include <map>
+#include <iostream>
+#include <string>
+#include <stdio.h>
+using namespace std;
+
+int scores[200];
+
+void solve (int a_case) {
+  int N, S, p;
+  cin >> N >> S >> p;
+
+  int able = 0;
+  int surprising = 0;
+  for (int i = 0; i < N; ++i) {
+    cin >> scores[i];
+
+    if (scores[i] >= p && scores[i] >= p*3 - 4) {
+      ++able;
+
+      if (scores[i] < p*3 - 2) {
+        ++surprising;
+      }
+    }
+  }
+
+  fprintf(stderr, "%d able, of which %d surprising. maximum %d\n", able, surprising, S);
+
+  able -= surprising;
+  able += std::min(surprising, S);
+
+  printf("Case #%d: %d\n", a_case, able);
+}
+
+int main ()
+{
+  int n;
+
+  cin >> n;
+  for (int i = 0; i < n; ++i) solve(i+1);
+
+  return 0;
+}
+
+
+

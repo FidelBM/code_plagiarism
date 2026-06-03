@@ -1,0 +1,17 @@
+
+#include <stdio.h>
+
+#include "r1prob1.h"
+
+int main(int argc, char *argv[])
+{
+    //cout.sync_with_stdio(0); 
+
+    r1prob1 prob;
+	
+	prob.solve();
+	
+    
+
+    return 0;
+}

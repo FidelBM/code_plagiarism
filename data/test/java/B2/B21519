@@ -1,0 +1,71 @@
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class RecycledNumbers {
+    public static void main(String[] args) {
+        new RecycledNumbers().go();
+    }
+
+    private void go() {
+        Scanner sc = new Scanner(System.in);
+
+        int numTestCases = Integer.parseInt(sc.nextLine());
+
+        for (int caseNum = 1; caseNum <= numTestCases; caseNum++) {
+            System.out.print("Case #" + caseNum + ": ");
+            int A = sc.nextInt();
+            int B = sc.nextInt();
+
+            long sum = 0;
+            for (int n = A; n < B; n++) {
+                String N = String.valueOf(n);
+                for (int i = 1; i < N.length(); i++) {
+                    int reCycled = Integer.parseInt(rotate(N, i));
+                    if(reCycled > n && reCycled <= B)
+                        sum++;
+                }
+            }
+            System.out.println(sum);
+        }
+    }
+
+    private boolean isRecycled(int n, int m) {
+        if (!isPermutation(n, m))
+            return false;
+
+        String N = String.valueOf(n);
+        String M = String.valueOf(m);
+
+        for(int i = 1; i < N.length(); i++) {
+            String reCycled = rotate(N, i);
+            if(reCycled.equals(M)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isPermutation(int n, int m) {
+        int[] digitsN = new int[10];
+        int[] digitsM = new int[10];
+
+        while(n != 0) {
+            digitsN[n % 10]++;
+            n = n / 10;
+        }
+
+        while(m != 0) {
+            digitsM[m % 10]++;
+            m = m / 10;
+        }
+
+        return Arrays.equals(digitsN, digitsM);
+    }
+
+    public static String rotate(String n, int i) {
+        String lastIChars = n.substring(n.length() - i);
+        String firstIChars = n.substring(0, n.length() - i);
+
+        return lastIChars + firstIChars;
+    }
+}

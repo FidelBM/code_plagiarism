@@ -1,0 +1,51 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.HashSet;
+import java.util.Set;
+
+
+public class RecycledNumbers {
+	public static void main(String[] args) throws IOException {
+		long start = System.currentTimeMillis();
+		BufferedReader in = new BufferedReader(new FileReader(args[0]));
+		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(args[0]+".out")));
+		String l = in.readLine();
+		int N = Integer.parseInt(l);
+		int i=1;
+		
+		while((l=in.readLine())!= null)
+		{
+			int cnt = 0;
+			String[] ll = l.split(" ");
+			out.print("Case #"+i+++": ");
+			int A = Integer.parseInt(ll[0]);
+			int B = Integer.parseInt(ll[1]);
+			
+			Set<String> set = new HashSet<String>();
+			for(int n=A;n<B;n++)
+			{
+				set.clear();
+				String nS = ""+n;
+				for(int z=1;z<nS.length();z++)
+				{
+					String foo = nS.substring(0, z);
+					String bar = nS.substring(z);
+					String barfoo = bar+foo;
+					int nbarfoo = Integer.parseInt(barfoo);
+					if(n<nbarfoo && nbarfoo<=B)
+						set.add(barfoo);
+				}
+				cnt+=set.size();
+			}
+			out.print(cnt);
+			if(i<=N)	out.println("");
+		}
+		in.close();
+		out.close();
+		System.out.println(System.currentTimeMillis()-start);
+	}
+}

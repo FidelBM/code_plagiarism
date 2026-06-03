@@ -1,0 +1,62 @@
+#include <iostream>
+#include <cstdio>
+#include <set>
+#include <vector>
+using namespace std;
+string to_s(int n)
+{
+	char ss[20];
+	sprintf(ss, "%d", n);
+	return ss;
+}
+string shift(const string& s, int si)
+{
+	string r = s;
+	for(int i = 0; i < s.size(); i++)
+		r[i] = s[(i + si) % s.size()];
+	return r;
+}
+vector<vector<string> > v(2000001);
+vector<bool> processed(2000001);
+void test(int tn)
+{
+	int a, b;
+	cin >> a >> b;
+	string bs = to_s(b);
+	int result = 0;
+
+	for(int n = a; n < b; n++)
+		if(!processed[n])
+		{
+			string s = to_s(n);
+			set<string> used;
+			for(int j = 0; j < s.size(); j++)
+				if(s[j] >= s[0])
+				{
+					string r = shift(s, j);
+					if(r > s && used.find(r) == used.end())
+					{
+						if(r <= bs)
+						{
+							result++;
+							used.insert(r);
+						}
+						v[n].push_back(r);
+					}
+				}
+			processed[n] = true;
+		}
+		else
+			for(int i = 0; i < v[n].size(); i++)
+				if(v[n][i] <= bs)
+					result++;
+	cout << "Case #" << tn << ": " << result << "\n";
+}
+int main()
+{
+	int t;
+	cin >> t;
+	for(int i = 1; i <= t; i++)
+		test(i);
+	return 0;
+}

@@ -1,0 +1,25 @@
+#include "../include/TestObj.h"
+
+using namespace std;
+
+TestObj::TestObj()
+{
+    //ctor
+}
+
+TestObj::~TestObj()
+{
+    //dtor
+}
+
+void TestObj::Run() {
+    const char* fname = InputFileName();
+    ifstream in(fname);
+    ofstream out("output.txt");
+
+    if (in.good())
+        Process(in, out);
+
+    in.close();
+    out.close();
+}

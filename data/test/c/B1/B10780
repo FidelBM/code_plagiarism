@@ -1,0 +1,37 @@
+#include <vector>
+#include <string>
+#include <map>
+#include <cstdio>
+#include <sstream>
+#include <cmath>
+using namespace std;
+
+#define sz(x) ((int)(x.size()))
+template<class T> string toString(T& v){ ostringstream os; os << v; return os.str(); }
+
+int main()
+{
+	freopen("in.txt","r",stdin);
+	freopen("out.txt","w",stdout);
+	int tests;
+	scanf("%d",&tests);
+	for(int test=1;test<=tests;++test){
+		int a,b; scanf("%d %d",&a,&b);
+		int cnt = 0;
+		map<pair<int,int>, bool> chk;
+		for(int i=a;i<=b;++i){
+			string val = toString(i);
+			for(int j=1;j<val.size();++j){
+				string next = val.substr(j) + val.substr(0,j);
+				int value = stoi(next);
+				if(i < value && value <= b && chk.find(make_pair(i,value)) == chk.end()){
+					chk[make_pair(i,value)] = true;
+					++cnt;
+				}
+			}
+		}
+
+		printf("Case #%d: %d\n",test, cnt);
+	}
+	return 0;
+}

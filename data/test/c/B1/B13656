@@ -1,0 +1,77 @@
+#include <iostream>
+#include <cstdio>
+#include <cmath>
+#include <algorithm>
+#include <queue>
+#include <cmath>
+using namespace std;
+
+int a[20], len;
+
+void change(int x){
+    int i = 1, j;
+
+    len = 1;
+    while(x / i >= 10){
+        i = i * 10;
+        len++;
+    }
+
+    int aa;
+    aa = 10;
+    for(j = 0; j < len; ++j){
+        a[j] = a[j + len] = x / i;
+        x = x % i;
+        i = i / 10;
+    }
+
+    printf("");
+}
+
+int hash[2000005];
+int ans;
+
+int IsOK(int A, int B, int n){
+    int i, j, t;
+    int flag = 0;
+    for(i = 1; i < len; ++i){
+        t = 0;
+        if(a[i] == 0){
+            continue;
+        }
+        for(j = 0; j < len; ++j){
+            t = t * 10 + a[i + j];
+        }
+        if(n < t && t <= B){
+            flag = 1;
+            ans++;
+            //return flag;
+        }
+    }
+    return flag;
+}
+
+int main()
+{
+    int T;
+    freopen("C-small-attempt0.in", "r", stdin);
+    freopen("2.txt", "w", stdout);
+    scanf("%d", &T);
+    int cas = 1;
+    while(T--){
+        int A, B;
+        scanf("%d %d", &A, &B);
+        int i;
+        ans = 0;
+        for(i = A; i <= B; ++i){
+            change(i);
+            if(IsOK(A, B, i)){
+
+                //ans++;
+            }
+        }
+        printf("Case #%d: ", cas++);
+        printf("%d\n", ans);
+    }
+    return 0;
+}

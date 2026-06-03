@@ -1,0 +1,85 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+
+/**
+ * 
+ * @author ysan
+ *
+ */
+
+public class Problem_C_large {
+	
+
+	public static void main(String[] args) throws NumberFormatException,
+			IOException {
+
+		BufferedReader in = new BufferedReader(new FileReader("C-large.in"));
+		BufferedWriter out = new BufferedWriter(new FileWriter("C-large-output0.txt"));
+		
+		int cases = Integer.parseInt(in.readLine());
+		
+		 for (int i = 1; i <= cases; i++) {
+			 String text = in.readLine().trim();
+			 String[] val = text.split(" ");
+			 int count = 0;
+			 BigInteger lasta = BigInteger.ZERO;
+			 BigInteger lastb = BigInteger.ZERO;
+			 
+			 BigInteger a = new BigInteger(val[0]);
+			 BigInteger b = new BigInteger(val[1]);
+			 
+			 System.out.println(a +" "+b);
+			 BigInteger j = a;
+			 while(j.compareTo(b) < 0){ 
+
+				 String g = j.toString();
+				
+				 for(int k=g.length()-1; k>0; k--){
+					 BigInteger r = switchIt(g, k);
+					 if(r.compareTo(j) > 0 && r.compareTo(b) <= 0 ){
+						 System.out.println(" r "+r+" j "+j);
+						 if(lasta == j && lastb == r) continue;
+						 lasta = j;
+						 lastb = r;
+						 count++;
+
+					 }
+				 }
+				 j = j.add(BigInteger.ONE);
+			 }
+			 out.write("Case #"+ i +": " + count);
+			 out.newLine();
+		 }
+		 
+		
+		in.close();
+		out.close();
+		
+		
+		
+
+	}
+	
+	
+	static BigInteger switchIt(String v, int p){
+		BigInteger r= BigInteger.ZERO;
+		
+		String a = v.substring(p);
+		String b = v.substring(0, p);
+		
+		if(a.charAt(0) != '0'){
+			r = new BigInteger(a+b);
+		}
+		return r;
+		
+	}
+}

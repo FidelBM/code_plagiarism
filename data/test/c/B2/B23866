@@ -1,0 +1,29 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include "Recycle.h"
+
+using namespace std;
+
+int main (int argc, const char * argv[])
+{
+	ifstream inFile("C-large.in");
+	ofstream outFile("output.txt");
+	string temp;
+	inFile >> temp;
+	int n = atoi(temp.c_str());
+
+	for (int i = 0; i < n; i++)
+	{
+		inFile >> temp;
+		int min = atoi(temp.c_str());
+		inFile >> temp;
+		int max = atoi(temp.c_str());
+		Recycle recycle;
+		outFile << "Case #"<< i + 1 << ": " << recycle.numberOfRecycles(min, max) << endl;
+	}
+
+	inFile.close();
+	outFile.close();
+	return 0;
+}

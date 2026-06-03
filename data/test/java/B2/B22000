@@ -1,0 +1,75 @@
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.util.HashSet;
+import java.util.Set;
+
+/**
+ * 
+ */
+
+/**
+ * @author Kamlesh Saran Dev
+ * 
+ */
+public class RecycledPair {
+
+	long a;
+	long b;
+
+	/**
+	 * @param i
+	 * @param j
+	 */
+	public RecycledPair(long a, long b) {
+		this.a = a;
+		this.b = b;
+	}
+
+	/**
+	 * @return
+	 */
+	public long getNumberOfPairs() {
+		long count = 0;
+		for (long n = a; n < b; n++) {
+			Set<Long> allCombinations = giveAllCombinations(n, b);
+			count = count + allCombinations.size();
+		}
+		return count;
+	}
+
+	/**
+	 * @param n
+	 * @return
+	 */
+	private Set<Long> giveAllCombinations(long n, long b) {
+		Set<Long> result = new HashSet<Long>();
+		String nStr = Long.toString(n);
+		for (int i = 1; i < nStr.length(); i++) {
+			String backPart = nStr.substring(i);
+			String frontPart = nStr.substring(0, i);
+			long newNumber = Long.valueOf((backPart + frontPart));
+
+			if (n < newNumber && newNumber <= b) {
+				result.add(newNumber);
+			}
+		}
+		return result;
+	}
+
+	public static void main(String args[]) throws Exception {
+		BufferedReader bufferedReader = new BufferedReader(
+				new FileReader(
+						new File(
+								"C:\\Documents and Settings\\Kamlesh\\Desktop\\codejam\\C-large.in")));
+		int numberOfTest = Integer.valueOf(bufferedReader.readLine());
+		for (int i = 1; i <= numberOfTest; i++) {
+			String line = bufferedReader.readLine();
+			String limits[] = line.split("\\ ");
+			RecycledPair rp = new RecycledPair(Integer.valueOf(limits[0]), Integer.valueOf(limits[1]));
+			System.out.println("Case #" + i + ": " +  rp.getNumberOfPairs());
+
+		}
+	}
+
+}

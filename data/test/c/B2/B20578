@@ -1,0 +1,112 @@
+#include<iostream.h>
+#include<conio.h>
+long count=0;
+int main()
+{
+    long A,B;
+   long t,n;
+
+    long a,b,c,d,e,f,g,s2;
+     
+    FILE *fr,*fw;
+    fr = fopen("C-large.in","r");
+    fw= fopen("C-large.out","w");
+    fscanf(fr,"%u",&t);
+    for(long i=1;i<=t;i++)
+    {
+            count=0;
+           fscanf(fr,"%u",&A);
+           
+           fscanf(fr,"%u",&B);
+           for(int s=A;s<B;s++)
+           {
+              s2=s;     
+            g=s2%10;
+            s2=s2/10;
+            f=s2%10;
+            s2=s2/10;
+            e= s2%10; s2=s2/10;
+            d= s2%10; s2= s2/10;       
+            c=s2%10;  s2=s2/10;
+            b=s2%10;  s2/10;
+            a=s2%10; 
+            if(a!=0)
+            {
+                
+               n = b*1000000+c*100000+d*10000+e*1000+f*100+g*10+a;
+               if(n!=s){if(s<n&&n<=B)count++;}
+               n = c*1000000+d*100000+e*10000+f*1000+g*100+a*10+b;
+               if(n!=s){if(s<n&&n<=B)count++;}
+               n = d*1000000+e*100000+f*10000+g*1000+a*100+b*10+c; 
+               if(n!=s){if(s<n&&n<=B)count++;}
+               n = e*1000000+f*100000+g*10000+a*1000+b*100+c*10+d;
+               if(n!=s){if(s<n&&n<=B)count++;}
+                  n = f*1000000+g*100000+a*10000+b*1000+c*100+d*10+e;
+               if(n!=s){if(s<n&&n<=B)count++;}
+                n = g*1000000+a*100000+b*10000+c*1000+d*100+e*10+f;  
+           }    
+           else if(b!=0)
+           {
+             n = c*100000+d*10000+e*1000+f*100+g*10+b;
+             if(n!=s){if(s<n&&n<=B)count++;}
+              n = d*100000+e*10000+f*1000+g*100+b*10+c;
+              if(n!=s){if(s<n&&n<=B)count++;}
+              n = e*100000+f*10000+g*1000+b*100+c*10+d;
+              if(n!=s){if(s<n&&n<=B)count++;}
+               n = f*100000+g*10000+b*1000+c*100+d*10+e;
+               if(n!=s){if(s<n&&n<=B)count++;}
+               n = g*100000+b*10000+c*1000+d*100+e*10+f;
+               if(n!=s){if(s<n&&n<=B)count++;}
+               
+              }
+              else if(c!=0)
+              {
+              n = d*10000+e*1000+f*100+g*10+c;
+             if(n!=s){if(s<n&&n<=B)count++;}
+              n = e*10000+f*1000+g*100+c*10+d;
+              if(n!=s){if(s<n&&n<=B)count++;}
+              n = f*10000+g*1000+c*100+d*10+e;
+              if(n!=s){if(s<n&&n<=B)count++;}
+               n = g*10000+c*1000+d*100+e*10+f;
+               if(n!=s){if(s<n&&n<=B)count++;}  
+            
+              }
+              
+              else if(d!=0)
+              {
+               n = e*1000+f*100+g*10+d;
+             if(n!=s){if(s<n&&n<=B)count++;}
+              n = f*1000+g*100+d*10+e;
+              if(n!=s){if(s<n&&n<=B)count++;}
+              n = g*1000+d*100+e*10+f;
+              if(n!=s){if(s<n&&n<=B)count++;}    
+              }
+              else if(e!=0)
+              {
+               n = f*100+g*10+e;
+             if(n!=s){if(s<n&&n<=B)count++;}
+              n = g*100+e*10+f;
+              if(n!=s){if(s<n&&n<=B)count++;}  
+              }   
+              else if(f!=0)
+              {
+                 n = g*10+f;
+                 if(n!=s){if(s<n&&n<=B)count++;} 
+                 }
+               else
+               count+=0;   
+         }
+          fprintf(fw,"\nCase #%u: ",i);
+          fprintf(fw,"%u",count);
+           cout<<"count="<<count;  
+    }
+        
+         
+         fclose(fr);
+         fclose(fw);
+        
+    getch();
+    return 0;
+           
+    }
+               

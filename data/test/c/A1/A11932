@@ -1,0 +1,75 @@
+#include "stdafx.h"
+
+#define PROBLEM_NAME "Prob_B"
+#define PROBLEM_SMALL_INPUT "B-small-attempt0"
+#define PROBLEM_LARGE_INPUT "B-large-practice"
+
+int main(int argc, char* argv[])
+{
+//	set_fio(PROBLEM_NAME ".txt");
+//	set_fio(PROBLEM_SMALL_INPUT ".in");
+	set_fio(PROBLEM_SMALL_INPUT ".in", PROBLEM_SMALL_INPUT ".out.txt");
+//	set_fio(PROBLEM_LARGE_INPUT ".in");
+//	set_fio(PROBLEM_LARGE_INPUT ".in", PROBLEM_LARGE_INPUT ".out.txt");
+
+	int T;
+	fin >> T;
+
+	for (int cases=1; cases<=T; ++cases)
+	{
+		int N, S, p;
+		fin >> N >> S >> p;
+		vector<int> points;
+		for (int i=0; i<N; ++i)
+		{
+			int v;
+			fin >> v;
+			points.push_back(v);
+		}
+		sort(points.rbegin(), points.rend());
+
+		int count = 0;
+
+		// first check : best result googler who don't need suprising
+		// score larger than 3p-2 is enough
+
+		vector<int>::iterator it = points.begin();
+		while (it != points.end())
+		{
+			int v = (*it);
+			if (v >= 3*p-2)
+			{
+				count++;
+				it = points.erase(it);
+			}
+			else
+			{
+				++it;
+			}
+		}
+
+		// second check : surprising googler
+		// score larger than 3p-4 is enough
+		if (3*p-4 >= 0)
+		{
+			it = points.begin();
+			while (it != points.end() && S > 0)
+			{
+				int v = (*it);
+				if (v >= 3*p-4)
+				{
+					count++;
+					S--;
+					it = points.erase(it);
+				}
+				else
+				{
+					++it;
+				}
+			}
+		}
+		fout << "Case #" << cases << ": " << count << endl;
+	}
+
+	return 0;
+}

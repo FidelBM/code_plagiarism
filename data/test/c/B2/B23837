@@ -1,0 +1,47 @@
+#include <cstdio>
+#include <cstring>
+#include <vector>
+#include <algorithm>
+using namespace std;
+const int N = 2000000;
+int T, a, b, s, d, l;
+char c[10], r[10], t;
+vector<bool> u[N+10];
+bool v(int x, int y) {
+    if(x > y) swap(x, y);
+    for(int i=0; i<u[x].size(); i++)
+        if(u[x][i] == y) return true;
+    return false;
+}
+void mark(int x, int y) {
+    if(x > y) swap(x, y);
+    u[x].push_back(y);
+}
+int main() {
+    freopen("C-large.in", "r", stdin);
+    freopen("C2.out", "w", stdout);
+    scanf("%d", &T);
+    for(int o=1; o<=T; o++) {
+        s = 0;
+        scanf("%d %d", &a, &b);
+        for(int i=a; i<=b; i++)
+            u[i].clear();
+        for(int i=a; i<=b; i++) {
+            sprintf(r, "%d", i);
+            l = strlen(r);
+            for(int j=1; j<l; j++) {
+                for(int k=j; k<l; k++) c[k] = r[k-j];
+                for(int k=0; k<j; k++) c[k] = r[k+l-j];
+                c[l] = '\0';
+                sscanf(c, "%d", &d);
+                if(d != i && a <= d && d <= b && !v(i, d)) {
+                    //if(i > d) fprintf(stderr, "(%d %d) ", i, d);
+                    mark(i, d);
+                    s++;
+                }
+            }
+        }
+        printf("Case #%d: %d\n", o, s / 2);
+    }
+    return 0;
+}

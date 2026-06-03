@@ -1,0 +1,92 @@
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Scanner;
+
+public class QC_Large2012 {
+
+	public static void main(String[] args) throws Exception {
+		new QC_Large2012();
+	}
+	
+	static final String filename = "C-large";
+	int testcases;
+	int[] tenPowers;
+	
+	public QC_Large2012() throws Exception {
+		FileReader ifile = new FileReader(filename+".in");
+		Scanner scanner = new Scanner(ifile);
+		testcases = Integer.parseInt(scanner.nextLine());
+		FileWriter ofile = new FileWriter(filename+".out");
+		for (int i = 1; i <= testcases; i++) {
+			ofile.write("Case #"+i+": "+solve(scanner.nextInt(), scanner.nextInt())+(i != testcases ? "\n" : ""));
+		}
+		ofile.close();
+		System.out.println("Finished");
+		
+		/*
+		 * Benchmarking code */
+		/*
+		long n = new Date().getTime();
+		for (int i = 0; i < 20000000; i++)
+			intStringLen(i);
+		System.out.println(new Date().getTime() - n);
+		n = new Date().getTime();
+		for (int i = 0; i < 20000000; i++)
+			intLen(i);
+		System.out.println(new Date().getTime() - n);
+		//solve(1, 4);
+		int l = 3;
+		tenPowers = new int[l+1];
+		initTenPowers(tenPowers);
+		System.out.println(rotR(123,0,l));*/
+	}
+
+	private int solve(int A, int B) throws Exception {
+		int l = intLen(A); //len A = len B (definition)
+		tenPowers = new int[l+1];
+		initTenPowers(tenPowers);
+		int sum = 0;
+		for (int n = A; n <= B-1; n++) {
+			sum += recycledPairs(n, B, l);
+		}
+		return sum;
+	}
+	
+	private void initTenPowers(int[] tenPowers) {
+		tenPowers[0] = 1;
+		for (int i = 1; i < tenPowers.length; i++)
+			tenPowers[i] = tenPowers[i-1] * 10;
+	}
+
+	private int recycledPairs(int n, int B, int l) {
+		int sum = 0;
+		int m;
+		for (int i = 0; i < l; i++) {
+			m = rotR(n, i, l);
+			if (m > n && m <= B)
+				sum++;
+		}
+		return sum;
+	}
+	
+	private int rotR(int n, int x, int l) {
+		int back = n % tenPowers[x];
+		int front = n / tenPowers[x];
+		return front + back * tenPowers[l-x];
+	}
+	
+	private int intLen(int n) {
+		int l = 0;
+		while (n > 0) {
+			n /= 10;
+			l++;
+		}
+		return l;
+	}
+}

@@ -1,0 +1,11 @@
+#ifndef DANCING_HH_
+#define DANCING_HH_
+# include <iostream>
+# include <fstream>
+# include <string>
+# include <stdio.h>
+# include <stdlib.h>
+
+int main (int argc, char** argv);
+
+#endif /* ! DANCING_HH_ */

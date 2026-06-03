@@ -1,0 +1,78 @@
+#pragma once
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+#include <map>
+#include <algorithm>
+using namespace std;
+
+class RecycledNumbers
+{
+public:
+	void Solve(const string& inputFileName, const string& outputFileName)
+	{
+		fstream inFile(inputFileName, ios::in);
+		string curLine;
+		inFile >> curLine;
+		int totalLines = atoi(curLine.c_str());
+		vector<int> result(totalLines);
+
+		for(size_t i = 0; i < totalLines; ++i)
+		{
+			long int A, B;
+			inFile >> A >> B;
+
+			result[i] = CalcRecycled(A, B);
+		}
+
+		ofstream outFile(outputFileName);
+		for(size_t i = 0; i < result.size(); ++i)
+		{
+			outFile << "Case #" << i + 1 << ": " << result[i] << endl;
+		}
+		return;
+	}
+
+	long int CalcRecycled(long int a, long int b)
+	{
+		int totalPairs = 0;
+		for(long int n = a; n <= b; ++n)
+		{
+			for(long int m = n + 1; m <= b; ++m)
+			{
+				char nBuffer[10];
+				itoa(n, nBuffer, 10);
+
+				char mBuffer[10];
+				itoa(m, mBuffer, 10);
+
+				int nBufferLength = strlen(nBuffer);
+
+				if(strlen(mBuffer) != nBufferLength)
+				{
+					continue;
+				}
+
+				for(size_t startIndex = 0; startIndex < nBufferLength; ++startIndex)
+				{
+					bool arentequal = false;
+					for(size_t i = 0; i < nBufferLength; ++i)
+					{
+						if(nBuffer[i] != mBuffer[(i + startIndex) % nBufferLength])
+						{
+							arentequal = true;
+							break;
+						}
+					}
+
+					if(arentequal) continue;
+					totalPairs++;
+					break;
+				}
+			}
+		}
+
+		return totalPairs;
+	}
+};

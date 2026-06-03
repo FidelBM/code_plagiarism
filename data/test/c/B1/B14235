@@ -1,0 +1,31 @@
+#include <cstdio>
+#include <string>
+#include <set>
+#include <boost/lexical_cast.hpp>
+
+#define FOR(I, N) for(int I = 0, end_ = (N); I < end_; ++I)
+int ri() { int r; scanf("%d", &r); return r; }
+std::string const itos(int value) { return boost::lexical_cast<std::string>(value); }
+int stoi(std::string const& value) { return boost::lexical_cast<int>(value); }
+
+int main()
+{
+    FOR(i, ri())
+    {
+		int A = ri(), B = ri();
+		int Z[] = {0, 0, 0, 0, 0, 0, 0, 0};
+
+		for(int T = A; T <= B; ++T)
+		{
+			std::set<int> U; std::string C = itos(T); int L = C.length(); C += C;
+			for(int pos = 0; pos < L; ++pos)
+			{
+				int R = stoi(std::string(&C[pos], L));
+				if (R >= A && R <= B)
+					U.insert(R);
+			}
+			++Z[U.size()];
+		}
+		printf("Case #%d: %d\n", i + 1, Z[2]/2 + Z[3] + 3*Z[4]/2 + 2*Z[5] + 5*Z[6]/2 + 3*Z[7]);
+    }
+}

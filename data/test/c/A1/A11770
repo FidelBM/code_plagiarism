@@ -1,0 +1,114 @@
+/*
+ * Solver.cpp
+ *
+ *  Created on: 2012/04/14
+ *      Author: yysaki
+ */
+
+#include <iostream>
+#include <sstream>
+#include <vector>
+#include <algorithm>
+#include <cassert>
+
+#include <boost/tuple/tuple.hpp>
+#include <boost/tuple/tuple_io.hpp>
+#include <boost/tokenizer.hpp>
+
+#include <iomanip>
+#include <fstream>
+
+#include "Solver.h"
+
+using namespace std;
+typedef vector<int> vec_t;
+typedef vec_t::iterator iterator_t;
+
+Solver::Solver(const char* in, const char* out) : ifs(in), inputFile(in), outputFile(out) {
+  if(!ifs.is_open()){
+    assert(0);
+  }
+  ifs >> TNum;
+}
+
+Solver::~Solver(){
+  ifs.close();
+}
+
+bool Solver::solve(){
+  int N, S, p, ans;
+  vec_t t;
+  for(int test=0;test<TNum;test++){
+    ans = 0; t.clear();
+    inputLine(&N, &S, &p, &t);
+    sort(t.rbegin(),t.rend());
+
+    for(iterator_t it=t.begin();it!=t.end();it++){
+      if(judge(*it,false,p)){
+        ans++;
+      }else if(judge(*it,true,p) && S>0){
+        ans++; S--;
+      }
+    }
+    answers.push_back(ans);
+  }
+  return true;
+}
+
+bool Solver::judge(int ti, bool isSurprising, int p) const{
+  int ans;
+  if(ti==0){
+    ans = 0>=p;
+  }
+  else if(ti%3==0){
+    if(isSurprising){
+      ans = ((ti/3)+1)>=p;
+    }else{
+      ans = (ti/3)>=p;
+    }
+  }else if(ti%3==1){
+    ans = ((ti/3)+1)>=p;
+  }else{
+    if(isSurprising){
+      ans = ((ti/3)+2)>=p;
+    }else{
+      ans = ((ti/3)+1)>=p;
+    }
+  }
+
+  return ans;
+}
+
+bool Solver::inputLine(int* N, int* S, int* p, std::vector<int>* t){
+  if(!ifs.is_open()){
+    assert(0);
+  }
+
+  ifs >> *N >> *S >> *p;
+  for(int i=0;i<*N;i++){
+    int tmp;
+    ifs >> tmp;
+    (*t).push_back(tmp);
+  }
+
+  return true;
+}
+
+bool Solver::output() const {
+  std::ofstream ofs(outputFile);
+  dump(ofs);
+  return true;
+}
+
+std::ostream& Solver::dump(std::ostream& s) const{
+  stringstream ss;
+  for (int i=0;i<(int)answers.size();i++) {
+    ss << "Case #" << i+1 << ": " << answers[i] << endl;
+  }
+  s << ss.str();
+  return s;
+}
+
+std::ostream& operator<<(std::ostream& s, const Solver& sol){
+  return sol.dump(s);
+}

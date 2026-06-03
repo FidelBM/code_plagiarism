@@ -1,0 +1,28 @@
+#ifndef GOOGLERS_H
+#define GOOGLERS_H
+
+
+class googlers
+{
+public:
+		googlers(int total);
+		void printTriplet();
+		void fillStrong(int minScore, int& strongGooglers);
+		void printStrong();
+		void applySurprising(int minScore, int& RefStrongGooglers, int& refSuprin);
+		bool getStrong() {return strong;}
+
+
+private:
+
+		void fillTripletWithTotalScore();
+
+		int scores[3];
+		bool strong;
+		int total;
+		bool tripletEqual;
+
+
+};
+
+#endif // GOOGLERS_H

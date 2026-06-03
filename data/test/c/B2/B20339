@@ -1,0 +1,63 @@
+#include<iostream>
+#include<cstdio>
+#include<cmath>
+#include<string>
+#include<cstring>
+#include<map>
+#include<algorithm>
+using namespace std;
+typedef long long ll;
+#define M 2000005
+#define INF 1<<30
+int t,n,m,N,NN;
+int a[M],b[M];
+map<int,bool> num;
+int fk(int kk)
+{
+    int ans=0,tmp=kk;
+    bool c;
+    num.clear();
+    for(int i=0; i<=NN; i++)
+    {
+        tmp=tmp%N*10+tmp/N;
+        if(tmp>kk && tmp<m)
+        {
+            if(num[tmp]==1)
+            continue;
+            num[tmp]=1;
+            ans++;
+        }
+    }
+    return ans;
+}
+int gao()
+{
+    int ans=0;
+    for(int i=n; i<m; i++)
+    {
+        ans+=fk(i);
+    }
+    return ans;
+}
+int main()
+{  
+	freopen("C-large.in","r",stdin);
+	freopen("C-large.out","w",stdout);
+    scanf("%d",&t);
+    for(int cas=1; cas<=t; cas++)
+    {
+        scanf("%d%d",&n,&m);
+        int nn=n;
+        N=1,NN=-1;
+        while(nn)
+        {
+            NN++;
+            if(nn>=10)
+                N*=10;
+            nn/=10;
+        }
+        printf("Case #%d: ",cas);
+        printf("%d\n",gao());
+    }
+    return 0;
+}

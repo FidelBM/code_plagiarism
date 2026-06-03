@@ -1,0 +1,130 @@
+// DancingWithTheGooglers.cpp : 定義主控台應用程式的進入點。
+//
+
+#include "stdafx.h"
+#include <vector>
+#include <iostream>
+#include <fstream>
+#include <string>
+using namespace std;
+
+
+struct stGoogler
+{
+	stGoogler();
+	~stGoogler();
+
+	int  m_iTotalScore;
+	bool m_bHighScore;
+	bool m_bNeedSurprising;
+};
+
+stGoogler::stGoogler():
+m_bHighScore(false), m_bNeedSurprising(false)
+{
+	
+}
+
+stGoogler::~stGoogler()
+{
+
+}
+
+void GenerateTriplet(int iBestScore, stGoogler* pGoogler)
+{
+	int iTotalScoreTmp = iBestScore*3;
+	
+	if(pGoogler->m_iTotalScore < iTotalScoreTmp-4 || (pGoogler->m_iTotalScore==0 && iBestScore!=0))
+	{
+		pGoogler->m_bHighScore = false;
+	}
+	else if( pGoogler->m_iTotalScore == iTotalScoreTmp-4 || pGoogler->m_iTotalScore == iTotalScoreTmp-3)
+	{
+		pGoogler->m_bHighScore = true;
+		pGoogler->m_bNeedSurprising = true;
+	}
+	else if(pGoogler->m_iTotalScore >= iTotalScoreTmp -2)
+	{
+		pGoogler->m_bHighScore = true;
+		pGoogler->m_bNeedSurprising = false;
+	}
+
+}
+
+int GetBest(int iSurprisingNum, int iBestScore, vector<int>& vecTotalScoles)
+{
+	stGoogler* pGoogler = new stGoogler[vecTotalScoles.size()];
+	int iBestNum = 0;
+
+	int iNeedSurprising=0 , iNoNeddSurprising=0;
+	for(int iGooglerIdx =0; iGooglerIdx<vecTotalScoles.size(); ++iGooglerIdx)
+	{
+		pGoogler[iGooglerIdx].m_iTotalScore = vecTotalScoles[iGooglerIdx];
+		GenerateTriplet(iBestScore, &pGoogler[iGooglerIdx]);
+
+		if(pGoogler[iGooglerIdx].m_bHighScore && !pGoogler[iGooglerIdx].m_bNeedSurprising)
+			++iNoNeddSurprising;
+		else if(pGoogler[iGooglerIdx].m_bHighScore && pGoogler[iGooglerIdx].m_bNeedSurprising)
+			++iNeedSurprising;
+	}
+
+	iBestNum = iNoNeddSurprising;
+	if(iNeedSurprising>iSurprisingNum)
+		iBestNum += iSurprisingNum;
+	else
+		iBestNum += iNeedSurprising;
+
+	delete [] pGoogler;
+	return iBestNum;
+}
+
+
+
+int main(int argc, char *argv[]) 
+{
+	ifstream inputFile(argv[1]);
+
+	string str;
+	getline(inputFile, str);
+	int iCaseNum = atoi(str.c_str());
+
+	string strOutfile  = argv[1];
+	strOutfile.erase(strOutfile.end()-2, strOutfile.end());
+	strOutfile.append("out");
+	ofstream outFile(strOutfile.c_str(), ofstream::binary);
+
+	int iGooglerNum, iSurprisingNum, iBestScore, iTotalScore, iMatchNum,
+		iGooglerIdx;
+	vector<int> vecTotalScoles;
+	string strOutput;
+	for(int iCase=0; iCase<iCaseNum; ++iCase)
+	{
+		strOutput.clear();
+		strOutput.append("Case #");
+		char buffer[20];
+		itoa(iCase+1, buffer, 10);
+		strOutput.append(buffer);
+		strOutput.append(": ");
+
+		vecTotalScoles.clear();
+		inputFile >> iGooglerNum;
+		inputFile >> iSurprisingNum;
+		inputFile >> iBestScore;
+
+		for(iGooglerIdx =0; iGooglerIdx<iGooglerNum; ++iGooglerIdx)
+		{
+			inputFile >> iTotalScore;
+			vecTotalScoles.push_back(iTotalScore);
+		}
+
+		iMatchNum = GetBest(iSurprisingNum, iBestScore, vecTotalScoles);
+
+		itoa(iMatchNum, buffer, 10);
+		strOutput.append(buffer);
+		strOutput.append("\n");
+		outFile.write(strOutput.c_str(), strOutput.size());
+	}
+
+	return 0;
+}
+

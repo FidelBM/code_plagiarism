@@ -1,0 +1,49 @@
+package SolnB;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.*;
+public class ProbB {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) throws IOException{
+		// TODO Auto-generated method stub
+
+		Scanner sc = new Scanner(System.in);
+		FileOutputStream out = new FileOutputStream("out.txt");
+		int loop = sc.nextInt();
+		for (int i =0;i <loop;i++){
+			int g=0, s=0, l=0, c=0;
+			g= sc.nextInt();
+			s= sc.nextInt();
+			l= sc.nextInt();
+			int scr[] = new int[g];
+			//System.out.println(i);
+
+			for (int j=0; j <g; j++){
+				scr[j] = sc.nextInt();
+				//System.out.println(j);
+				if (l<2){
+					if (scr[j]>=l)
+						c++;
+				}
+				else{
+					if (scr[j]>=(l+l-1+l-1)){
+						c++;
+					//	System.out.println(c);
+					}
+					else if (s>0 && (scr[j]>=(3*l-4))){
+				//		System.out.println(s);
+						c++;
+						s--;
+					}
+				}
+			}
+			//System.out.println();
+			out.write(String.format("Case #%d: %d\n", i+1, c).getBytes());	
+		}
+	}
+
+}

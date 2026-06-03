@@ -1,0 +1,39 @@
+/*
+ * parseFile.h
+ *
+ *  Created on: Sep 14, 2009
+ *      Author: xhd
+ */
+
+#ifndef PARSEFILE_H_
+#define PARSEFILE_H_
+
+#include <string>
+#include <fstream>
+#include <sstream>
+
+using namespace std;
+
+class parseFile {
+public:
+	parseFile(string inputfilename);
+	virtual ~parseFile();
+
+	bool nextLineSStream();
+	void rmStrSpace(string line);
+	/*
+    int openFile();
+    int closeFile();
+    virtual int parseLine();
+    */
+public:
+	stringstream os;
+private:
+	ifstream inFile;
+	string iFileName;
+    string line;
+    static const int LINE_LENTH = 0x1FFFF; //the maximum length for a line in the inputfile.
+};
+
+
+#endif /* PARSEFILE_H_ */

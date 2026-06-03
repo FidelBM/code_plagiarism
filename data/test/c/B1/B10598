@@ -1,0 +1,145 @@
+#include <iostream>
+#include <fstream>
+#include <stdint.h>
+#include <math.h>
+
+
+using namespace std;
+
+
+void 
+	read (ifstream &in, int &begin, int &end, int &order)
+{
+	in >> begin;
+	in >> end;
+
+	int rest = begin;
+	order = 1;
+
+	while (rest != 0)
+	{		
+		rest /= 10;
+		
+		if (rest != 0)
+			order *= 10;
+	}
+}
+
+
+int 
+	digit_sum (int x)
+{
+	int sum = 0;
+
+	while (x != 0)
+	{
+		sum += x % 10;
+		x /= 10;
+	}
+
+	return sum;
+}
+
+
+void 
+	next_digit_and_sum (int &x, int &sum)
+{
+	int tmpx = x;
+	++sum;
+
+	while ((tmpx % 10) == 9)
+	{
+		tmpx /= 10;
+		sum -= 9;
+	}
+
+	++x;
+}
+
+
+bool 
+	is_recycled (int n, int m, int order)
+{	
+	if (n == m)
+			return true;
+
+	for (int i = 0; i < order; ++i)
+	{	
+		int rem = n % 10;
+		n = (n / 10) + rem * order;
+		
+		if (n == m)
+			return true;
+	}
+
+	return false;
+}
+
+
+void
+	solve (ofstream &out, int i, int begin, int end, int order)
+{
+	//
+	// tries to find collision using digit sum heuristic to skip some checks
+	// needs better algorithm to solve wide intervals
+	//
+
+	int n = begin;
+	int m = begin + 1;
+
+	int n_sum = digit_sum (n);
+	int m_sum = digit_sum (m);
+
+	int recycled = 0;
+
+	while (m <= end)
+	{
+		while (n < m)
+		{
+			if (n_sum == m_sum && is_recycled (n, m, order))
+				recycled++;
+
+			next_digit_and_sum (n, n_sum);
+		}
+
+		n = begin;
+		n_sum = digit_sum (n);
+		next_digit_and_sum (m, m_sum);
+	}
+
+	out << "Case #" << i << ": " << recycled << endl;
+}
+
+
+void
+	run ()
+{
+	ifstream in = ifstream ("in.txt");
+	ofstream out = ofstream ("out.txt");
+
+	int case_count;
+	in >> case_count;
+
+	for (int i = 1; i <= case_count; ++i)
+	{
+		int begin;
+		int end;
+		int order;
+
+		read (in, begin, end, order);
+
+		solve (out, i, begin, end, order);
+	}
+
+	in.close ();
+	out.close ();
+}
+
+
+int 
+	main ()
+{	
+	run ();
+
+	system ("pause");
+}

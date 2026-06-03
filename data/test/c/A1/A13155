@@ -1,0 +1,94 @@
+// ProblemB.cpp : Defines the entry point for the console application.
+//
+
+#include "stdafx.h"
+
+int do_case(FILE* f) {
+
+	int g[20];
+
+	int N, S, P;
+	if( 3 != fscanf(f, "%d %d %d", &N, &S, &P ) ) assert(false);
+
+	for( int i=0; i<N; i++ ) {
+		if( 1 != fscanf(f, "%d", &g[i] ) ) assert(false);
+	}
+
+	printf("%d %d %d\n # ", N, S, P );
+	for( int i=0; i<N; i++ ) {
+		printf("%d ", g[i] );
+	}
+
+	printf("\n");
+
+	int count = 0;
+
+	for( int i=0; i<N; i++ ) {
+		int c = g[i];
+
+		int pt   = c/3;
+		int pt_r = c%3;
+
+		if( pt >= P ) {
+			count++;
+			continue;
+		}
+
+		int diff = P - pt;
+		if( diff > 2 ) continue; //impossible
+
+		if( diff == 1 && pt_r >= 1 ) {
+			count++;
+			continue;
+		}
+
+		if( S <= 0 ) continue; //no more surprising
+
+		if( diff == 1 ) {
+			if( pt > 0 ) { //borrow pt form other
+				S--;
+				count++;
+				continue; 
+			}
+		}
+
+		if( diff == 2 ) {
+			if( pt_r >= 2 ) {
+				S--;
+				count++;
+				continue;
+			}
+		}
+	}
+
+	printf("count = %d\n\n", count);
+
+	return count;
+}
+
+
+int main() {
+	FILE* f = fopen("B-small-attempt1.in","rb");
+	if( !f ) assert(false);
+
+	int T;
+	if( 1 != fscanf(f, "%d", &T ) ) assert(false);
+
+	FILE* outFile = fopen("out.txt", "wb");
+	if( !outFile ) assert(false);
+
+	for( int t=0; t<T; t++ ) {
+		int ret = do_case(f);
+		fprintf( outFile, "Case #%d: %d\n", t+1, ret );
+	}
+
+	fclose(f);
+	fclose(outFile);
+
+	printf("=== end ===\n");
+
+	_getch();
+
+	return 0;
+}
+

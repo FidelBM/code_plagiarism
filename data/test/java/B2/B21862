@@ -1,0 +1,118 @@
+import java.io.*;
+import java.util.ArrayList;
+
+public class RecycledNumbers {
+
+	static int caseNumber;
+	static int totalCases;
+
+	public static void main(String[] args) throws Exception {
+
+		caseNumber = 1;
+
+		File fileIn = new File("C:\\GCJ\\RecycledNumbers\\C-large.in");
+		FileInputStream fileInputStream = null;
+		BufferedInputStream inputStream = null;
+		BufferedReader reader = null;
+		Writer out;
+
+		String newLine = System.getProperty("line.separator");
+
+		String fileOutPath = "C:\\GCJ\\RecycledNumbers\\largeOutput.txt";
+		File fileOut = new File(fileOutPath);
+		if (!fileOut.createNewFile()) {
+			fileOut.delete();
+			fileOut.createNewFile();
+		}
+
+		out = new OutputStreamWriter(new FileOutputStream(fileOutPath), "US-ASCII");
+
+		StringBuilder builder = new StringBuilder();
+
+		try {
+			fileInputStream = new FileInputStream(fileIn);
+
+			// Here BufferedInputStream is added for fast reading.
+			inputStream = new BufferedInputStream(fileInputStream);
+			reader = new BufferedReader(new InputStreamReader(inputStream));
+
+			totalCases = Integer.parseInt(reader.readLine());
+			while (caseNumber <= totalCases) {
+				builder.append(handleTestCase(reader));
+				builder.append(newLine);
+				caseNumber++;
+			}
+
+			// dispose all the resources after using them.
+			fileInputStream.close();
+			inputStream.close();
+			reader.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.print(builder.toString());
+		out.write(builder.toString());
+		out.close();
+	}
+
+	public static String handleTestCase(BufferedReader reader) throws Exception {
+		String[] numsAsStrings = reader.readLine().split(" ");
+		int start = Integer.parseInt(numsAsStrings[0]);
+		int end = Integer.parseInt(numsAsStrings[1]);
+		int pairs = 0;
+		int current = start;
+		while (current <= end){
+			pairs += getNumRecycledPairsInRange(current, start, end);
+			current++;
+		}
+		return "Case #"+caseNumber+": "+pairs;
+	}
+	
+	public static int getNumRecycledPairsInRange(int orig, int start, int end){
+		int pairs = 0;
+		ArrayList<Integer> options = getAllRotationsInRange(orig, start, end);
+		for(int i = 0; i < options.size(); i++){
+			if (orig < options.get(i)){
+				pairs++;
+			}
+		}
+		return pairs;
+	}
+	
+	public static ArrayList<Integer> getAllRotationsInRange(int orig, int start, int end){
+		if(orig < 10)
+			return new ArrayList<Integer>(0);
+		char[] origAsChars = String.valueOf(orig).toCharArray();
+		ArrayList<Integer> allRotations = new ArrayList<Integer>(origAsChars.length-1);
+		char[] curRotation = origAsChars;
+		
+		// i < length - 1 because I don't want to repeat the original by doing it the full time
+		for(int i = 0; i < origAsChars.length - 1; i++){ 
+			char temp = curRotation[0];
+			for(int j = 1; j < origAsChars.length; j++){
+				curRotation[j-1] = curRotation[j];
+			}
+			curRotation[curRotation.length-1] = temp;
+			allRotations.add(new Integer(String.valueOf(curRotation)));
+		}
+		
+		for(int i = 0; i < allRotations.size(); i++){
+			if (allRotations.get(i) < start || allRotations.get(i) > end || allRotations.get(i) == orig){
+				allRotations.remove(i);
+				i--; //Because ArrayList shifts everything down an index
+			}	
+		}
+		makeListUnique(allRotations);
+		return allRotations;
+	}
+	public static void makeListUnique(ArrayList<Integer> list){
+		for(int i = 0; i < list.size(); i++){
+			for(int j = i+1; j < list.size(); j++){
+				if(list.get(i).equals(list.get(j))){
+					list.remove(j);
+				}
+			}
+		}
+	}
+}

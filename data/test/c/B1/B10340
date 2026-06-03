@@ -1,0 +1,17 @@
+// C.h
+
+#ifndef _C_H_
+#define _C_H_
+
+void read_file(char *szFile_in, char *szFile_out);
+void init_arr(int nA);
+void check_curr_val(void);
+void check_val_for_part(int nPart);
+void add_M_to_set(int nM);
+void increment_curr_val(void);
+void reset_value_for_index(int nNum_Idx);
+void increment_value_for_index(int nNum_Idx);
+int proceed(int nA, int nB);
+
+
+#endif

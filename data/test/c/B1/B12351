@@ -1,0 +1,71 @@
+#include <vector>
+#include <list>
+#include <map>
+#include <set>
+#include <deque>
+#include <stack>
+#include <bitset>
+#include <algorithm>
+#include <functional>
+#include <numeric>
+#include <utility>
+#include <sstream>
+#include <iostream>
+#include <iomanip>
+#include <cstdio>
+#include <cmath>
+#include <cstdlib>
+#include <ctime>
+
+using namespace std;
+
+bool flag[1001];
+
+int main(){
+	freopen("C-small-attempt0.in","r",stdin);
+	freopen("C-small-attempt0.out","w",stdout);
+
+	int Case,a,b,res;
+	scanf("%d",&Case);
+	for(int cas = 1; cas <= Case; cas ++){
+
+		scanf("%d %d",&a,&b);
+		res = 0;
+		for(int kk = a;kk <= b; kk ++){
+
+			if(kk < 10) continue;
+			memset(flag,false,sizeof(flag));
+			int tmp = kk;
+			int cnt = 1;
+			while(tmp / 10){
+				tmp /= 10;
+				cnt *= 10;
+			}
+			int now = 10;
+			tmp = kk;
+		//	printf("kk = %d cnt = %d");
+			while(cnt >= 10){
+				int tt = tmp % cnt;
+
+				tt *= now;
+				tt += tmp / cnt;
+
+			//	printf("%tt = %d \n",tt);
+
+				if(tt <= b && tt > kk) {
+
+					if(!flag[tt]) {
+						res ++;
+						flag[tt] = true;
+					}
+				}
+				now *= 10;
+				cnt /= 10;
+
+			}
+		}
+
+		printf("Case #%d: %d\n",cas,res);
+	}
+	return 0;
+}

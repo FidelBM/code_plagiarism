@@ -1,0 +1,49 @@
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cmath>
+#include <fstream>
+#include <iostream>
+
+using namespace std;
+
+#define forn(n) for(int i=0; i<n; i++)
+#define forn2(n) for(int j=0; j<n; j++)
+#define ccs(ii) cout << "Case #" << ii << ": "
+#define cgl(s, n) cin.getline(s, n)
+#define ci cin.ignore()
+
+int main() {
+	freopen("input.in", "rt", stdin);
+	freopen("output.txt", "wt", stdout);
+	
+	short T, N, S, p, t;
+	cin >> T;
+	forn(T) {
+		cin >> N >> S >> p;
+		
+		short btN = 0;
+		short pM = 3*p;
+		
+		forn2(N) {
+			cin >> t;
+			
+			if(t>=p) {
+				if(t>=pM-2)
+					btN++;
+				else if(t>=pM-4 && S) {
+					btN++;
+					S--;
+				}
+			}
+		}
+		
+		ccs(i+1) << btN << endl;
+	}
+	
+	fclose(stdin);
+	fclose(stdout);
+	return 0;
+}
+
+// hackerma3x (c)

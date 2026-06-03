@@ -1,0 +1,74 @@
+#include <cstdio>
+#include <cmath>
+#include <cstring>
+#include <algorithm>
+#include <iostream>
+using namespace std;
+
+int v[1000];
+int n,p;
+int re;
+
+void dfs(int cnt,int s,int val)
+{
+    //cout<<cnt<<endl;
+    if(cnt==n)
+    {
+        //cout<<val<<endl;
+        re=max(re,val);
+        return ;
+
+    }
+    for(int i=0;i<=v[cnt];i++)
+    {
+         for(int j=max(0,i-2);j<=i;j++)
+            {
+                int k=v[cnt]-i-j;
+                if(!s&&i-min(k,j)==2||i<k||i-k>2)
+                  continue;
+                if(s&&i-min(k,j)==2)
+                {
+                   if(i>=p)
+                    dfs(cnt+1,s-1,val+1);
+                   else
+                     dfs(cnt+1,s-1,val);
+                }
+                else
+                    {
+                       if(i>=p)
+                         dfs(cnt+1,s,val+1);
+                       else
+                          dfs(cnt+1,s,val);
+                    }
+
+
+            }
+    }
+
+
+}
+
+int main()
+{
+     freopen("B-small-attempt0.in","r",stdin);
+     freopen("outB.txt","w",stdout);
+     int cas,s,t;
+     cas=0;
+
+     scanf("%d",&t);
+     while(t--)
+     {
+
+          scanf("%d%d%d",&n,&s,&p);
+          for(int i=0;i<n;i++)
+            scanf("%d",&v[i]);
+          re=0;
+          dfs(0,s,0);
+          //cout<<re<<endl;
+          printf("Case #%d: %d\n",++cas,re);
+
+     }
+    return 0;
+
+
+}

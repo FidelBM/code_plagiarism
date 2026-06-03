@@ -1,0 +1,162 @@
+//
+//  CodeJam-1-3.cpp
+//  CodeJam-1-3
+//
+//  Created by Ryan Luedders on 4/13/12.
+//  Copyright 2012 n/a. All rights reserved.
+//
+
+#include <cmath>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <stdlib.h>
+#include "CodeJam-1-3.h"
+
+#define OUTPUT_TO_STDOUT    true
+#define MAX_INTEGER_LENGTH 50
+
+namespace CJ13
+{   
+    std::vector<std::string> readFile
+    (
+     const char * fileName
+     )
+    {
+        std::vector<std::string> returnVector;
+        
+        std::ifstream inputFile;
+        inputFile.open( fileName );
+        
+        if( inputFile.is_open() )
+        {
+            std::string fileLine;
+            while( inputFile.good() )
+            {
+                getline( inputFile, fileLine );
+                returnVector.push_back( fileLine );
+            }
+        }
+        
+        return returnVector;
+    } // end of readFile
+    
+    bool writeFile
+        (
+         const char * fileName,
+         std::vector<std::string> fileLines
+         )
+    {
+        bool result = false;
+        std::ofstream outputFile;
+
+        outputFile.open( fileName );
+    
+        if( outputFile.is_open() )
+        {
+            for( int i = 0; i < fileLines.size(); i++ )
+            {
+                outputFile << fileLines[i] << std::endl;
+                #if( OUTPUT_TO_STDOUT )
+                    std::cout << fileLines[i] << std::endl;
+                #endif
+            }
+            
+            outputFile.close();
+            result = true;
+        }
+        return result;
+    } // end of writeFile
+    
+    std::string solveProblem
+        (
+         int lineNumber,
+         std::string aInput
+        )
+    {
+        
+        std::string returnString;
+        std::string boundString;
+        
+        int lowerBound = 0;
+        int upperBound = 0;
+        int count = 0;
+        
+        std::stringstream stringStrm( aInput );
+        
+        // get upper and lower bound
+        while( getline( stringStrm, boundString, ' ' ) )
+        {
+            if( count == 0 )
+            {
+                lowerBound = std::atoi( boundString.c_str() );
+            }
+            else if( count == 1 )
+            {
+                upperBound = std::atoi( boundString.c_str() );
+            }
+            count++;
+        }
+        
+        int dupCount = 0;
+        
+        for( int i = lowerBound; i <= upperBound; i++ )
+        {
+            std::stringstream stringStrm;
+            stringStrm << i;
+            std::string iStr( stringStrm.str() );
+            
+            std::vector<std::string> pairsForI;
+            
+            for( int j = 0; j < iStr.size(); j++ )
+            {
+                if( std::atoi( iStr.c_str() ) >= lowerBound
+                   && std::atoi( iStr.c_str() ) <= upperBound
+                   && calculatePlaces( std::atoi( iStr.c_str() ) == calculatePlaces( lowerBound ) ) 
+                   && i < std::atoi( iStr.c_str() ) )
+                {
+                    std::vector<std::string>::iterator iter = pairsForI.begin();
+                    bool isInVec = false;
+                    for( iter = pairsForI.begin(); iter != pairsForI.end(); iter++ )
+                    {
+                        if( ((std::string)(*iter)).compare( iStr ) == 0 )
+                        {
+                            isInVec = true;
+                            break;
+                        }
+                    }
+                    
+                    if( !isInVec )
+                    {
+                        dupCount += 1;
+                        //std::cout << i << " " << iStr << std::endl;
+                        pairsForI.push_back( iStr );
+                    }
+                }
+                
+                std::string rotString = iStr.substr( iStr.size() - 1, iStr.size() );
+                rotString += iStr.substr( 0, iStr.size() - 1 );
+                iStr = rotString;
+            }
+            
+            pairsForI.clear();
+        }
+        
+        std::stringstream returnStream;
+        returnStream << "Case #" << lineNumber << ": " << dupCount;
+        returnString = returnStream.str();
+    
+        return returnString;
+    } // end of solveProblem
+    
+    int calculatePlaces
+        (
+         int aNumber
+         )
+    {
+        std::stringstream stringStrm;
+        stringStrm << aNumber;
+        
+        return (int)std::string( stringStrm.str() ).size();
+    } // end of calculatePlaces
+}

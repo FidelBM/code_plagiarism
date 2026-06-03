@@ -1,0 +1,206 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <set>
+#include <map>
+#include <list>
+#include <sstream>
+
+#include "Rational.h"
+
+using namespace std;
+
+bool trace = false;
+
+Rational two(2);
+Rational one(1);
+Rational half(1,2);
+Rational zero(0);
+Rational negOne(-1);
+
+#define bounceRight vx = -vx
+#define bounceTop vy = -vy
+#define bounceLeft vx = -vx
+#define bounceBottom vy = -vy
+
+#define mirrorTopRight (map[row-1][col+1]=='#')
+#define mirrorTopLeft (map[row-1][col-1]=='#')
+#define mirrorBottomRight (map[row+1][col+1]=='#')
+#define mirrorBottomLeft (map[row+1][col-1]=='#')
+
+#define mirrorLeft (map[row][col-1]=='#')
+#define mirrorRight (map[row][col+1]=='#')
+#define mirrorTop (map[row-1][col]=='#')
+#define mirrorBottom (map[row+1][col]=='#')
+
+#define xHere (map[row][col]=='X')
+
+// "hit" is set when false is returned
+bool followRay(bool &hit, int &col, int &row, Rational &x, Rational &y, int &vx, int &vy, double &distLeft, const vector<string> &map) {
+  Rational cellLeft(col), cellTop(row);
+  Rational cellRight = cellLeft+one, cellBottom = cellTop+one;
+  Rational cellHMid = Rational(cellLeft)+half, cellVMid = Rational(cellTop)+half;
+ 
+  Rational tLeft(2), tRight(2), tTop(2), tBottom(2);
+
+  if (vx < 0 && x!=cellLeft) tLeft = (cellLeft - x)/Rational(vx); 
+  if (vx > 0 && x!=cellRight) tRight = (cellRight - x)/Rational(vx); 
+
+  if (vy < 0 && y!=cellTop) tTop = (cellTop - y)/Rational(vy); 
+  if (vy > 0 && y!=cellBottom) tBottom = (cellBottom - y)/Rational(vy);
+
+  if (xHere)
+    while (x!=cellHMid || y!=cellVMid) {
+      Rational tHMid(-1), tVMid(-1);
+      if (x!=cellHMid && vx==0) break;
+      if (vx!=0) tHMid = (cellHMid - x)/Rational(vx);
+      
+      if (y!=cellVMid && vy==0) break;
+      if (vy!=0) tVMid = (cellVMid - y)/Rational(vy);
+      
+      if ((tHMid==negOne && tVMid>=zero) || (tHMid>=zero && tVMid==negOne)
+	  || (tHMid>=zero && tHMid==tVMid)) {
+	double dist = hypot(col+0.5 - ((double)x.P())/x.Q(), 
+			    row+0.5 - ((double)y.P())/y.Q());
+	if (dist <= distLeft + 0.000001) { hit = true; return false; }
+      }
+      
+      break;
+    }
+  
+  Rational tMin = tLeft;
+  if (tRight < tMin) tMin = tRight;
+  if (tTop < tMin) tMin = tTop;
+  if (tBottom < tMin) tMin = tBottom;
+
+  if (tMin==two) { cerr << "Whoa---no hits:\n"; 
+    cerr << "   [" << col << "," << row << "] / (" << x << "," << y << ") + <" << vx << "," << vy << ">; dist left = " << distLeft << "\n";
+return false; }
+
+  int hits = ((tMin==tRight) ? 1 : 0)
+    | ((tMin==tTop) ? 2 : 0)
+    | ((tMin==tLeft) ? 4 : 0)
+    | ((tMin==tBottom) ? 8 : 0);
+
+  Rational delX = tMin*Rational(vx), delY = tMin*Rational(vy);
+  double dist = hypot((double)(delX.P())/delX.Q(),
+		      (double)(delY.P())/delY.Q());
+  
+  if (dist > distLeft) return false;
+  distLeft -= dist;
+
+  x = x + delX; y = y + delY;
+
+  if (trace) cerr << hits << "\n";
+
+  if (hits==1) { // Right only
+    if (mirrorRight) bounceRight; else ++col;
+  } else if (hits==2) { // Top only
+    if (mirrorTop) bounceTop; else --row;
+  } else if (hits==4) { // Left only
+    if (mirrorLeft) bounceLeft; else --col;
+  } else if (hits==8) { // Bottom only
+    if (mirrorBottom) bounceBottom; else ++row;
+  } else if (hits==3) { // Top-right corner
+    if (mirrorTopRight) {
+      if (mirrorTop || mirrorRight) {
+	if (mirrorTop) bounceTop; else --row;
+	if (mirrorRight) bounceRight; else ++col;
+      } else
+	return false;
+    } else {
+      --row;
+      ++col;
+    }
+  } else if (hits==6) { // Top-left corner
+    if (mirrorTopLeft) {
+      if (mirrorTop || mirrorLeft) {
+	if (mirrorTop) bounceTop; else --row;
+	if (mirrorLeft) bounceLeft; else --col;
+      } else
+	return false;
+    } else {
+      --row;
+      --col;
+    }
+  } else if (hits==12) { // Bottom-left corner
+    if (mirrorBottomLeft) {
+      if (mirrorBottom || mirrorLeft) {
+	if (mirrorBottom) bounceBottom; else ++row;
+	if (mirrorLeft) bounceLeft; else --col;
+      } else
+	return false;
+    } else {
+      ++row;
+      --col;
+    }
+  } else if (hits==9) { // Bottom-right corner
+    if (mirrorBottomRight) {
+      if (mirrorBottom || mirrorRight) { 
+	if (mirrorBottom) bounceBottom; else ++row;
+	if (mirrorRight) bounceRight; else ++col;
+      } else
+	return false;
+    } else {
+      ++row;
+      ++col;
+    }
+  } else {
+    cerr << "Whoa---illegal combination of hits!\n"; return false;
+  }
+
+  return true;
+}
+
+int main(void) {
+  int iTest, nTests; cin >> nTests;
+
+  for (iTest = 1; iTest <= nTests; ++iTest) {
+    cerr << iTest << "/" << nTests << "\n";
+
+    int i, j, w, h, dist;
+    Rational x0, y0;
+
+    cin >> h >> w >> dist;
+    vector<string> map(h);
+    for (i = 0; i < h; ++i) {
+      cin >> map[i];
+      int pos = map[i].find('X');
+      if (pos!=string::npos) { x0 = Rational(pos) + half; y0 = Rational(i) + half; }
+    }  
+
+    int maxDel = 50;
+    int vx0, vy0;
+
+    int row, col;
+    Rational x, y;
+    int vx, vy;
+    double distLeft;
+    int count = 0;
+    bool hit;
+    for (vx0 = -maxDel; vx0 <= maxDel; ++vx0)
+      for (vy0 = -maxDel; vy0 <= maxDel; ++vy0) {
+	if (gcd(abs(vx0), abs(vy0)) != 1) continue;
+	
+	x = x0; y = y0;
+	col = floor(x); row = floor(y); 
+	vx = vx0; vy = vy0;
+	distLeft = dist;
+	hit = false;
+	trace = false && (row==3 && col==3 && vx0==-1 && vy0==7);
+	if (trace) cerr << "[" << col << "," << row << "] / (" << x << "," << y << ") + <" << vx << "," << vy << ">; dist left = " << distLeft << "\n";
+	while (followRay(hit, col, row, x, y, vx, vy, distLeft, map)) {
+	  if (trace) cerr << "   [" << col << "," << row << "] / (" << x << "," << y << ") + <" << vx << "," << vy << ">; dist left = " << distLeft << "\n";
+	}
+	if (hit) { ++count; }
+      }
+
+    cout << "Case #" << iTest << ": ";
+
+    cout << count;
+
+    cout << "\n";
+  }
+
+  return 0;
+}

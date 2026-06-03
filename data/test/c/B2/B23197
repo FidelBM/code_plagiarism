@@ -1,0 +1,42 @@
+#include "../include/Recycle.h"
+
+Recycle::Recycle()
+{
+    //ctor
+}
+
+Recycle::~Recycle()
+{
+    //dtor
+}
+
+void Recycle::Process(ifstream& in, ofstream& out, int count) {
+    long low, high;
+    in >> low >> high;
+
+    long temp = low;
+    int num_dig = 0;
+    long mask = 1;
+    while (temp > 0) {
+        temp /= 10;
+        num_dig++;
+        mask *= 10;
+    }
+
+    int total = 0;
+
+    for (long cur = low; cur <= high; ++cur) {
+        // rotate
+        long num = cur;
+        bool first = true;
+        while (first || num != cur) {
+            first = false;
+            num *= 10;
+            long first_digit = num / mask;
+            num = num % mask + first_digit;
+            if (num > cur && num <= high) total++;
+        }
+    }
+    out << total;
+cout << total << endl;
+}

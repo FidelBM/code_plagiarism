@@ -1,0 +1,72 @@
+//-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~
+// Google Code Jam Solution Framework
+//
+// Copyright (C) 2012 Matthew Alan Gray
+//
+//  This software is licensed as described in the file license.txt, which you
+//  should have received as part of this distribution.
+//
+//  This software is provided 'as-is', without any express or implied
+//  warranty.  In no event will the authors be held liable for any damages
+//  arising from the use of this software.
+//
+//  Permission is granted to anyone to use this software for any purpose,
+//  including commercial applications, and to alter it and redistribute it
+//  freely, subject to the terms described in the file license.txt.
+//
+//  @author Matthew Alan Gray <mgray@hatboystudios.com>
+//-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~
+#include "Solution.hpp"
+
+#include <boost/cstdint.hpp>
+
+#include <sstream>
+#include <vector>
+
+//-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~
+namespace GCJFramework {
+//-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~
+bool
+Solution::execute(std::istream& _inputStream, std::ostream& _outputStream) const
+{
+    boost::uint32_t testCases;
+
+    _inputStream >> testCases;
+
+    for (boost::uint32_t i = 0; i < testCases; ++i)
+    {
+        std::stringstream stream;
+        int numGooglers;
+        int numSuprisingResults;
+        int bestResult;
+        int foundPossibleResults = 0;
+        int foundSuprisingResults = 0;
+        _inputStream >> numGooglers >> numSuprisingResults >> bestResult;
+        for (int i = 0; i < numGooglers; i++)
+        {
+            int total;
+            _inputStream >> total;
+            int residual = total - 3 * bestResult;
+            if (residual >= -2)
+            {
+                foundPossibleResults++;
+            }
+            else
+            if (foundSuprisingResults < numSuprisingResults &&
+                total >= bestResult &&
+                residual >= -4)
+            {
+                foundPossibleResults++;
+                foundSuprisingResults++;
+            }
+        }
+        stream << "Case #" << i+1 << ": " << foundPossibleResults << std::endl;
+        _outputStream << stream.str();
+    }
+
+    return true;
+}
+
+//-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~
+}   // namespace GCJFramework
+//-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~

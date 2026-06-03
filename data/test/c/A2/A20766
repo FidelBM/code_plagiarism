@@ -1,0 +1,92 @@
+#include "mainwindow.h"
+#include "ui_mainwindow.h"
+
+#include <QFileDialog>
+#include <QTextStream>
+#include <QDebug>
+
+MainWindow::MainWindow(QWidget *parent) :
+    QMainWindow(parent),
+    ui(new Ui::MainWindow)
+{
+    ui->setupUi(this);
+
+    connect(ui->pushButton,SIGNAL(clicked()),this,SLOT(loadFile()));
+}
+
+MainWindow::~MainWindow()
+{
+    delete ui;
+}
+
+
+
+
+void MainWindow::loadFile()
+{
+    QFile file(QFileDialog::getOpenFileName(this));
+    if(file.open(QFile::ReadOnly))
+    {
+        QTextStream in(&file);
+        QString input = in.readAll();
+        solveInput(input);
+    }
+}
+
+void MainWindow::solveInput(QString &input)
+{
+    QTextStream in(&input);
+    int numCases = in.readLine().toInt();
+    int count = 0;
+
+    QFile file(QFileDialog::getSaveFileName());
+    if(!file.open(QFile::WriteOnly))
+    {
+        return;
+    }
+    QTextStream out(&file);
+
+    for(int i = 0; i < numCases; i++)
+    {
+        count = 0;
+        QString line = in.readLine();
+        QTextStream lStream(&line);
+        int numGooglers;
+        lStream >> numGooglers;
+
+        int surprises;
+        lStream >> surprises;
+
+        int bestResult;
+        lStream >> bestResult;
+
+        QList<int> scores;
+        for(int j = 0; j < numGooglers; j++)
+        {
+            int score;
+            lStream >> score;
+            scores.append(score);
+        }
+
+        QList<int> possibleSurprises;
+        foreach(int i, scores)
+        {
+            if(i/3 + ((i%3)?1:0) >= bestResult)
+            {
+                count++;
+                continue;
+            }
+            if(i/3 + ((i%3 == 2)?2:1) >= bestResult && i >= 2 && i <= 28)
+                possibleSurprises.append(i);
+        }
+
+        count += qMin(possibleSurprises.count(), surprises);
+
+
+        QString outLine("Case #%1: %2");
+        out << outLine.arg(i+1).arg(count);
+        if(i != numCases - 1)
+            out << '\n';
+        //qDebug() << count;
+    }
+}

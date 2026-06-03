@@ -1,0 +1,75 @@
+// QualProb2.cpp : Defines the entry point for the console application.
+//
+
+#include "stdafx.h"
+#include <string.h>
+#include <vector>
+#include <stack>
+#include <queue>
+#include<iostream>
+
+using namespace std;
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	char *current_line = new char[1000];
+	cin.getline(current_line, 999);
+	int N=0;
+	sscanf(current_line,"%d",&N);
+	int total_judges = 3;
+
+	for(int test_case = 0; test_case < N; test_case++)
+	{
+		//cin.getline(current_line, 999);
+
+		int NG=0, S=0, p=0;
+		int number_of_possible_gs = 0;
+		cin>>NG;
+		cin>>S;
+		cin>>p;
+
+		int *total_points = new int[NG];
+
+		for(int i=0; i<NG; i++)
+			cin>>total_points[i];
+
+		int total_surprises_used = 0;
+
+		for(int i=0; i<NG; i++)
+		{
+			if(total_points[i]/total_judges >=p)
+			{
+				number_of_possible_gs++;
+				continue;
+			}
+
+			int sub_total = total_points[i] - p;
+
+			if(sub_total < 0)
+				continue;
+
+			if(sub_total/2 >= p-1)
+			{
+				number_of_possible_gs++;
+				continue;
+			}
+
+			if(total_surprises_used < S)
+			{
+				if(sub_total/2 >= p-2)
+				{
+					total_surprises_used++;
+					number_of_possible_gs++;
+				}
+			}
+			
+		}
+		
+		delete[] total_points;
+
+		cout<<"Case #"<<test_case+1<<": "<<number_of_possible_gs<<endl;
+	}
+
+	return 0;
+}
+

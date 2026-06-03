@@ -1,0 +1,63 @@
+#include <stdio.h>
+#include <iostream>
+#include <bitset> 
+#include <memory.h>
+#include <assert.h>
+#include <algorithm>
+#include <functional>
+#include <vector>
+#include <string>
+#include <map>
+#include <set>
+#include <deque>
+#include <math.h>
+
+using namespace std;
+
+
+int m,n;
+char ms[8], ns[8];
+int tempm, tempn;
+
+int main( )
+{
+	int t, tt;
+	long long count = 0;
+	freopen( "input.txt", "r", stdin );
+	freopen( "output.txt", "w", stdout );
+
+	scanf( "%d\n", &tt );
+	for( t = 1; t <= tt; ++ t )
+	{
+		printf( "Case #%d: ", t );
+        count  = 0;
+		scanf("%d",&m);
+		scanf("%d",&n);
+		for ( int i = m ; i <= n ; i++ )
+		{
+			itoa (i,ms,10);
+			tempm = i;
+				
+			int k = 0;
+
+			while ( k < strlen(ms)-1 )
+			{
+
+				int last = tempm%10;
+				tempm = tempm/10 + last*pow(10,strlen(ms)-1);
+				k++;
+				itoa(tempm,ns,10);
+				if ( tempm<=n && tempm >=m && strlen(ms)==strlen(ns) && i<tempm )
+				{
+					count++;
+					//break;
+				}
+			}
+		}
+		printf("%lld\n",count);
+        
+        
+	}
+
+	return 0;
+}

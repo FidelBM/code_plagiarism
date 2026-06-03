@@ -1,0 +1,63 @@
+#include <string> 
+#include <algorithm> 
+#include <cfloat> 
+#include <climits> 
+#include <cmath> 
+#include <complex> 
+#include <cstdio> 
+#include <cstdlib> 
+#include <cstring> 
+#include <functional> 
+#include <iostream> 
+#include <map> 
+#include <memory> 
+#include <queue> 
+#include <set> 
+#include <sstream> 
+#include <stack> 
+#include <utility> 
+#include <vector> 
+
+#define EACH(i,c) for(__typeof((c).begin()) i=(c).begin(); i!=(c).end(); ++i)
+#define ALL(x) (x).begin(),(x).end() 
+using namespace std;
+const double eps = 1e-10;
+
+//input data
+int A, B;
+
+void solve(int caseNum){
+    //solve problem here
+    set<pair<int, int> > st;
+    int res = 0;
+    for(int i = 1; i <= B; ++i){
+        int d;
+        for(d = 10; i / d > 0; d *= 10) ;
+        for(int j = i + 1; j <= B; ++j){
+            int d2;
+            for(d2 = 10; j / d2 > 0; d2 *= 10) ;
+            int n = j * d + i, m = i * d2 + j;
+            if(n != m && A <= n && n <= B && A <= m && m <= B){
+                pair<int, int> p = make_pair(min(n, m), max(n, m));
+                if(st.find(p) == st.end()){
+                    ++res;
+                    st.insert(p);
+                }
+            }
+        }
+    }
+    cout << "Case #" << caseNum << ": " << res << endl;
+}
+
+int main(){
+    int T;
+    cin >> T;
+
+    for(int t=1; t<=T; ++t){
+        //input test case here
+        cin >> A >> B;
+
+        solve(t);
+    }
+    return 0;
+}

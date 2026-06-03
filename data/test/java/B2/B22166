@@ -1,0 +1,53 @@
+/**
+ * 
+ */
+
+/**
+ * @author Mostafa
+ *
+ */
+public class ReNumbersLarge {
+	
+	public static String traverse(String x, int index) {
+		char[] m = x.toCharArray();
+		int i;
+		for (i=0; i<x.length(); i++) {
+			m[i] = x.charAt(index);
+			if (index == x.length()-1) {
+				index = -1;
+			}
+			index++;
+		}
+		String t = new String(m);
+		return t;
+	}
+	
+	public static int renumber(int first, int last) {
+		String[] test = new String[last-first+1];
+		int i, j;
+		int testc = 0;
+		int count = 0;
+		for (i = first; i<=last; i++) {
+			String x = Integer.toString(i);
+			test[testc] = x;
+			testc++;
+		}
+		if (test[0].length() == 1) {
+			count = 0;
+		}
+		else {
+			for (i=0; i<test.length/2; i++) {
+				for (j=1; j<test[i].length(); j++) {
+					String s = traverse(test[i], j);
+					int testme = Integer.parseInt(s);
+					if (testme >= first && testme<= last && test[i].compareTo(s) != 0) {
+						
+						count++;
+					}
+				}
+			}
+		}
+		return count;
+	}
+		
+}

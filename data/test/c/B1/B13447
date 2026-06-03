@@ -1,0 +1,59 @@
+#include <iostream>
+#include <string>
+#include <fstream>
+using namespace std;
+
+//convert integer to string
+string toString(unsigned int n)
+{
+	char r[11];
+	itoa(n,r,10);
+	return string(r);
+}
+
+//convert string to integer
+int toInteger(string s)
+{
+	const char* r = s.c_str();
+	return atoi(r);
+}
+
+bool isRecycled(int n, int m)
+{
+	string ns = toString(n);
+	string ms = toString(m);
+	if ((ns+ns).find(ms)==-1)
+		return false;
+	return true;
+}
+
+int numberOfRecycledPairs(int A, int B)
+{
+	int number=0;
+	for(int n=A; n<B; n++)
+		for(int m=n+1; m<=B; m++)
+			if (isRecycled(n, m))
+				number++;
+	return number;
+}
+
+int main()
+{
+	ifstream fin("C-small-attempt0.in");
+	ofstream fout("2.out");
+
+	int T=0;
+	string s;
+	getline(fin, s);
+	T=toInteger(s);
+
+
+	for(int t=1; t<=T; t++)
+	{
+		int A=0, B=0;
+		fin>>A>>B;
+		fout<<"Case #"<<t<<": "<< numberOfRecycledPairs(A, B) <<"\n";
+	}
+
+	return 0;
+}

@@ -1,0 +1,134 @@
+// ZOJ.cpp : Defines the entry point for the console application.
+//
+
+#include "stdafx.h"
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <string>
+#include <set>
+#include <cstdio>
+#include <map>
+#include <queue>
+
+#define REP(i,j,k) for(int i = j ; i < k ; ++i)
+#define INF (0x7FFFFFFF)
+#define MAX (875714)   
+//#define MAX (100)
+
+using namespace std;
+
+vector< vector<int> > V;
+
+int size( int i )
+{
+	if( i < 10 )
+	{
+		return 1;
+	}
+	else if( i < 100 )
+	{
+		return 2;
+	}
+	else if( i < 1000 )
+	{
+		return 3;
+	}
+	else if( i < 10000 )
+	{
+		return 4;
+	}
+	else if( i < 100000 )
+	{
+		return 5;
+	}
+	else if( i < 1000000 )
+	{
+		return 6;
+	}
+	else if( i < 10000000 )
+	{
+		return 7;
+	}
+	else
+	{
+		return 8;
+	}
+
+}
+
+void make( int i )
+{
+	int temp = i;
+
+	int shift = i;
+
+	int len = size( i );
+
+	REP( j , 1 , len )
+	{
+
+		shift = ( shift % 10 ) * pow( ( double )10 , len - 1 ) + shift / 10;
+
+		if( shift > i )
+		{
+			V[ i ].push_back( shift );
+		}
+
+	}
+
+	sort( V[ i ].begin() , V[ i ].end() );
+}
+
+
+int main()
+{
+	
+	V.reserve( 2000001 );
+
+	REP( i , 0 , 2000001 )
+	{
+		if( i % 10000 == 0 )
+		{
+			printf( "%d\n" , i);
+		}
+		vector<int> t;
+		t.reserve( 10 );
+		V.push_back( t );
+		make( i );
+	}
+
+	freopen( "test.txt" , "r" , stdin );
+	freopen( "C:\\out.txt" , "w" , stdout );
+	int T;
+	cin >> T;
+
+	int A;
+	int B;
+
+	REP( i , 0 , T )
+	{
+		cin >> A >> B;
+
+		int count = 0;
+
+		REP( n , A , B + 1 )
+		{
+			REP( j , 0 , V[ n ].size() )
+			{
+				if( V[ n ][ j ] > B )
+				{
+					break;
+				}
+				else
+				{
+					++count;
+				}
+			}
+		}
+
+		cout << count << endl;
+	}
+
+	return 0;
+}

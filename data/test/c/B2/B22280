@@ -1,0 +1,98 @@
+// ProblemA.cpp : Defines the entry point for the console application.
+//
+
+#include "stdafx.h"
+
+int num_digi( int n ) {
+	int d = 0;
+	while( n > 0 ) {
+		n /= 10;
+		d++;
+	}
+	return d;
+}
+
+int find_pair( axIArray<int> &digi, int A, int B ) {
+	
+	return 0;
+}
+
+int rotate( int n, int digi ) {
+	int m = 1;
+	for( int i=1; i<digi; i++ ) {
+		m *= 10;
+	}
+
+	int a = n % 10;
+	n /= 10;
+	n += a * m;
+	return n;
+}
+
+
+int do_case( int A, int B ) {
+	int pair = 0;
+	int digi = num_digi(B);
+
+	for( int n=A; n<=B; n++ ) {
+		int m = n;
+		axArray<int,100>	mm;
+
+		for( int d=1; d<digi; d++ ) {
+			m = rotate( m, digi );
+
+			bool skip = false;
+			for( axSize j=0; j<mm.size(); j++ ) {
+				if( mm[j] == m ) {
+					skip = true;
+					break;
+				}
+			}
+			if( skip ) continue;
+			mm.append(m);
+
+
+			if( m <= n ) continue;
+			if( m > B ) continue;
+			if( m < A ) continue;
+
+//			printf("(%d,%d)\n", n, m );
+			pair++;
+		}
+	}
+//	printf("pair = %d\n", pair );
+	return pair;
+}
+
+int run() {
+	FILE* f = fopen("C-large.in", "rb" );
+	if( !f ) return -1;
+
+	FILE* outFile = fopen("out.txt","wb");
+
+	int T;
+	if( 1 != fscanf( f, "%d", &T ) ) return -2;
+
+	int A, B;
+	int ret;
+
+	for( int t=0; t<T; t++ ) {
+		if( 2 != fscanf( f, "%d %d", &A, &B ) ) return -3;
+		ret = do_case( A, B );
+		if( ret < 0 ) return ret;
+
+		fprintf( outFile, "Case #%d: %d\n", t+1, ret );
+	}
+
+
+	fclose(f);
+	fclose(outFile);
+	return 0;
+}
+
+int main() {
+	int ret = run();
+	printf("\n\n ==== end return = %d ====\n\n", ret);
+
+	_getch();
+}

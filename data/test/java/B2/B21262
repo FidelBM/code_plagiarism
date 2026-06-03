@@ -1,0 +1,61 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.HashSet;
+import java.util.Set;
+
+
+public class Recycled {
+
+	
+	public static boolean isRecycled(int a, int b) {
+		String left = a+"";
+		String right = b+"";
+		return (left+left).contains(right);
+		//		if(left.length()!=right.length()) return false;
+//		int l = left.length();
+//		for(int i=0;i<l;i++) {
+//			boolean o = true;
+//			for(int j=0;j<l;j++) {
+//				if(left.charAt((i+j)%l) == right.charAt(j)) continue;
+//				else o=false;
+//			}
+//			if(o) return true;
+//		}
+//		return false;
+	}
+	
+	public static Set<Integer> recycles(int in) {
+		String s = in+"";
+		int l = s.length();
+		Set<Integer> out = new HashSet<Integer>();
+		for(int i=1;i<l;i++) {
+			String n = "";
+			for(int j=0;j<l;j++) n += s.charAt((i+j)%l);
+			out.add(Integer.parseInt(n));
+		}
+		return out;
+	}
+	
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		
+		int cases = Integer.parseInt(in.readLine());
+		for (int i = 1; i <= cases; i++) {
+			String[]e = in.readLine().trim().split(" ");
+			int A = Integer.parseInt(e[0]);
+			int B = Integer.parseInt(e[1]);
+			
+			int count = 0;
+			
+			for(int x=A;x<B;x++) {
+				for(int y:recycles(x)) {
+					if(x<y && y<=B) count ++;
+				}
+			}
+			
+			System.out.println("Case #"+i+": "+count);
+		}
+	}
+	
+}

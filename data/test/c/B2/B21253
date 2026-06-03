@@ -1,0 +1,47 @@
+#include <iostream>
+#include <cstring>
+#include <cctype>
+#include <cstdlib>
+#include <cstdio>
+using namespace std;
+
+int low;
+long long f[2222222];
+int check(int a)
+{
+	char x[22];
+	int len;
+	int cnt = 0;
+	sprintf(x, "%d%d", a, a);
+	len = strlen(x) / 2;
+	for (int i = 1, j = len+1; i<len; i++, j++)
+	{
+		char ch = x[j];
+		x[j] = 0;
+
+		if (x[i] != '0' && atoi(x+i) < a && low <= atoi(x+i)) cnt ++;
+		x[j] = ch;
+	}
+	return cnt;
+}
+
+int main(void)
+{
+	freopen("C-large.in", "r", stdin);
+	freopen("C-large.out", "w", stdout);
+
+	int T;
+	scanf("%d", &T);
+	for (int cnmb=1; cnmb<=T; cnmb++)
+	{
+		int a, b;
+		long long ans = 0;
+		scanf("%d%d", &a, &b);
+		low = a;
+		for (int i=a; i<=b; i++)
+			ans += check(i);
+		cout << "Case #" << cnmb << ": " << ans << "\n";
+//		printf("Case #%d: %d\n", cnmb, ans);	
+	}
+	return 0;
+}

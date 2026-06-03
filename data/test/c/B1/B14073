@@ -1,0 +1,17 @@
+#include <iostream>
+
+#include "include/Tongues.h"
+#include "include/Dance.h"
+#include "include/Recycle.h"
+
+using namespace std;
+
+int main()
+{
+    //TestObj* test = new Tongues;
+    //TestObj* test = new Dance;
+    TestObj* test = new Recycle;
+    test->Run();
+    delete test;
+    return 0;
+}

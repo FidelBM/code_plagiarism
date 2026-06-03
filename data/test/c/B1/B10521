@@ -1,0 +1,27 @@
+#ifndef CONFIG_H_
+#define CONFIG_H_
+
+#include <iostream>
+#include <fstream>
+#include <map>
+#include <string>
+#include <vector>
+#include <utility>
+
+using std::string;
+using std::map;
+using std::vector;
+using std::ifstream;
+using std::pair;
+
+class Loader {
+  public:
+    static Loader* LoadFile(string filename);
+    ~Loader();
+    vector<pair<int,int> >* GetRanges();
+  private:
+    Loader(vector<pair<int,int> >* ranges);
+    vector<pair<int,int> >* ranges_;
+};
+
+#endif

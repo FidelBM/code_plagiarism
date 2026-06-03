@@ -1,0 +1,98 @@
+import java.io.*;
+import java.util.*;
+
+public class clarge {
+
+	public static void main(String[] args) {
+
+		Scanner stdin = new Scanner(System.in);
+
+		int[][] list = new int[2000000][];
+
+
+		for (int i=0; i<2000000; i++) {
+			list[i] = fill(i);
+		}
+
+		int numCases = stdin.nextInt();
+
+		for (int loop=1; loop<=numCases; loop++) {
+
+			int A = stdin.nextInt();
+			int B = stdin.nextInt();
+
+			int sum = 0;
+			for (int i=A; i<=B; i++) {
+
+				if (list[i] != null) {
+					for (int j=0; j<list[i].length; j++)
+						if (list[i][j] <= B)
+							sum++;
+				}
+
+			}
+			System.out.println("Case #"+loop+": "+sum);
+		}
+
+	}
+
+	public static int[] fill(int val) {
+
+		if (val < 10) return null;
+
+		int[] temp = new int[7];
+
+		int index = 0;
+
+		int saveval = val;
+
+		int numdigits = numd(val);
+
+		for (int i=0; i<numdigits; i++) {
+
+			val = rotate(saveval, val, numdigits);
+
+			if (val > saveval) {
+				temp[index] = val;
+				index++;
+			}
+		}
+
+		int[] ans = new int[index];
+		for (int i=0; i<index; i++)
+			ans[i] = temp[i];
+
+		return ans;
+
+	}
+
+	public static int rotate(int orig, int val, int numd) {
+		return (val%10)*pow10(orig) + val/10;
+	}
+
+	public static int pow10(int val) {
+
+		if (val == 0) return 0;
+
+		int cnt = 1;
+		while (val >= 10) {
+
+			cnt*=10;
+			val /= 10;
+		}
+		return cnt;
+	}
+
+	public static int numd(int val) {
+
+		if (val == 0) return 0;
+
+		int cnt = 0;
+		while (val > 0) {
+
+			cnt++;
+			val /= 10;
+		}
+		return cnt;
+	}
+}

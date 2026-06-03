@@ -1,0 +1,57 @@
+import java.util.Scanner;
+
+
+public class C {
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        for (int i = 0; i < t; i++) {
+            int a = sc.nextInt();
+            int b = sc.nextInt();
+            int count = 0;
+            
+            int digits = 0;
+            int max = 1;
+            int ac = a;
+            while(ac > 0) {
+                ac /= 10;
+                digits++;
+                max *= 10;
+            }
+            int min = max / 10;
+            ac = a;
+            
+            for (int j = a; j < b; j++) {
+                if (j == max) {
+                    digits++;
+                    max *= 10;
+                    min *= 10;
+                }
+                count += getNumPair(j, b, digits, min);
+            }
+            System.out.println("Case #" + (i+1) + ": " + count);
+            
+        }
+    }
+
+    static final int[] temp = new int[10];
+    
+    private static int getNumPair(int i, int b, int digits, int min) {
+        int ac = i;
+        int numKouho = 0;
+        int count = 0;
+        ddd: for (int k = 0; k < digits - 1; k++) {
+            i = i % min * 10 + i / min;
+            if (ac < i && i <= b) {
+                for (int j = 0; j < numKouho; j++) {
+                    if (temp[j] == i) continue ddd;
+                }
+                temp[numKouho++] = i;
+                count++;
+            }
+        }
+        return count;
+    }
+
+}

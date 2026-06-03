@@ -1,0 +1,116 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+
+import java.io.IOException;
+
+import java.util.HashMap;
+import java.util.Vector;
+
+public class Task
+{
+    public static void main(String[] args)
+    {	
+	
+	  try
+	  {
+	      readSolveAndWrite("C-large.in", "output_file.txt");
+	  }
+	  catch(IOException ioException) { System.err.println(ioException); }
+
+	//for(int i = 0; i < 50; i++)
+	    //System.out.println((i + 1) + "-> " + solve("1 2000000"));
+
+	//System.out.println(solve("1 10"));
+	//System.out.println(solve("10 40"));
+	//System.out.println(solve("100 500"));
+	//System.out.println(solve("1111 2222"));
+    }
+
+    protected static void readSolveAndWrite(final String inputPath, final String outputFile) throws IOException
+    {
+	BufferedReader in = new BufferedReader(new FileReader(inputPath));
+	BufferedWriter out = new BufferedWriter(new FileWriter(outputFile));
+	int n = Integer.parseInt(in.readLine());
+	for(int i = 0; i < n; i++)
+	    {
+		final String inputLine = in.readLine();
+	        final String outputLine = "Case #" + (i + 1) + ": " + solve(inputLine);
+
+		System.out.println(outputLine);
+
+	        out.write(outputLine);
+	        out.newLine();
+	    }
+
+        out.flush();
+        out.close();
+        in.close();
+    }
+
+    protected static String solve(final String line)
+    {
+	String[] elements = line.split(" ");
+	final int min = Integer.parseInt(elements[0]);
+	final int max = Integer.parseInt(elements[1]);
+
+	int result = 0;
+	for(int i = min; i <= max; i++)
+	    result += get(i, max);
+	return "" + result;
+    }
+
+    protected static int convertToInt(Vector<Integer> digits)
+    {
+	int result = 0;
+	final int size = digits.size();
+	for(int i = size - 1; i >= 0; i--)
+	    result = result*10 + digits.elementAt(i).intValue();
+	 
+	return result;
+    }
+
+    protected static int get(int current, int max)
+    {
+	int result = 0;
+	
+	Vector<Integer> base = new Vector<Integer>();
+	int m = current;
+	while(true)
+	    {
+		final int digit = m % 10;
+
+		base.add(new Integer(digit));
+		m = m / 10;
+		if(m == 0)
+		    break;
+	    }
+
+	HashMap<String, Integer> map = new HashMap<String, Integer>();
+	final int size_base = base.size();
+	for(int i = 1; i < size_base; i++)
+	    {
+		
+		Vector<Integer> temp = new Vector<Integer>();
+
+		for(int j = i; j < size_base; j++)
+		    temp.add(base.elementAt(j));
+		    
+		for(int j = 0; j < i; j++)
+		    temp.add(base.elementAt(j));
+ 
+		int pair = convertToInt(temp);
+		if(current < pair && pair <= max && null == map.get(new String(current + "" + pair)))
+		    {
+			//System.out.println(current + " -> " + pair);
+			map.put(new String(current + "" + pair), new Integer(1));
+			map.put(new String(pair + "" + current), new Integer(1));
+			result++;
+		    }
+	    }
+
+	return result;
+    }
+}

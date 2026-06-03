@@ -1,0 +1,46 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <set>
+#include <iostream>
+#include <math.h>
+using namespace std;
+
+int main(){
+	freopen("in.txt","rt",stdin);
+	freopen("out.txt","wt",stdout);
+	int h=0;
+	scanf("%d\n",&h);
+	for(int t=0;t<h;t++){
+		int a,b;
+		scanf("%d %d",&a,&b);
+		int result = 0;
+		set<int> ccc;
+		for(int i=a;i<b;i++){
+			char buf[10];
+			itoa(i,buf,10);
+			//string g;
+			ccc.clear();
+			for(int j=0;j<strlen(buf);j++)
+			{
+				
+				//g.clear();
+				int p1 = pow(10,(double)j);
+				int p2 = pow(10,(double)strlen(buf)-j);
+
+				//for(int k=0;k<strlen(buf);k++){
+				//	g+=buf[(j+k)%strlen(buf)];
+				//}
+				//int d = atoi(g.c_str());
+				int d= i/p1+(i%p1)*p2;
+				if(i<d && d<=b && ccc.count(d)==0) {
+					//printf("%d %d\n",i,d);
+					result++;
+					ccc.insert(d);
+				}
+			}
+		}
+		//printf("\n");
+		printf("Case #%d: %d\n",t+1,result);
+	}
+	return 0;
+}

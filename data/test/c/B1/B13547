@@ -1,0 +1,50 @@
+#include <cstdio>
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+
+int log[10000];
+int bas[5];
+
+bool isRec(int m, int n) {
+	int N = log[m];
+	int a = n, d;
+	for (int i = 0; i <= N; ++i) {
+		d = a % 10;
+		a = d * (bas[N]/10) + (a/10);
+		if (a == m){
+			return true;
+		}
+	}
+
+	return false;
+}
+
+int main()
+{
+	for (int i = 0; i <= 10000; ++i) {
+		for (int k = 1, b = 10; b <=10000; b*=10, ++k)
+			if(i < b) {
+				log[i] = k;
+				bas[k] = b;
+				break;
+			}
+	}
+
+	int T;
+	int A, B;
+	cin >> T;
+	for (int c = 0; c < T; ++c) {
+		cin>>A>>B;
+		int ans = 0;
+		for (int n = A; n <= B; ++n)
+			for(int m = A; m < n; ++m) 
+				if (isRec(m,n)) {
+					ans++;
+				}
+		cout << "Case #" << c + 1 << ": " << ans << endl;
+	}
+	return 0;
+}

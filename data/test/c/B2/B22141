@@ -1,0 +1,22 @@
+/*
+ * InputData.h
+ *
+ *  Created on: Mar 17, 2012
+ *      Author: dasc
+ */
+
+#ifndef INPUTDATA_H_
+#define INPUTDATA_H_
+
+#include <vector>
+#include <string>
+
+class InputData
+{
+public:
+	int A;
+	int B;
+};
+
+
+#endif /* INPUTDATA_H_ */

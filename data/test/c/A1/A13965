@@ -1,0 +1,14 @@
+// TopCoderSolutions.cpp : Defines the entry point for the console application.
+//
+#include "stdafx.h"
+#include <string>
+#include <iostream>
+#include "Dancing.h"
+
+using namespace std;
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	Dancing solver;
+	solver.Solve("B-small-attempt0.in", "B_Small_output.txt");
+}

@@ -1,0 +1,19 @@
+#pragma once
+#include<vector>
+
+using namespace std;
+
+class GoogleDancers
+{
+public:
+	GoogleDancers(void);
+	int getAnswer();
+	void remove( vector<int>& vScores, int iScore );
+	~GoogleDancers(void);
+public:
+	int m_nTestData;
+	int m_nSurprising;
+	int m_iBestResult;
+	vector<int> m_vDancerScores;
+};
+

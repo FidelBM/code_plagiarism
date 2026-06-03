@@ -1,0 +1,154 @@
+package GoogleCodeJam.ed2012;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.util.concurrent.Semaphore;
+
+public class QualificationC2012 {
+
+	private String inputFile;
+	private String outputFile;
+
+	private BufferedReader reader = null;
+	private BufferedWriter writer = null;
+	
+	
+	private static int[] sollutions = null;
+	private static int[][] inputs = null;
+	
+	private int totalSollutions = 0;
+	private int currentSollution = 0;
+	
+	private Semaphore deathSignal = new Semaphore(0);
+	private Object synchObject = new Object();
+	
+	/**
+	 * @param args
+	 * @throws Exception 
+	 */
+	public static void main(String[] args) throws Exception {
+		QualificationC2012 qualificationC2012 = new QualificationC2012("QualificationC2012.in", "QualificationC2012.out");
+		qualificationC2012.run();
+	}
+
+	private void run() throws Exception {
+		openFiles();
+		solve();
+		closeFiles();
+	}
+
+	private void solve() throws Exception {
+		long startTime = System.currentTimeMillis();
+		totalSollutions = Integer.valueOf(reader.readLine());
+		inputs = new int[totalSollutions][2];
+		sollutions = new int[totalSollutions];
+		
+		for (int i = 0; i<totalSollutions; i++) {
+			String[] line = reader.readLine().split(" ");
+			inputs[i][0] = Integer.valueOf(line[0]);
+			inputs[i][1] = Integer.valueOf(line[1]);
+		}
+		
+		int threadNumber = Runtime.getRuntime().availableProcessors();
+		
+		for (int i = 0; i<threadNumber; i++) {
+			Worker worker = new Worker();
+			worker.start();
+		}
+		
+		deathSignal.acquire(threadNumber);
+		
+		for (int i = 0; i<totalSollutions; i++) {
+			writer.write("Case #"+(i+1)+": "+sollutions[i]+"\n");
+		}
+		long endTime = System.currentTimeMillis();
+		System.out.println("Solve time = "+(endTime-startTime));
+	}
+	
+
+	
+	
+	public QualificationC2012(String inputFile, String outputFile) {
+		this.inputFile = inputFile;
+		this.outputFile = outputFile;
+	}
+	
+	private void closeFiles() {
+		try {
+			reader.close();
+			writer.close();
+		}
+		catch (Exception e) {
+			throw new RuntimeException();
+		}
+
+	}
+	
+	private void openFiles() {
+		try {
+			reader = new BufferedReader(new FileReader(inputFile));
+			writer = new BufferedWriter(new FileWriter(outputFile));
+		}
+		catch (Exception e) {
+			throw new RuntimeException("File initialization failed");
+		}
+	}
+	
+	private class Worker extends Thread {
+		private int[] foundValues = new int[6];	
+	
+		
+		public Worker() {
+			
+		}
+		
+		public void run() {
+			while (true){
+				int currentInput = 0; 
+				synchronized (synchObject) {
+					currentInput = currentSollution;
+					currentSollution++;
+					if (currentInput >= totalSollutions) {
+						break;
+					}
+				}
+				int a = inputs[currentInput][0];
+				int b = inputs[currentInput][1];
+				int sum = 0;
+				for (int i=a; i<b; i++) {
+					sum+=getValidPairs(i,b);
+				}
+				sollutions[currentInput] = sum;
+			}
+			deathSignal.release();
+		}
+		
+		private int getValidPairs(int j, int b) {
+			int validPairs = 0;
+			StringBuilder transformedString = new StringBuilder();
+			transformedString.append(j);
+			int length = transformedString.length();
+			transformedString.append(j);
+			
+			for (int i=1; i<length; i++) {
+				int transformed = Integer.valueOf(transformedString.substring(i, i+length));
+				if ((j<transformed) && (transformed<=b) && (!found(transformed,validPairs))) {
+					foundValues[validPairs] = transformed;
+					validPairs++;
+				}
+			}
+			return validPairs;
+		}
+
+		private boolean found(int n, int total) {
+			for (int i=0; i<total; i++) {
+				if (foundValues[i] == n) {
+					return true;
+				}
+			}
+			return false;
+		}
+	}
+}

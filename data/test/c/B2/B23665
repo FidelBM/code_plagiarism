@@ -1,0 +1,55 @@
+#pragma warning(disable : 4786)
+#include<stdio.h>
+#include<string.h>
+#include<map>
+#include<algorithm>
+using namespace std;
+
+
+char s[10],r[10],t[10];
+long S,L;
+
+void i2s(long d){
+	int i=0;
+	while(d>0){
+		t[i++]=(d%10)+48;
+		d/=10;
+	}
+
+	L=i--;
+	S=1;
+	for(i;i>0;i--)
+		S*=10;
+
+}
+
+
+
+int main(){
+	freopen("C.in", "r", stdin);
+	freopen("CO.out", "w", stdout);
+
+	__int64 res;
+	long t, cs, A,B,k,i,M;
+	scanf("%ld", &t);
+	for(cs=1; cs<=t; cs++){
+		res = 0;
+		scanf("%ld%ld", &A, &B);
+		i2s(A);
+		
+		for(i=A; i<=B; i++){
+			M=i;
+			for(k=0;k<L;k++){
+				M=(M%10)*S+M/10;
+
+				if(M>i){
+					if(M<=B){
+						res++;
+					}
+				}
+			}
+		}
+			printf("Case #%d: %I64d\n", cs,res);
+	}
+	return 0;
+}

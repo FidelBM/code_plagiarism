@@ -1,0 +1,100 @@
+import java.io.*;
+import java.util.*;
+
+public class MainLarge {
+
+	public static Map<Integer, Integer> mapMax=Collections.synchronizedMap( new HashMap<Integer, Integer>());
+	public static Map<Integer, Integer> mapSurprisingMax=Collections.synchronizedMap( new HashMap<Integer, Integer>());
+	
+	/**
+	 * */
+	public class TestCase{
+		
+		public Integer id, n, s, p; 
+		public Integer iResult=0;
+		public Integer[] rPoints; 
+		/***/
+		public TestCase( Integer id, Integer n, Integer s, Integer p, Integer[] rPoints){
+			this.id=id; 
+			this.n=n; 
+			this.s=s; 
+			this.p=p; 
+			this.rPoints=Arrays.copyOf( rPoints, rPoints.length); }
+		
+		/***/
+		public void doSolution(){
+			this.iResult=0;
+			if( this.s==0){
+				for( int i=0; i!=this.rPoints.length; i++){
+					if( MainLarge.mapMax.get( this.rPoints[ i])>=this.p)
+						this.iResult++; }				
+			}else{
+				// MaxPoints
+				Integer[] rMaxPoints=new Integer[ this.rPoints.length];
+				for( int i=0; i!=this.rPoints.length; i++)
+					rMaxPoints[ i]=MainLarge.mapMax.get( this.rPoints[ i]); 
+				// MaxPoints using Surprising values for some (S) dancers. 
+				int sCounter=this.s;
+				for( int i=0; i!=this.rPoints.length; i++)
+					if(( sCounter>0) && ( rMaxPoints[ i]<this.p)){
+						if( MainLarge.mapSurprisingMax.get( this.rPoints[ i])>=this.p){
+							rMaxPoints[ i]=MainLarge.mapSurprisingMax.get( this.rPoints[ i]);
+							sCounter--; }}
+				// Counts
+				for( int i=0; i!=this.rPoints.length; i++)
+					if( rMaxPoints[ i]>=this.p)
+						this.iResult++; }}		
+	}	
+	public TestCase createTestCase( Integer id, Integer n, Integer s, Integer p, Integer[] rPoints){
+		return new TestCase( id, n, s, p, rPoints); } 
+		
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		
+		try {
+			
+			MainLarge m=new MainLarge();
+			LineNumberReader reader=new LineNumberReader( new FileReader( new File( args[ 0].trim())));
+			PrintWriter printer=new PrintWriter( new FileWriter( args[ 1].trim()));
+			
+				
+			/** ScoreMaps */
+			for( int i0=0; i0<=10; i0++){
+				for( int i1=0; i1<=10; i1++){
+					for( int i2=0; i2<=10; i2++){
+						Integer maxScore=Math.max( i0, Math.max( i1, i2)); 
+						if( ( Math.abs( i0- i1)<= 2) && ( Math.abs( i0- i2)<= 2) && ( Math.abs( i1- i2)<= 2)){
+							Integer nSum=i0+ i1+ i2;
+							// Not surprising score. 
+							if( !(( Math.abs( i0- i1)==2) ||  ( Math.abs( i0- i2)==2) || ( Math.abs( i1- i2)==2))){
+								if( !MainLarge.mapMax.containsKey( nSum)){
+									MainLarge.mapMax.put( nSum, maxScore); }					
+								MainLarge.mapMax.put( nSum, Math.max( MainLarge.mapMax.get( nSum), maxScore)); }
+							// Surprising Score. 
+							if( !MainLarge.mapSurprisingMax.containsKey( nSum)){
+								MainLarge.mapSurprisingMax.put( nSum, maxScore); }					
+							MainLarge.mapSurprisingMax.put( nSum, Math.max( MainLarge.mapSurprisingMax.get( nSum), maxScore)); }}}}
+
+			/***/
+			int nTestCases=Integer.valueOf( reader.readLine().trim());
+			for( int n=0; n!=nTestCases; n++){
+				String str[]=reader.readLine().split( " ");
+				Integer[] rPoints=new Integer[ str.length- 3];
+				for( int i=3; i!=str.length; i++)
+					rPoints[ i- 3]=Integer.valueOf( str[ i].trim()); 
+				TestCase testCase=m.createTestCase( n+ 1, 
+						Integer.valueOf( str[ 0].trim()), 
+						Integer.valueOf( str[ 1].trim()), Integer.valueOf( str[ 2].trim()), rPoints);				
+				testCase.doSolution();				
+				printer.println( "Case #"+ testCase.id+": "+ testCase.iResult);
+				System.out.println( "Case #"+ testCase.id+": "+ testCase.iResult); }
+			
+			printer.close();
+			
+		} catch (FileNotFoundException e) {
+			
+			e.printStackTrace(); } 
+		catch (IOException e) {
+			e.printStackTrace(); }}}

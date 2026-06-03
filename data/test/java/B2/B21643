@@ -1,0 +1,104 @@
+import java.util.ArrayList;
+import java.util.Collection;
+
+/**
+ * User: avokin
+ * Date: 4/14/12
+ */
+public class ProblemC {
+    private static int[] deg = {1, 10, 100, 1000, 10000, 100000, 1000000, 10000000};
+
+    private static int recycled(int a, int b, int n) {
+        int result = 0;
+        int i = 1;
+        Collection<Integer> counted = new ArrayList<Integer>();
+        while (i < n) {
+            int a1 = a / deg[i];
+            int a2 = a % deg[i];
+            int a3 = a2 * deg[n - i] + a1;
+            if (a < a3 && a3 <= b) {
+                if (!counted.contains(a3)) {
+                    result++;
+                }
+                counted.add(a3);
+            }
+            i++;
+        }
+        return result;
+    }
+
+    private static int solve(int a, int b) {
+        int result = 0;
+        int n = ("" + a).length();
+        for (int i = a; i < b; i++) {
+            result += recycled(i, b, n);
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        String input = "50\n" +
+                "1000000 2000000\n" +
+                "1003717 1987538\n" +
+                "1013804 1939331\n" +
+                "1222652 1836943\n" +
+                "831085 961576\n" +
+                "1323254 1655499\n" +
+                "1036764 1919078\n" +
+                "54728 86069\n" +
+                "1140403 1378888\n" +
+                "1086580 1931538\n" +
+                "4017 5065\n" +
+                "47682 47682\n" +
+                "1075058 1974024\n" +
+                "1104180 1282545\n" +
+                "1081837 1579766\n" +
+                "1081844 1913145\n" +
+                "1054644 1914812\n" +
+                "200978 590182\n" +
+                "17 79\n" +
+                "401165 866289\n" +
+                "1503092 1980132\n" +
+                "1001493 1921033\n" +
+                "1092675 1901907\n" +
+                "1676026 1895467\n" +
+                "39677 93416\n" +
+                "1127 7446\n" +
+                "205 445\n" +
+                "1097902 1907197\n" +
+                "229602 483412\n" +
+                "74999 89942\n" +
+                "1078656 1915322\n" +
+                "44 52\n" +
+                "1049694 1900352\n" +
+                "100000 999999\n" +
+                "4251 6207\n" +
+                "1079496 1901886\n" +
+                "191939 567669\n" +
+                "1011791 1962213\n" +
+                "35390 98715\n" +
+                "364 920\n" +
+                "100 101\n" +
+                "11868 53377\n" +
+                "443 748\n" +
+                "10000 10000\n" +
+                "1091806 1930053\n" +
+                "1070990 1934498\n" +
+                "1 9\n" +
+                "332045 943240\n" +
+                "7621 9867\n" +
+                "1028742 1028742\n";
+
+        String[] lines = input.split("\n");
+        int T = Integer.parseInt(lines[0]);
+        for (int i = 1; i <= T; i++) {
+            String line = lines[i];
+            String[] items = line.split(" ");
+            int a = Integer.parseInt(items[0]);
+            int b = Integer.parseInt(items[1]);
+            int solution = solve(a, b);
+            System.out.println("Case #" + i + ": " + solution);
+        }
+
+    }
+}

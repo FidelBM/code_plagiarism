@@ -1,0 +1,31 @@
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+
+#define rep(i,n) for(int i=0;i<(n);i++)
+
+using namespace std;
+
+void solve(){
+	int a,b; scanf("%d%d",&a,&b);
+	int ans=0;
+	for(int n=a;n<=b;n++){
+		char s[16];
+		sprintf(s,"%d",n);
+		int m=strlen(s);
+		rep(i,m){
+			char t[16]={};
+			strncpy(t,s+i,m-i);
+			strncpy(t+m-i,s,i);
+			int y=atoi(t);
+			if(n<y && y<=b) ans++;
+		}
+	}
+	printf("%d\n",ans);
+}
+
+int main(){
+	int T; scanf("%d",&T);
+	for(int t=1;t<=T;t++) printf("Case #%d: ",t), solve();
+	return 0;
+}

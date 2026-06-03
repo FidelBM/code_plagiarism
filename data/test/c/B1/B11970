@@ -1,0 +1,45 @@
+#include <iostream>
+#include <map>
+#include <cstring>
+#include <sstream>
+
+using namespace std;
+
+// bool r[2000001][2000001];
+
+std::string IntToStr(int tmp)
+{
+  std::ostringstream out;
+  out << tmp;
+  return out.str();
+}
+
+bool isRecycled(int n , int m ){
+  string ns, ms;
+  ns = IntToStr(n);
+  ms = IntToStr(m);
+  if(ns.size() != ms.size()){
+    return false;
+  }
+  ns += ns;
+  return  ns.find(ms) != string::npos;
+}
+
+int main(){
+  int c;
+  cin >> c;
+  for(int i = 1 ; i <= c ; ++i){
+    int A, B;
+    cin >> A >> B;
+    int recycled = 0;
+    for(int n = A ; n < B ; ++n){
+      for(int m = n+1; m <= B ; ++m){
+//         cout << "Probando " << n << " y " << m << endl;
+        if(isRecycled(n,m)){
+          ++recycled;
+        }
+      }
+    }
+    cout << "Case #" << i << ": " << recycled << endl;
+  }
+}

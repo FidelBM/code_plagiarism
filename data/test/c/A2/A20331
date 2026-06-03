@@ -1,0 +1,101 @@
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+bool check(int tot,int p)
+{
+    int temp;
+    temp=tot/3;
+    if(tot-(3*temp)==0)
+    {
+        if(temp>=p)
+            return true;
+        else {
+            return false;
+        }
+        
+    }
+    else if(tot-(3*temp)==1)
+    {
+        if((temp+1)>=p)
+            return true;
+        else {
+            return false;
+        }
+        
+    }
+    else if(tot-(3*temp)==2)
+    {
+        if((temp+1)>=p)
+            return true;
+        else {
+            return false;
+        }
+    }
+    
+}
+
+
+int main()
+{
+    int T;
+    int arr[105][100];
+    int count;
+    int ver;
+    cin>>T;
+    for(int i=0;i<T;i++)
+    {
+        cin>>arr[i][0]>>arr[i][1]>>arr[i][2];
+        for(int j=0;j<arr[i][0];j++)
+            cin>>arr[i][j+3];
+    }
+    for(int i=0;i<T;i++)
+    {
+        count=0;
+        ver=0;
+        for(int j=0;j<arr[i][0];j++)
+        {
+            if(check(arr[i][j+3],arr[i][2]))
+            {
+                count++;
+            }
+            else{
+				int temp=arr[i][j+3]/3;
+				temp = arr[i][j+3]-(3*temp);
+            if(temp==2)
+            {
+                if(((arr[i][j+3]/3)+2)>=arr[i][2])
+                    ver++;
+            }
+            /*if((arr[i][j+3])%(arr[i][j+3]/3)==1)
+                {
+                    if(((arr[i][j+3]/3)+1)>=arr[i][2])
+                        ver++;
+                }*/
+            
+            if(temp==0){
+            {
+				if(arr[i][j+3] == 0)
+					continue;
+                if(((arr[i][j+3]/3)+1)>=arr[i][2])
+                    ver++;
+            }
+            }
+        }
+        
+        
+		}
+        if(arr[i][1]<=ver)
+           count+=arr[i][1];
+        if(arr[i][1]>ver)
+            count+=ver;
+        if(count>arr[i][0])
+            cout<<"Case #"<<i+1<<": "<<arr[i][0]<<endl;
+        else 
+            cout<<"Case #"<<i+1<<": "<<count<<endl;
+        
+
+    }
+
+    return 0;
+}

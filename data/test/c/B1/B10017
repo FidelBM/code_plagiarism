@@ -1,0 +1,54 @@
+#include<iostream>
+#include <vector>
+using namespace std;
+
+bool isPair(int n, int m)
+{
+	vector<int> vn;
+	vector<int> vm;
+	while(n>0)
+	{
+		vn.push_back(n%10);
+		n=n/10;
+	}
+
+	while(m>0)
+	{
+		vm.push_back(m%10);
+		m=m/10;
+	}
+	int mysize=vn.size();
+	for(int i=1;i<mysize;i++)
+	{
+		bool test=true;
+		for(int j=0;j<mysize;j++)
+		{ 
+			if (vn[j]!=vm[(j+i)%mysize])
+			{
+				test=false;
+				break;
+			}
+		}
+		if(test) return true;
+	}
+	return false;
+
+}
+int main()
+{
+	int T;
+	cin>>T;
+	for(int i=0;i<T;i++)
+	{
+	int A,B;
+	cin>>A>>B;
+	int ret=0;
+	for(int n=A;n<B;n++)
+		for(int m=n+1;m<=B;m++)
+		{
+			if (isPair(n,m))
+				ret++;
+		}
+	cout<<"Case #"<<i+1<<": "<<ret<<endl;
+	}
+}

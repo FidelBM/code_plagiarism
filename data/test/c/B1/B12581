@@ -1,0 +1,57 @@
+#include<stdio.h>
+#include<string.h>
+#include<algorithm>
+using namespace std;
+
+int main()
+{
+    freopen("C-small-attempt0.in.","r",stdin);
+    freopen("out.txt","w",stdout);
+    
+    int amm;
+    scanf("%d",&amm);
+    for (int i=1;i<=amm;i++)
+    {
+        int low,high;
+        scanf("%d%d",&low,&high);
+        printf("Case #%d: ",i);
+        if (low/10==0){printf("0\n");continue;}
+        if (low/100==0)
+        {
+           int ans=0;
+           for (int j=low;j<=high;j++)
+           {
+               int p=j/10+(j%10)*10;
+               if (p!=j&&p>=low&&p<=high)ans++;              
+           }               
+           printf("%d\n",ans/2);                       
+           continue;
+        }
+        if (low/1000==0)
+        {
+           int ans=0;
+           for (int j=low;j<=high;j++)
+           {
+               int a=j/100;
+               int b=(j%100)/10;
+               int c=j%10;
+               if (a==b&&a==c)continue;
+               int p1=b*100+c*10+a;
+               if (p1!=j&&p1>=low&&p1<=high)
+               {
+                  ans++;
+                  //printf("%d %d\n",j,p1);
+               }
+               int p2=c*100+a*10+b;
+               if (p2!=p1&&p2!=j&&p2>=low&&p2<=high)
+               {
+                  ans++;
+                  //printf("%d %d\n",j,p2);
+               }
+           }               
+           printf("%d\n",ans/2);                       
+           continue;                
+        }
+    }
+    return 0;   
+}

@@ -1,0 +1,42 @@
+import java.util.*;
+import static java.lang.Math.*;
+
+public class C {
+	public static void main(String[] args)
+	{
+		Scanner in = new Scanner(System.in);
+		int T = in.nextInt();
+		for(int cases = 1; cases <= T;cases++){
+			int A = in.nextInt();
+			int B = in.nextInt();
+			int ans = 0;
+			
+			
+			for(int i = A ; i < B+1; ++i)
+			{
+				String stringValue = Integer.toString(i);
+				HashSet set = new HashSet();
+				for(int j = 1; j <stringValue.length(); ++j)
+				{
+					stringValue = stringValue.substring(1) + stringValue.charAt(0);
+					int BB = Integer.parseInt(stringValue);
+					if( stringValue.charAt(0) != '0' && i < BB && A <=BB && BB <= B
+					    && !set.contains(BB)
+ 					)
+					{
+						set.add(BB);
+						ans = ans+1;
+					}
+				}
+			
+			}
+			
+			System.out.format("Case #%d: %d\n", cases, ans);
+			
+			
+						
+			
+			
+		}
+	}
+}

@@ -1,0 +1,43 @@
+#include <QtCore/QCoreApplication>
+#include <QFile>
+#include <QDebug>
+#include <iostream>
+#include <QStringList>
+
+int main(int argc, char *argv[])
+{
+    QFile in("B.in");
+    QFile out("B.out");
+    in.open(QIODevice::ReadOnly);
+    out.open(QFile::WriteOnly | QFile::Text);
+    char buffer[5000];
+    in.readLine(buffer,5000);
+    int T=QString(buffer).toInt();
+
+    int googlers, surprising, p;
+
+    for(int i=0;i<T;i++){
+        in.readLine(buffer,5000);
+        QStringList numbers = QString(buffer).split(" ");
+        googlers = numbers.at(0).toInt();
+        surprising = numbers.at(1).toInt();
+        p = numbers.at(2).toInt();
+        int result = 0;
+        for(int j=3; j<numbers.size();j++){
+            int total = numbers.at(j).toInt();
+            int mul = p*3;
+            if(total >= mul-2){
+                result++;
+            } else if(total>=2 && total >=mul-4 && surprising >0){
+                result++;
+                surprising--;
+            }
+        }
+
+        out.write(QString("Case #"+QString::number(i+1)+": "+QString::number(result)+"\n").toAscii());
+    }
+
+    in.close();
+    out.close();
+    return 0;
+}

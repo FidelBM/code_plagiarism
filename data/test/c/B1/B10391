@@ -1,0 +1,72 @@
+#include<iostream>
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+
+int A,B;
+int v[5005],stat[5],st;
+struct Node {
+        int i, j;
+};
+bool cmp(Node a, Node b) {
+        if(a.i==b.i) return a.j<b.j;
+        return a.i<b.i;
+}
+Node node[500];
+int cal()
+{
+        int i, j, k, exp, cnt, len,ans = 0;
+        memset(v,0,sizeof v);
+        int sst=0;
+        for(i = A; i <= B; i++){
+                if(v[i]) continue;
+                j=i;
+                exp=1;
+                len=0;
+                while(j) { j/=10; ++len; exp*=10; }
+                j=i;
+                exp/=10;
+                cnt=1;
+                // printf("i = %d: ", i);
+                //st=0;
+                //stat[st++]=i;
+                for(k=1;k<len;k++) {
+                        j = (j%10)*exp+j/10;
+                        if(j<=i || j>B || v[j]) continue;
+                        ++cnt;
+                        v[j]=1;
+                        //stat[st++]=j;
+                        //if(st<0) return 1;
+                        //printf("%d\n",st);
+                }
+                /*for(k=0;k<st;k++)
+                        for(int kk=k+1;kk<st;kk++){
+                                //printf("%d %d\n",stat[k],stat[kk]);
+                                if(stat[k]<stat[kk]) { node[sst].i=stat[k],node[sst].j=stat[kk]; }
+                                else { node[sst].i=stat[kk],node[sst].j=stat[k]; }
+                                sst++;
+                        }
+                //printf("\n");*/
+                if(cnt) ans+=cnt*(cnt-1)/2;
+        }
+        //printf("%d\n",sst);
+        //sort(node,node+sst,cmp);
+        //for(k=0;k<sst;k++) printf("%d %d\n",node[k].i,node[k].j);
+        return ans;
+}
+int main()
+{
+        int i,t,cas=0;
+        freopen("C-small-attempt0.in","r",stdin);
+        freopen("C.out","w",stdout);
+        scanf("%d",&t);
+        while(t--){
+                scanf("%d%d",&A,&B);
+                printf("Case #%d: ",++cas);
+                printf("%d\n", cal());
+
+        }
+        return 0;
+}
+

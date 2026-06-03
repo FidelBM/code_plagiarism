@@ -1,0 +1,78 @@
+#include <fstream>
+#include <iostream>
+using namespace std;
+
+int getlength(int a)
+{
+	int temp = a;
+	int length = 0;
+
+	while(temp/(10^length)!=0)
+	{
+		temp%=10;
+		length++;
+	}
+
+	return length;
+}
+
+bool recyclable(int a, int b)
+{
+	int length=getlength(a);
+
+	int loop=0;
+	int temp=a;
+
+//0일 때는 어떻게 하지??
+	do{
+		if(temp==b) return true;
+
+		int a = temp/(10^(length-1));
+		temp = temp%(10^(length-1))*10+a;
+		loop++;
+	}
+	while(loop<=length);
+
+	return false;
+}
+
+int process(int a, int b)
+{
+	int num_recyclable=0;
+
+	for(int i = a; i <=b; i++)
+	{
+		for(int j = a+1; j <=b; j++)
+		{
+			if(recyclable(i, j)) num_recyclable++;
+		}
+	}
+	return num_recyclable;
+}
+
+int main()
+{
+	cout<<getlength(10)<<' '<<getlength(5737)<<' '<<getlength(164132749)<<endl;
+
+
+	ifstream input("input.in");
+	ofstream output("output.out");
+
+	int input_number=0;
+	input>>input_number;
+
+	for(int i = 1; i <= input_number; i++)
+	{
+		if(input.good())
+		{
+			int a, b;
+			input>>a>>b;
+
+			output<<"Case #"<<i<<": ";
+			output<<process(a, b)<<endl;
+		}
+	}
+	input.close();
+	output.close();
+	return 0;
+}

@@ -1,0 +1,39 @@
+// Recycled.cpp : Defines the entry point for the console application.
+//
+
+#include "stdafx.h"
+#include <conio.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	int T;
+	scanf("%d\n",&T);
+
+	for (int i=0; i<T; i++)
+	{
+		int count=0;
+		int A,B;
+		scanf("%d %d\n",&A,&B);
+
+		for (int n=A; n<=B; n++)
+		{
+			double ddigits = log10((double)n);
+			int digits = ((int)ddigits)+1;
+
+			int m=n;
+			int multiplier = pow(10.0,(int)ddigits);
+			do
+			{
+				m = ((m%10)*multiplier)+(m/10);
+				if (m>n && m<=B)
+					count++;
+			} while (m!=n);
+ 		}
+		printf("Case #%d: %d\n",i+1,count);
+	}
+	return 0;
+}
+

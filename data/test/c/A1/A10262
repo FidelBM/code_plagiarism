@@ -1,0 +1,13 @@
+#ifndef INPUTREADER_H
+#define INPUTREADER_H
+#include <QString>
+#include "algo.h"
+
+class InputReader
+{
+public:
+    InputReader();
+    static QList<Algo *> * read(QString filename);
+};
+
+#endif // INPUTREADER_H

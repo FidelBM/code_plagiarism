@@ -1,0 +1,46 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+using namespace std;
+int prims[10] = {3,5,7,11,13,17,19,23,27};
+
+int num_digit(int num)	{
+	if(num == 0)	return 1;
+	int ant = 0;
+	while(num > 0)	{
+		num /= 10;
+		ant++;
+	}
+	return ant;
+}
+
+int recycle(int num, int digits, int tot)	{
+	int div = pow(10, digits);
+	int pluss = num%div;
+	if(pluss < (div/10))	return -1;
+	pluss *= pow(10, tot-digits);
+	num /= div;
+	return num+pluss;
+}
+
+int main()	{
+	int rounds, num1, num2, num1D, tot, sum1, sum2, temp;
+	cin >> rounds;
+	for(int i = 0; i < rounds; i++)	{
+		cin >> num1 >> num2;
+		tot = 0;
+		num1D = num_digit(num1);
+//		cout <<"Tallene er " << num1 <<" --> " << num2 <<'\n';
+		for(int j = num2; j > num1; j--)	{
+			for(int k = 1; k< num1D; k++)	{
+				temp = recycle(j, k, num1D);
+				if(temp < j && temp >= num1)	{
+					tot++;
+//					cout << j <<"   " << temp <<'\n';
+				}
+			}
+		}
+		cout <<"Case #" << i+1 <<": " << tot <<'\n';
+	}
+	return 0;
+}

@@ -1,0 +1,99 @@
+#include <iostream>
+#include <string.h>
+#include <set>
+using namespace std;
+
+/*
+tipico problema de seg tree
+alg que eu sei que funfa
+
+constroi a seg tree com o valor dos nodos folha como 0
+a operacao de soma 1 ao intervalo deve existir nos nos
+for i de 1 ate 2 milhoes
+	acha o menor m que eh maior q i
+	se m existir
+		add 1 ao intervalo [m, 2 milhoes]
+isso ta errado :(
+tentar brute force
+*/
+
+#define MAX_VAL 2000000
+
+//n tem que ser maior q 10
+int getminM(int n)
+{
+	int m = MAX_VAL + 1;
+	int front, back, nm;
+	int mul = 10, maxmul = 1;
+	
+	while (n/maxmul > 0) maxmul *= 10;
+	
+	while (n/mul > 0)
+	{
+		back = n % mul;
+		front = n / mul;
+		nm = back * maxmul / mul + front;
+		
+		if (nm < m && nm > n) {
+			m = nm;
+		}
+		
+		mul *= 10;
+	}
+	
+	return m;
+}
+
+int getnumMs(int n, int b)
+{
+	int cnt = 0;
+	int front, back, m;
+	int mul = 10, maxmul = 1;
+	set<int> allm;
+	
+	while (n/maxmul > 0) maxmul *= 10;
+	
+	while (n/mul > 0)
+	{
+		back = n % mul;
+		front = n / mul;
+		m = back * maxmul / mul + front;
+		
+		if (m <= b && m > n && allm.count(m) == 0) {
+			cnt++;
+			allm.insert(m);
+		}
+		
+		mul *= 10;
+	}
+	
+	return cnt;
+}
+
+int main()
+{
+	int t, a, b, cnt, nrecicled;
+	
+	cin >> t;
+	
+	for (int teste = 1; teste <= t; teste++)
+	{
+		cin >> a >> b;
+		cnt = 0;
+		for (int n = a; n <= b; n++)
+		{
+			int m = getminM(n);
+			nrecicled = 0;
+			
+			cnt += getnumMs(n, b);
+			
+			/*if (m <= b) {
+				cnt++;
+				//cout << n << " " << m << endl;
+			}*/
+		}
+		cout << "Case #" << teste << ": " << cnt << endl;
+	}
+	
+	return 0;
+}

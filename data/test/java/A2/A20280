@@ -1,0 +1,9 @@
+package common;
+
+public interface ISolver {
+	
+	String solve(String problem);
+	
+	void addCase(String problem, String answer);
+
+}

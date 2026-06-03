@@ -1,0 +1,290 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package code_jam_3;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.InputStreamReader;
+
+/**
+ *
+ * @author Neo
+ */
+public class Main {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        // TODO code application logic here
+        
+          int line_counter=0;
+      try{
+  // Open the file that is the first
+  // command line parameter
+  FileInputStream fstream = new FileInputStream("textfile.txt");
+  DataInputStream in = new DataInputStream(fstream);
+  BufferedReader br = new BufferedReader(new InputStreamReader(in));
+  FileWriter ostream = new FileWriter("output.txt");
+  BufferedWriter out = new BufferedWriter(ostream);
+
+  String strLine;
+  //Read File Line By Line
+  while ((strLine = br.readLine()) != null)   {
+  // Print the content on the console
+    if(line_counter==0){  
+  } else{  
+        String delims = "[ ]+";
+        String[] tokens = strLine.split(delims);
+        int a =Integer.parseInt(tokens[0]);
+        int b = Integer.parseInt(tokens[1]);
+        if(a<10){
+        out.write("Case #"+line_counter+": "+0);
+        out.newLine();       
+        }else{
+            int output = 0;
+            int a_lenght = String.valueOf(a).trim().length();
+            if(a_lenght==2){
+                for(int i =a;i<b+1;i++){
+                    int n= i;
+                    int b0 = n%10;
+                    int m = b0*10+((n-b0)/10);
+                    if(m>n&&m<b+1){
+                    output = output+1;
+                    }
+                }
+                 out.write("Case #"+line_counter+": "+output);
+                  out.newLine();
+
+            }
+            if(a_lenght==3){
+                for(int i =a;i<b+1;i++){
+                    int n= i;
+                    int b0 = n%10;
+                    int m = b0*100+((n-b0)/10);
+                    if(m>n&&m<b+1){
+                    output = output+1;
+                    }
+                    b0 = n%100;
+                    m = b0*10+((n-b0)/100);
+                    if(m>n&&m<b+1){
+                    output = output+1;
+                     
+                    }
+                }
+               out.write("Case #"+line_counter+": "+output);
+                 out.newLine();
+
+            }
+            if(a_lenght==4){
+             
+                int m1=0,m2=0,m3=0;
+                 for(int i =a;i<b+1;i++){
+                  int n= i;
+                  int b0 = n%10;
+                  int m = (b0*1000)+((n-b0)/10);
+                 if(m>n&&m<b+1){
+                    output = output+1;
+                       
+                       m1 = m;
+                    }
+                  b0 = n%100;
+                  m = b0*100+((n-b0)/100);
+              
+                  if(m>n&&m<b+1){
+                   
+                    m2 = m;
+                  
+                    output = output+1;
+
+                     
+                    }
+                  b0 = n%1000;
+                  m = b0*10+((n-b0)/1000);
+                 
+                  if(m>n&&m<b+1){
+                      m3 = m;
+                    if(m3!=m1){
+                    output = output+1;
+
+                   
+                      }
+                    }
+                }
+                 out.write("Case #"+line_counter+": "+output);
+                 out.newLine();
+
+            }
+            if(a_lenght==5){
+                 int m1=0,m2=0,m3=0,m4=0;
+
+                for(int i =a;i<b+1;i++){
+                  int n= i;
+                  int b0 = n%10;
+                  int m = b0*10000+((n-b0)/10);
+                   if(m>n&&m<b+1){
+                       m1= m;
+                    output = output+1;
+                    }
+                  b0 = n%100;
+                  m = b0*1000+((n-b0)/100);
+
+                   if(m>n&&m<b+1){
+                       m2=m;
+                    output = output+1;
+                    }
+                  b0 = n%1000;
+                  m = b0*100+((n-b0)/1000);
+                  if(m>n&&m<b+1){
+                      m3=m;
+                      if(m3!=m1){
+                    output = output+1;
+                      }
+                    }
+                  b0 = n%10000;
+                  m = b0*10+((n-b0)/10000);
+
+                  if(m>n&&m<b+1){
+                      m4 = m;
+                      if(m4!= m2){
+                    output = output+1;
+                     }
+                    }
+                }
+
+                out.write("Case #"+line_counter+": "+output);
+                 out.newLine();
+
+            }
+            if(a_lenght==6){
+                int m1=0,m2=0,m3=0,m4=0,m5=0;
+                 for(int i =a;i<b+1;i++){
+                  int n= i;
+                  int b0 = n%10;
+                  int m = b0*100000+((n-b0)/10);
+
+                  if(m>n&&m<b+1){
+                      m1=m;
+                    output = output+1;
+                   
+                    }
+                   b0 = n%100;
+                   m = b0*10000+((n-b0)/100);
+                   if(m>n&&m<b+1){
+                       m2=m;
+                    output = output+1;
+                    }
+                   b0 = n%1000;
+                   m = b0*1000+((n-b0)/1000);
+                   if(m>n&&m<b+1){
+                       m3=m;
+                       if(m3!=m1){
+                    output = output+1;
+                     }
+                    }
+                   b0 = n%10000;
+                   m = b0*100+((n-b0)/10000);
+                   if(m>n&&m<b+1){
+                       m4=m;
+                       if(m4!=m2){
+                    output = output+1;
+                      }
+                    }
+                   b0 = n%100000;
+                   m = b0*10+((n-b0)/100000);
+                  if(m>n&&m<b+1){
+                      m5=m;
+                      if(m5!=m1&&m5!=m3){
+                    output = output+1;
+                     }
+                    }
+
+                }
+
+                    out.write("Case #"+line_counter+": "+output);
+                     out.newLine();
+
+            }
+            if(a_lenght==7){
+                 int m1=0,m2=0,m3=0,m4=0,m5=0,m6=0;
+
+                for(int i =a;i<b+1;i++){
+                  int n= i;
+                  int b0 = n%10;
+                  int m = b0*1000000+((n-b0)/10);
+
+                  if(m>n&&m<b+1){
+                       m1=m;
+                    output = output+1;
+                    }
+                   b0 = n%100;
+                   m = b0*100000+((n-b0)/100);
+
+                   if(m>n&&m<b+1){
+                       m2=m;
+                    output = output+1;
+                    }
+
+                   b0 = n%1000;
+                   m = b0*10000+((n-b0)/1000);
+                   if(m>n&&m<b+1){
+                       m3 = m;
+                       if(m3!=m1){
+                    output = output+1;
+                       }
+                     }
+                   b0 = n%10000;
+                   m = b0*1000+((n-b0)/10000);
+                   if(m>n&&m<b+1){
+                       m4=m;
+                       if(m4!=m2){
+                    output = output+1;
+                      }
+                    }
+                   b0 = n%100000;
+                   m = b0*100+((n-b0)/100000);
+                   if(m>n&&m<b+1){
+                       m5 =m;
+                       if(m5!=m1&&m5!=m3){
+                    output = output+1;
+                      }
+                    }
+                  b0 = n%1000000;
+                   m = b0*10+((n-b0)/1000000);
+                   if(m>n&&m<b+1){
+                       m6=m;
+                       if(m6!=m2&&m6!= m4)
+                    output = output+1;
+                    // System.out.println("n= "+n+"b="+b+"b0="+b0+"m="+m);
+
+                    }
+
+                }
+                  out.write("Case #"+line_counter+": "+output);
+                 out.newLine();
+
+            }
+            
+
+
+        }
+        
+       
+  }
+      line_counter= line_counter+1;
+  }
+  //Close the input stream
+  in.close();
+  out.close();
+    }catch (Exception e){//Catch exception if any
+  System.err.println("Error: " + e.getMessage());
+  }
+    }
+
+}

@@ -1,0 +1,37 @@
+#include "Score.h"
+
+Score::Score() {
+	_score1 = 0;
+	_score2 = 0;
+	_score3 = 0;
+	_normal = false;
+	_surprise = false;
+}
+
+Score::Score(int a, int b, int c) {
+	_score1 = a;
+	_score2 = b;
+	_score3 = c;
+	_normal = false;
+	_surprise = false;
+}
+
+bool Score::hasBestScore(int type) {
+	if (type == Score::_BESTSCORE_NORMAL) {
+		return _normal;
+	}
+	else if (type == Score::_BESTSCORE_SURPRISE) {
+		return _surprise;
+	}
+
+	return false;
+}
+
+void Score::setBestScore(bool b, int type) {
+	if (type == Score::_BESTSCORE_NORMAL) {
+		_normal = b;
+	}
+	else if (type == Score::_BESTSCORE_SURPRISE) {
+		_surprise = b;
+	}
+}

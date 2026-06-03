@@ -1,0 +1,27 @@
+#include<cstdio>
+#include<algorithm>
+#include<math.h>
+using namespace std;
+
+int main(){
+	int t,a,b,i,j,n,temp,count,len,la,lb,li;
+	scanf("%d",&t);
+	j=0;
+	while(j++<t){
+		scanf("%d %d",&a,&b);
+		count=0;
+		for (i=a;i<=b;i++){
+			li=log10(i);
+			len=pow(10,li+1);
+			while(li){
+				temp=pow(10,li--);
+				n=i%temp;
+				n*=(len/temp);
+				n+=i/temp;
+				if(n<=b&&n>i) count++;
+			}
+		}
+		printf("Case #%d: %d\n",j,count);
+	}
+	return 0;
+}

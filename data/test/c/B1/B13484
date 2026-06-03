@@ -1,0 +1,54 @@
+#include <cstdio>
+#include <string>
+#include <sstream>
+#include <vector>
+#include <set>
+#include <algorithm>
+using namespace std;
+
+//by Skyly
+
+typedef long long int64;
+typedef vector<int> vint;
+
+#define SIZE(X) ((int)((X).size())) 
+#define ALL(X) (X).begin(), (X).end()
+#define FOR(IT, X) for (__typeof((X).begin()) IT = (X).begin(); IT != (X).end(); ++IT)
+
+template<typename T> string toStr(const T &x) { ostringstream os; os << x; return os.str(); }
+template<typename T> void toMin(T &x, const T &y) { x = min(x, y); }
+template<typename T> void toMax(T &x, const T &y) { x = max(x, y); }
+
+set<string> app;
+
+int update(const string &s) {
+    set<string> curr;
+
+    for (int i = 1; i < SIZE(s); i++) {
+        string tmp = s.substr(i) + s.substr(0, i);
+        if (app.find(tmp) != app.end()) curr.insert(tmp);
+    }
+    app.insert(s);
+
+    return SIZE(curr);
+}
+
+int main() {
+    int t, casN = 0;
+    int A, B;
+
+    scanf("%d", &t);
+    while (t-- > 0) {
+        scanf("%d%d", &A, &B);
+        app.clear();
+        int64 ans = 0LL;
+        for (int i = B; i >= A; i--) {
+            string s = toStr(i);
+            ans += update(s);
+        }
+        printf("Case #%d: %lld\n", ++casN, ans);
+    }
+
+    return 0;
+}
+

@@ -1,0 +1,124 @@
+// RecycledNumbers.cpp : 定義主控台應用程式的進入點。
+//
+
+#include "stdafx.h"
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+#include <math.h>
+using namespace std;
+
+int FindDigital(int iNumber)
+{
+	int iDidital = 0;
+	for(int iTmp = iNumber; iTmp>0; iTmp=iTmp/10)
+		++iDidital;
+	return iDidital;
+}
+
+void ConvertToDigital(int iDigital, int iNumber, vector<int>& vecDigital)
+{
+	vecDigital.clear();
+	for(int iDigitalTmp = 0; iDigitalTmp<iDigital; ++iDigitalTmp)
+	{
+		int iTmp = pow(10.0f, (float)(iDigitalTmp+1));
+		int iTmp1 = pow(10.0f, (float)(iDigitalTmp));
+		vecDigital.push_back(  (iNumber % iTmp) / iTmp1 );
+	}
+}
+
+int Shift(vector<int>& vecNumber, int iShiftDigital)
+{
+	int iReturnValue = 0;
+	int iDigNum = vecNumber.size();
+	
+	for(int iDigital=0; iDigital<iDigNum; ++iDigital)
+	{
+		iReturnValue += vecNumber[iDigital] * pow( 10.0f, (float)( (iDigital-iShiftDigital+iDigNum)%iDigNum ) );
+	}
+	return iReturnValue;
+}
+
+int FindMatchCase(int iRangeMin, int iRangeMax)
+{
+	int iDigital = FindDigital(iRangeMin);
+	vector<int> vecDigitalCur;
+
+	int iMatchCase = 0;
+
+	vector<int> ResultTmp;
+
+	for(int iNumber = iRangeMin; iNumber<=iRangeMax; ++iNumber)
+	{
+		ConvertToDigital(iDigital, iNumber, vecDigitalCur);
+		ResultTmp.clear();
+		for(int iDigitalIdx=1; iDigitalIdx<iDigital;++iDigitalIdx)
+		{
+			
+			int iShift = Shift(vecDigitalCur, iDigitalIdx);
+			if(iShift>iNumber && iShift>=iRangeMin && iShift<=iRangeMax && FindDigital(iShift)==iDigital)
+			{
+				bool bRepeat = false;
+				for(int iResultIdx=0; iResultIdx<ResultTmp.size(); ++iResultIdx)
+				{
+					if(iShift == ResultTmp[iResultIdx])
+					{
+						bRepeat = true;
+						break;
+					}
+				}
+				
+				if(!bRepeat)
+				{
+					ResultTmp.push_back(iShift);
+					++iMatchCase;
+				}
+			}
+		}
+	}
+
+	return iMatchCase;
+}
+
+int main(int argc, char *argv[]) 
+{
+	ifstream inputFile(argv[1]);
+
+	string str;
+	getline(inputFile, str);
+	int iCaseNum = atoi(str.c_str());
+
+	string strOutfile  = argv[1];
+	strOutfile.erase(strOutfile.end()-2, strOutfile.end());
+	strOutfile.append("out");
+	ofstream outFile(strOutfile.c_str(), ofstream::binary);
+
+	int iRangeMin, iRangeMax;
+	char buffer[20];
+	string strOutput;
+	for(int iCaseIdx=0; iCaseIdx<iCaseNum; ++iCaseIdx)
+	{
+		inputFile >> iRangeMin;
+		inputFile >> iRangeMax;
+
+		int iMatchCase = FindMatchCase(iRangeMin, iRangeMax);
+
+		strOutput.clear();
+		strOutput.append("Case #");
+		char buffer[20];
+		itoa(iCaseIdx+1, buffer, 10);
+		strOutput.append(buffer);
+		strOutput.append(": ");
+
+		itoa(iMatchCase, buffer, 10);
+		strOutput.append(buffer);
+		strOutput.append("\n");
+		outFile.write(strOutput.c_str(), strOutput.size());
+	}
+
+	inputFile.close();
+	outFile.close();
+	return 0;
+}
+

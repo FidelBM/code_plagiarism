@@ -1,0 +1,79 @@
+#include "stdio.h"
+#include "string.h"
+#include "stdlib.h"
+
+inline int s2i(char* s,int len)
+{
+	int i,j;
+	int result=0;
+	for(i=len-1,j=1; i>=0; i--,j*=10)
+		result += (s[i]-'0')*j;
+
+	return result;
+}
+
+int main()
+{
+	int t,i;
+
+	scanf("%d", &t);
+
+	for(i=0; i<t; i++)
+	{
+		int a,b,j;
+		int c = 0;
+
+		scanf("%d %d", &a, &b);
+
+		for(j=a;j<b;j++)
+		{
+			int k;
+
+			char s[8] = {0};
+			int s_len = 0;
+
+			int e[7]={0};
+			int e_len = 0;
+			
+			s_len = sprintf(s,"%d",j);
+
+			for (k=0; k<s_len-1; k++)
+			{
+				int h;
+				int l;
+				int is_exists = 0;
+
+				int last_c = s[s_len-1];
+
+				memcpy(s+1,s,s_len-1);
+				s[0] = last_c;
+				
+				h = s2i(s,s_len);
+
+				for (l=0;l<e_len; l++)
+				{
+					if(e[l] == h)
+					{
+						is_exists = 1;
+						break;
+					}
+				}
+
+				if(is_exists)
+					continue;
+
+				if(h>j && h<=b)
+				{
+//					cout<<j<<" "<<h<<endl;
+					e[e_len++]=h;
+					c++;
+				}
+
+			}
+		}
+
+		printf("Case #%d: %d\n",i+1,c);
+	}
+
+	return 0;
+}

@@ -1,0 +1,156 @@
+// Sergey Kolomenkin <kolomenkin.development+codejam@gmail.com>
+// Belarus, Minsk, 2011
+//------------------------------------------------------
+//#define USE_BI	// use NTL big integer library, http://www.shoup.net/ntl/
+#include "common.h"
+
+#define FILE_PREFIX		"B"
+#define PROBLEM_NAME	"DancingWithTheGooglers"
+
+const int nDefaultTestType = 0; // 0 - data from task, 1 - Small Test, 2 - Big Test
+const bool bDefaultPracticeMode = false;
+const int nDefaultAttempt = 0;
+
+//------------------------------------------------------
+
+typedef int32 tResult;
+typedef int32 tElement;
+
+//------------------------------------------------------
+
+tResult problem(const int Ti, const int N, const int S, const int p, const int D,
+		const vector<tElement>& v)
+{
+	tResult res = 0;
+	if(Ti == 3)
+		printf("");
+
+	const int nMin = 3*p - 2;
+	const int nMinSurp = 3*p - 4;
+
+	int S2 = S;
+	forn(i, N)
+	{
+		if(v[i] < p)
+		{
+			continue;
+		}
+		if(v[i] >= nMin)
+		{
+			res++;
+			continue;
+		}
+		if(v[i] >= nMinSurp && S2 > 0)
+		{
+			res++;
+			S2--;
+			continue;
+		}
+	}
+
+//	if(N2 > 0)
+
+	return res;
+}
+
+//------------------------------------------------------
+
+int process(const string& sFileIn, const string& sFileOut)
+{
+	FILE* fin = NULL; FOPEN(fin, sFileIn.c_str(), "rb");
+	FILE* fout = NULL; FOPEN(fout, sFileOut.c_str(), "wb+");
+
+	int T = 0;	// test count
+	int i = 0;	// test index (1..T)
+	int j = 0;
+
+	fscanf(fin, "%d\n", &T);
+
+	for(i = 1; i <= T; i++)
+	{
+		int N = 0;
+		int S = 0;
+		int p = 0;
+		int D = 0;
+		fscanf(fin, "%d %d %d ", &N, &S, &p);
+		printf("test #%d, N = %d, S = %d, p = %d\n", i, N, S, p);
+
+		if(i == 0)
+			printf("");
+
+		vector<tElement> v;
+		v.resize(N);
+		for(j = 0; j < N; j++)
+		{
+			fscanf(fin, "%d", &v[j]);
+		}
+		fscanf(fin, "\n");
+
+		if(i == 0)
+			printf("");
+
+		const tResult res = problem(i, N, S, p, D, v);
+		printf("test #%d, res = %s\n\n", i, ToStr(res).c_str());
+		fprintf(fout, "Case #%d: %s\n", i, ToStr(res).c_str());
+	}
+
+	fclose(fin);
+	fclose(fout);
+	printf("\nProcessed file: \"%s\" => \"%s\"\n", sFileIn.c_str(), sFileOut.c_str());
+	return T;
+}
+
+//------------------------------------------------------
+
+int main(int argc, char* argv[])
+{
+	const time_t t1 = clock();
+
+	const int nTestType = argc > 1 ? atoi(argv[1]) : nDefaultTestType;
+	const int nAttempt = argc > 2 ? atoi(argv[2]) : nDefaultAttempt;
+	const bool bPracticeMode = bDefaultPracticeMode;
+
+	const string sSmallPractice = bPracticeMode ? "-practice" : "-attempt" + ToStr(nAttempt);
+	const string sBigPractice = bPracticeMode ? "-practice" : "";
+	const string sFileIn0 = "test-practice.in";
+	const string sFileOut0 = "test-practice.out";
+	//const string sFileOut0Desired = "test-practice-desired.out";
+	const string sFileIn1 = FILE_PREFIX "-small" + sSmallPractice + ".in";
+	const string sFileOut1 = FILE_PREFIX "-small" + sSmallPractice + ".out";
+	const string sFileIn2 = FILE_PREFIX "-large" + sBigPractice + ".in";
+	const string sFileOut2 = FILE_PREFIX "-large" + sBigPractice + ".out";
+
+	printf("Problem %s. %s (%s, attempt %d%s)\n", FILE_PREFIX, PROBLEM_NAME,
+		nTestType == 0 ? "manual tests" : nTestType == 1 ? "Small Test" : "Big Test", nAttempt,
+		bPracticeMode ? ", practice" : "");
+
+	int res = 0;
+	try
+	{
+		switch(nTestType)
+		{
+		case 0:
+			res = process(sFileIn0, sFileOut0);
+			break;
+		case 1:
+			res = process(sFileIn1, sFileOut1);
+			break;
+		case 2:
+			res = process(sFileIn2, sFileOut2);
+			break;
+		default:
+			printf("ERROR! Unknown test data index!\n");
+			res = 1;
+		}
+	}
+	catch (std::exception &e)
+	{
+		printf("ERROR! Unhandled std exception: %s: %s!\n", typeid(e).name(), e.what());
+	}
+
+	const time_t t2 = clock();
+	printf("Work got %.2f seconds (%.3f sec/test).\n", ld(t2-t1)/1000.0, ld(t2-t1)/(1000.0*ld(res?res:1)));
+	return 0;
+}
+
+//------------------------------------------------------

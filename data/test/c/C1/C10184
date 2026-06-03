@@ -1,0 +1,40 @@
+#if !defined(_Rational_h)
+#define _Rational_h
+
+#include <iostream>
+
+int gcd(int a, int b);
+
+class Rational {
+
+  int p, q;
+
+ public:
+
+  int P() const;
+  int Q() const;
+
+  friend int floor(const Rational &r);
+  friend Rational operator*(const Rational &r0, const Rational &r1);
+  friend Rational operator/(const Rational &r0, const Rational &r1);
+  friend Rational operator+(const Rational &r0, const Rational &r1);
+  friend Rational operator-(const Rational &r0, const Rational &r1);
+
+  friend int compare(const Rational &r0, const Rational &r1);
+  friend bool operator==(const Rational &r1, const Rational &r2);
+  friend bool operator!=(const Rational &r1, const Rational &r2);
+  friend bool operator<(const Rational &r1, const Rational &r2);
+  friend bool operator>(const Rational &r1, const Rational &r2);
+  friend bool operator<=(const Rational &r1, const Rational &r2);
+  friend bool operator>=(const Rational &r1, const Rational &r2);
+
+  void Normalize();
+  void Set(int _p, int _q);
+  explicit Rational(int _p = 0, int _q = 1);
+
+  friend std::ostream &operator<<(std::ostream &os, const Rational &r);
+
+};
+
+
+#endif

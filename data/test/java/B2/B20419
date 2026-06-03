@@ -1,0 +1,76 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package codejam;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.StringTokenizer;
+
+/**
+ *
+ * @author parusnik
+ */
+public class Codejam {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader("input.txt"));
+        BufferedWriter bw = new BufferedWriter(new FileWriter("output.txt"));
+        
+        int T = Integer.parseInt(br.readLine());
+        StringTokenizer st;
+        String s1, s2;
+        
+        HashMap<String, Integer> map = new HashMap<String, Integer>();
+        
+        for (int t = 1; t<=T; t++){
+            
+            bw.write("Case #" + String.valueOf(t) + ": ");
+            
+            st = new StringTokenizer(br.readLine());
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
+            
+            long d = 0;
+            
+            map.clear();
+            
+            for (int i = a; i<=b; i++){
+                String s = String.valueOf(i);
+                String str = s;
+                for (int k = 0; k<10; k++){
+                    s = s.substring(1, s.length()) + s.substring(0, 1);
+                    str = min (str, s);
+                }
+                int x = 0;
+                if (map.containsKey(str)) x = map.get(str);
+                map.put(str, x+1);
+            }
+            
+            Collection<Integer> col = map.values();
+            for (Integer i : col) {
+                d+=(long) (i)*(i-1)/2;
+            }
+            
+            bw.write(String.valueOf(d));
+            
+            bw.newLine();
+        }
+        
+        br.close();
+        bw.close();
+    }
+    
+    static String min(String s1, String s2){
+        if (Integer.parseInt(s1)<Integer.parseInt(s2)) return s1; else return s2;
+    }
+}

@@ -1,0 +1,127 @@
+#include "input.h"
+
+Input::Input(std::string const & filename) :
+m_numExamples(0),
+m_filename(filename),
+m_failed(false)
+{
+   if( !parseFile() )
+   {
+      std::cout << "Failed to read file!" << std::endl;
+      m_failed = true;
+   }
+
+}
+
+bool Input::parseFile()
+{
+   std::ifstream infile(m_filename.c_str());
+
+   // Read the first line, it should be a number
+   std::string temp;
+   std::getline(infile,temp);
+
+   // If there are more than 50, just do the first 50
+
+   m_numExamples = std::atoi(temp.c_str());
+   if( m_numExamples > 100 )
+   {
+	  //std::cout << "Too many examples! Capping at 50" << std::endl;
+	  m_numExamples = 100;
+   }
+   if( m_numExamples < 1 )
+   {
+      std::cout << "Nothing to read!" << std::endl;
+   }
+
+   // Read the corresponding lines
+   for( int i = 0; i < m_numExamples; ++i)
+   {
+	  // Create vectors for the upper and lower bounds
+	  Case newCase;
+
+	  // Read the line
+      temp.clear();
+      std::getline(infile,temp);
+      std::stringstream intStream(temp);
+
+      std::vector<int> intVector;
+      // Get lines and push onto a vector
+      while( getline(intStream,temp,' ') ) intVector.push_back(std::atoi(temp.c_str()));
+
+      // First is number of people
+      newCase.numPeople = intVector[0];
+      newCase.surprises = intVector[1];
+      newCase.minScore  = intVector[2];
+      for(int j = 0; j < newCase.numPeople; ++j) newCase.scores.push_back(intVector[j+3]);
+      m_cases.push_back(newCase);
+   }
+   
+
+   infile.close();
+   return true;
+}
+
+void Input::processCases()
+{
+   caseList::iterator cIter = m_cases.begin();
+   int idx = 1;
+   while( cIter != m_cases.end() )
+   {
+	   // Loop over the scores
+	   int noSurpriseCount = 0;
+	   int surpriseCount   = 0;
+	   for( int i = 0; i < cIter->numPeople; ++i)
+	   {
+		  // No surprise
+	      if( checkScore(cIter->scores[i],cIter->minScore,false) ){
+	    	  noSurpriseCount++;
+	    	  continue;
+	      }
+		  // surprise
+	      if( checkScore(cIter->scores[i],cIter->minScore,true) ){
+	    	  surpriseCount++;
+	      }
+
+	   }
+	   std::cout << "Case #" << idx << ": " << std::min(surpriseCount,cIter->surprises)+noSurpriseCount << std::endl;
+	   ++idx;
+       ++cIter;
+   }
+}
+
+bool Input::checkScore(int const & score, int const & threshold,bool const & surprise)
+{
+	// Check for zero
+	if( score == 0 && threshold > 0) return false;
+
+	// Divide the score by 3
+	int third = score/3;
+	int remainder = score%3;
+	switch( remainder ){
+	case(0):
+    	if( surprise )
+    	{
+    		if( third + 1 >= threshold ) return true;
+    	} else {
+    		if( third >= threshold ) return true;
+    	}
+	    return false;
+	case(1):
+	    if( third + 1 >= threshold ) return true;
+	    return false;
+	case(2):
+		if( surprise )
+		{
+			if( third + 2 >= threshold ) return true;
+		} else {
+			if( third + 1 >= threshold ) return true;
+		}
+	    return false;
+	default:
+	    return false;
+	}
+
+}
+
+

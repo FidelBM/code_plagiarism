@@ -1,0 +1,31 @@
+#include <cstdio>
+
+using namespace std;
+
+const int EXP[] = {1, 1e1, 1e2, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8, 1e9};
+
+int main(void)
+{
+	int testcase;
+	scanf("%d", &testcase);
+	for (int case_id=1; case_id<=testcase; case_id++) {
+		int A, B, len=0;
+		scanf("%d %d", &A, &B);
+		int tmp = A;
+		while (tmp > 0) {
+			len++;
+			tmp /= 10;
+		}
+		int result = 0;
+		for (int x=A; x<=B; x++) {
+			for (int k=1; k<len; k++) {
+				int y = (x/EXP[k]) + (x%EXP[k]*EXP[len-k]);
+				//printf("%i -> (%i) -> %i\n", x,k,y);
+				if (y<x && y>=A && y<=B)
+					result ++;
+			}
+		}
+		printf("Case #%i: %i\n", case_id, result);
+	}
+	return 0;
+}

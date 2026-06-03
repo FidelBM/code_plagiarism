@@ -1,0 +1,62 @@
+package googlejam;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.Set;
+
+public class ProblemCLinear {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int numberOfCases = sc.nextInt();
+		sc.nextLine();
+		for (int i = 0; i < numberOfCases; i++) {
+			int A = sc.nextInt();
+			int B = sc.nextInt();
+			int sum = 0;
+			Map<Integer, Set<Integer>> found = new HashMap<Integer, Set<Integer>>();
+			for (int n = A; n <= B; n++) {
+				List<Integer> rotations = getRotations(n);
+				for (int j : rotations) {
+					if ((n != j) && isInRange(j, A, B)) {
+
+						int min = Math.min(n, j);
+						int max = Math.max(n, j);
+						Set<Integer> foundForInt = found.get(min);
+						if (foundForInt == null) {
+							Set<Integer> set = new HashSet<Integer>();
+							set.add(max);
+							found.put(min, set);
+							sum++;
+						} else if (!foundForInt.contains(max)) {
+							foundForInt.add(max);
+							sum++;
+						}
+
+					}
+				}
+			}
+			System.out.println(String.format("Case #%d: %d", i + 1, sum));
+		}
+	}
+
+	private static boolean isInRange(int j, int a, int b) {
+		return a <= j && j <= b;
+	}
+
+	private static List<Integer> getRotations(int n) {
+		String nString = Integer.toString(n);
+		String doubleNString = nString + nString;
+		List<Integer> rotations = new ArrayList<Integer>();
+		for (int i = 1; i < nString.length(); i++) {
+			Integer valueOf = Integer.valueOf(doubleNString.substring(i, i + nString.length()));
+			rotations.add(valueOf);
+		}
+		return rotations;
+	}
+
+}

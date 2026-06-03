@@ -1,0 +1,56 @@
+// code_jam2012-3.cpp : Defines the entry point for the console application.
+//
+
+#include <iostream>
+#include <fstream>
+#include <set>
+#include <string>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+int RecycledNumbers(int start, int end)
+{
+    set<int> table;
+    char buf[30];
+    int count(0);
+    for (int num=start; num <=end; num++) {
+         string str(_itoa(num, buf, 10));
+         for (unsigned j = 0; j < str.size()-1; j++) {
+             str = str.substr(1) + str[0];
+             if (str[0] == '0' )
+                 continue;
+             int pair_num = atoi(str.c_str());
+             if (table.find(pair_num) != table.end())
+                 continue;
+             if (pair_num > num && pair_num <= end) 
+                 count++;
+             table.insert(pair_num);
+         }
+        table.clear();
+    }
+    return count;
+}
+
+int main(int argc, char* argv[])
+{
+    ifstream fin("C-small-attempt0.in");
+    ofstream fout("C-small-attempt0.out");
+    clock_t start_clock = clock();
+
+    int n;
+    fin >> n;
+
+    int case_no = 0;
+    for (int i=0; i<n; i++) {
+        int start,end;
+        fin >> start >> end;
+        int ans = RecycledNumbers(start, end);
+        fout << "Case #" << ++case_no << ": " << ans << endl;
+    }
+    clock_t end_clock = clock();
+    cout << (end_clock - start_clock) / double(CLOCKS_PER_SEC) << endl;
+
+	return 0;
+}
+

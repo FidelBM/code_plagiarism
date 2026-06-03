@@ -1,0 +1,53 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.TreeMap;
+
+
+public class Recycler {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		String input;
+		BufferedReader br;
+		HashSet<String> set;
+		try{
+			br=new BufferedReader(new InputStreamReader(System.in));
+			int T=Integer.parseInt(br.readLine());
+			int A,B;
+			String []inputs;
+			for (int i=0;i<T;i++)
+			{
+				input=br.readLine();
+				inputs=input.split(" ");
+				A=Integer.parseInt(inputs[0]);
+				B=Integer.parseInt(inputs[1]);
+				set=new HashSet<String>();
+				
+				int s=0;
+				int m;
+				for (int n=A;n<=B;n++)
+				{
+					int multiple=10;
+					while (1.0*n/multiple > 0)
+					{
+						m=Integer.parseInt(n%multiple + "" + n/multiple);
+						if (m<=B && n<m)
+						{
+							s++;
+							set.add(n+""+m);
+						}
+						multiple*=10;
+					}
+					
+				}
+				System.out.println("Case #"+ (i+1) + ": " +set.size());
+			}
+		}catch(Exception e)
+		{
+			
+		}
+	}
+
+}

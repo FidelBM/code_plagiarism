@@ -1,0 +1,108 @@
+#include <conio.h>
+#include <string>
+#include <vector>
+#include <math.h>
+#include <xstring>
+#include <iostream>
+#include <fstream>
+#include <algorithm>
+
+using namespace std;
+
+typedef vector<string> strarr;
+
+class FileIO
+{
+	ifstream	fin;
+	ofstream	fout;
+	string		name;
+
+public:
+	void read(strarr& line, const char* fname)
+	{
+		name = fname;
+		if(fin.is_open())
+			fin.close();
+		fin.open(fname, ios::binary);
+		line.clear();
+#define MAX_BUFFER 1024
+		while(!fin.eof())
+		{
+			char buffer[MAX_BUFFER];
+			fin.getline(buffer, MAX_BUFFER);
+			if(*buffer != ' ' && *buffer != '\n' && *buffer != '\0')
+			{
+				line.push_back(string(buffer));
+			}
+		}
+		fin.close();
+	}
+
+	void write(vector<string>& data)
+	{
+		if(fout.is_open())
+			fout.close();
+		string new_name(name);
+		new_name += "out";
+		fout.open(new_name.c_str(), ios::binary);
+		string out;
+		for(int i=0 ; i<data.size() ; i++)
+		{
+			fout.write(data[i].c_str(), data[i].length());
+			fout<<"\n";
+			//out.append(data[i]);
+			//out.push_back('\n');
+			//fout.write(data[i].c_str(), data[i].length());
+			//fout<<'\n';
+		}
+		fout.close();
+	}
+};
+
+class Display
+{
+public:
+	void show(const strarr& line)
+	{
+		for( string::size_type i=0 ; i<line.size() ; i++)
+		{	cout<<line.at(i).c_str()<<"\n";}
+	}
+	void show(const string& str)
+	{	cout<<str.c_str()<<"\n";}
+};
+
+class Tokenizer
+{
+public:
+	void tokenize(strarr& tokens, const string& str)
+	{
+		const char *ptr, *start;
+		start = ptr = str.c_str();
+		for(string::size_type i=0 ; ; i++,ptr++)
+		{
+			char c = *ptr;
+			if(c == ' ' || c == '\t')
+			{
+				tokens.push_back(string(start,ptr-start));
+				start = ptr+1;
+			}
+			else
+			if(c == '\n')
+			{
+				tokens.push_back(string(start,ptr-start-1));
+				break;
+			}
+			else
+			if(c == '\0')
+			{
+				tokens.push_back(string(start,ptr-start));
+				break;
+			}
+			else
+			{	continue;}
+		}
+	}
+};
+
+template<class T> T crop(const T v,const T lb)
+{	return v<lb?lb:v;}

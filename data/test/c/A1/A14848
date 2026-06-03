@@ -1,0 +1,15 @@
+#include <string>
+#include <iostream>
+class RankFinder
+{
+public:
+	RankFinder();
+	~RankFinder();
+
+	int find_num_p(std::ifstream* in_file);
+	bool is_normal(int ranking);
+	bool is_surprising(int ranking);
+	int num_goog;
+	int num_surprising;
+	int min_rank;
+};

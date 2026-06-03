@@ -1,0 +1,41 @@
+#include<stdio.h>
+#include<algorithm>
+#include<vector>
+#include<time.h>
+#include<math.h>
+
+int test_cases;
+int case_n;
+int A,B,dig,p10dig;
+
+char is_true(int a,int b){
+	int tmp = a;
+	for(;; ){
+		tmp = p10dig * (tmp%10) + tmp/10;
+		if(tmp == b) return 1;
+		if(tmp == a) break;
+	}
+	return 0;
+}
+
+int main(){
+	freopen("INPUT.TXT","r",stdin);
+	freopen("OUTPUT.TXT","w",stdout);
+
+	scanf("%d\n",&test_cases);
+
+	for(case_n = 1; case_n <= test_cases; case_n++){
+		scanf("%d%d",&A,&B);
+		
+		int tmp = A;
+		for(dig=0;tmp>0; tmp/=10) dig++;
+		p10dig = (int)pow(10.,(double)(dig-1));
+
+		int res = 0;
+		for(int i=A; i<=B; i++){
+			for(int j=i+1; j<=B; j++) res += is_true(i,j);
+		}
+		printf("Case #%d: %d\n",case_n,res);
+	}
+	return 0;
+}

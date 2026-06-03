@@ -1,0 +1,111 @@
+#pragma once
+
+#include <stdio.h>
+#include <tchar.h>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <iostream>
+#include <fstream>
+#include <algorithm>
+#include <map>
+#include <set>
+
+class CppUtils
+{
+public:
+	CppUtils(void);
+	~CppUtils(void);
+
+	template <typename T>
+	static std::string Stringify(const T& t)
+	{
+		std::stringstream ss;
+		ss << t;
+		return ss.str();
+	}
+
+	static std::vector<std::string> GetLinesFromFile(const std::string& filename)
+	{
+		std::vector<std::string> outLines;
+		std::string line;
+		std::ifstream file(filename);
+
+		if (file.is_open())
+		{
+			while (file.good())
+			{
+				std::getline(file, line);
+				outLines.push_back(line);
+			}
+		
+			file.close();
+		}
+
+		return outLines;
+	}
+
+	static void WriteLinesToFile(
+		const std::string& filename,
+		const std::vector<std::string>& outputLines)
+	{
+		WriteLinesToFile(filename, outputLines, false);
+	}
+
+	static void WriteLinesToFile(
+		const std::string& filename,
+		const std::vector<std::string>& outputLines,
+		bool withCaseNums)
+	{
+		std::ofstream file;
+		file.open(filename);
+		int i = 1;
+
+		for (std::vector<std::string>::const_iterator it = outputLines.begin(); it != outputLines.end(); ++it)
+		{
+			std::string line = *it;
+
+			if (withCaseNums)
+			{
+				line = "Case #" + Stringify(i) + ": " + line;
+			}
+
+			file << line << std::endl;
+
+			++i;
+		}
+
+		file.close();
+	}
+
+	static std::vector<std::string> Split(
+		const std::string& str, 
+		char delim)
+	{
+		std::stringstream ss(str);
+		std::string item;
+		std::vector<std::string> results;
+
+		while (std::getline(ss, item, delim)) 
+		{
+			results.push_back(item);
+		}
+
+		return results;
+	}
+
+	template <typename T>
+	static bool Contains(
+		const std::vector<T>& vec, 
+		const T& t)
+	{
+		for (std::vector<T>::const_iterator it = vec.begin(); it != vec.end(); ++it)
+		{
+			if (*it == i_)
+				return true;
+		}
+	
+		return false;
+	}
+};
+

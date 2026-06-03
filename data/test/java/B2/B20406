@@ -1,0 +1,128 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ *
+ * @author ZAMAN
+ */
+import java.io.*;
+
+public class test2 {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        // TODO code application logic here
+       
+        int start;
+        int end;
+        try {
+            BufferedReader a = new BufferedReader(new FileReader("C-large.in"));
+            BufferedWriter b = new BufferedWriter(new FileWriter("C-large.out"));
+            
+            int lines = Integer.valueOf(a.readLine());
+            for (int z = 1; z <= lines; z++) {
+                 int pairs = 0;
+                String ints[] = a.readLine().split(" ");
+                start = Integer.parseInt(ints[0]);
+                end = Integer.parseInt(ints[1]);
+                b.append("Case #" + z + ": ");
+                for (int i = start; i <= end; i++) {
+                    String number = String.valueOf(i);
+                    int length = number.length();
+                    int newnums[] = new int[length - 1];
+                    int count = 0;
+                    if (length == 1) {
+                        continue;
+                    }
+                    if (length == 2) {
+
+                        char ch1 = number.charAt(0);
+                        char ch2 = number.charAt(1);
+                        if (ch1 < ch2) {
+                            String num = "";
+                            //interchange
+                            num += ch2 + "" + ch1;
+                            int newnum = Integer.parseInt(num);
+
+                            if (newnum <= end) {
+                                pairs++;
+                            }
+                        }
+                    }
+                    if (length > 2) {
+                        
+                        //mving one character to the front
+                        String num = "";
+                        char ch = number.charAt(length - 1);
+                        num += ch;
+                        num += number.substring(0, length - 1);
+                        int newnum = Integer.parseInt(num);
+                        if (newnum > i && newnum <= end) {
+                            if (count == 0) {
+                                newnums[count] = newnum;
+                                count++;
+                                pairs++;
+                            } else {
+                                int k = 0;
+                                for (; k < length - 1; k++) {
+                                    if (newnums[k] == newnum) {
+                                        break;
+                                    }
+                                }
+                                if (k == length - 1) {
+                                    pairs++;
+                                }
+                            }
+
+                        }
+
+                        for (int j = length - 2; j > 0; j--) {
+                            //moving more than once
+                            String mov = number.substring(j, length);
+                            num = "";
+                            num += mov;
+                            num += number.substring(0, j);
+                            newnum = Integer.parseInt(num);
+
+                            if (newnum > i && newnum <= end) {
+                                if (count == 0) {
+                                    newnums[count] = newnum;
+                                    count++;
+                                    pairs++;
+                                } else {
+                                    int k = 0;
+                                    for (; k < length - 1; k++) {
+                                        if (newnums[k] == newnum) {
+                                            break;
+                                        }
+                                    }
+                                    if (k == length - 1) {
+                                        pairs++;
+                                    }
+                                }
+                            }
+
+
+                        }
+                    }
+
+
+                }
+                
+                b.append("" + pairs);
+                b.newLine();
+            }
+
+            b.flush();
+            a.close();
+            b.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}

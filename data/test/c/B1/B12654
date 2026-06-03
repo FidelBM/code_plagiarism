@@ -1,0 +1,99 @@
+// Google Code Jam 2012 
+// Problem C : Recycled Numbers 
+
+#include <iostream> 
+#include <fstream> 
+#include <string> 
+#include <sstream> 
+#include <list> 
+#include <cmath> 
+using namespace std; 
+
+int main(int argc, char *argv[]) 
+{ 
+	if (argc < 3) 
+	{ 
+		cout << "[Usage] Recycle input_file output_file" << endl; 
+		return -1; 
+	} 
+
+	// Initialize problem variables 
+	int numcases = 0; 
+	int numrecycled = 0; 
+
+	// Open the input and outputfile  
+	ifstream inputfile; 
+	ofstream outfile; 
+	string line; 
+	inputfile.open(argv[1]); 
+	outfile.open(argv[2]); 
+
+	// Get the number of cases 
+	inputfile >> numcases; 
+	getline(inputfile, line); 
+
+	// Read through the input 
+	int count = 0; 
+	while (inputfile.good()) 
+	{ 
+		count++; 
+
+		int A, B; 
+
+		// Get the two bounds 
+		inputfile >> A;
+		inputfile >> B; 
+
+		getline(inputfile, line); 
+		if (!inputfile.good()) break; 
+		
+		// Try to find the number of distinct recycled pairs 
+		numrecycled = 0; 
+		int numdigits = 0; 
+		int curdigit; 
+
+		// Find the initial number of digits 
+		int num = A; 
+		while (num > 0) 
+		{ 
+			numdigits++; 
+			num /= 10; 
+		} 
+
+		// Find the number of increments before the number 
+		// of digits increase by one 
+		curdigit = pow((double)10, numdigits - 1); 
+
+		for (int k = A; k < B; k++) 
+		{ 
+			int curnum = k; 
+			int onum = k; 
+
+			for (int m = 0; m < numdigits - 1; m++) 
+			{ 
+				int num = curnum % 10; 
+				curnum = num * curdigit + curnum / 10; 
+				if (num == 0) continue; 
+				else if (curnum == onum) break; 
+				else if ((curnum > onum) && (curnum <= B)) numrecycled++; 
+			} 
+		} 
+
+		stringstream s; 
+		s << "Case #" << count << ": " << numrecycled; 
+		
+		outfile << s.str() << endl; 
+
+		cout << "A: " << A << " B: " << B << " NumDistinct: " << numrecycled << endl; 
+
+	} 
+
+	// Closes the file 
+	inputfile.close(); 
+	outfile.close(); 
+
+	// Successful run 
+	return 0; 
+}
+
+

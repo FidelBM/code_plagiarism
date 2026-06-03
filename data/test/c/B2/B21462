@@ -1,0 +1,80 @@
+// RecycledNumbersRunner.cpp : Defines the entry point for the console application.
+//
+
+#include "stdafx.h"
+
+#include "CppUtils.h"
+
+using namespace std;
+
+#define NUM_PROC 8
+
+vector<string> Run(const vector<string>& inputLines, string fileIn, string fileOut)
+{
+	vector<string> outputLines;
+
+	int numInEachFile = (inputLines.size() - 1) / NUM_PROC;
+	vector<string> theseLines;
+	int j = 1;
+
+	for (unsigned int i = 1; i < inputLines.size(); ++i)
+	{
+		theseLines.push_back(inputLines[i]);
+
+		if ((i+1) % numInEachFile == 0 && j != NUM_PROC)
+		{
+			theseLines.insert(theseLines.begin(), CppUtils::Stringify(theseLines.size()));
+
+			CppUtils::WriteLinesToFile(fileIn + CppUtils::Stringify(j), theseLines, false);
+			
+			theseLines.clear();
+
+			j++;
+		}
+	}
+
+	theseLines.insert(theseLines.begin(), CppUtils::Stringify(theseLines.size()));
+	CppUtils::WriteLinesToFile(fileIn + CppUtils::Stringify(j), theseLines, false);
+
+	for (int i = 1; i <= NUM_PROC; ++i)
+	{
+		string s = CppUtils::Stringify(i);
+
+		string cmd = "start C:\\Development\\temp\\RecycledNumbers\\RecycledNumbers.exe " + 
+			fileIn + s + " " + fileOut + s + " false";
+
+		system(cmd.c_str());
+	}
+
+	cout << "Waiting..." << endl;
+
+	string done;
+	getline(std::cin, done);
+
+	for (int i = 1; i <= NUM_PROC; ++i)
+	{
+		vector<string> lines = CppUtils::GetLinesFromFile(fileOut + CppUtils::Stringify(i));
+
+		for (unsigned int j = 0; j < lines.size(); ++j)
+		{
+			if (lines[j] != "")
+				outputLines.push_back(lines[j]);
+		}
+	}
+
+	return outputLines;
+}
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	string fileIn = argv[1];
+	string fileOut = argv[2];
+	
+	vector<string> inputLines = CppUtils::GetLinesFromFile(fileIn);
+
+	vector<string> outputLines = Run(inputLines, fileIn, fileOut);
+
+	CppUtils::WriteLinesToFile(fileOut, outputLines, true);
+
+	return 0;
+}

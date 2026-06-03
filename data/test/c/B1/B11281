@@ -1,0 +1,49 @@
+#include<iostream>
+#include<string>
+#include<sstream>
+#include<fstream>
+using namespace std;
+string its(int);
+void main()
+{
+	ifstream fin("C-small-attempt0.in");
+	ofstream fout("output.txt");
+	int cases;
+	fin>>cases;
+	for(int c=1;c<=cases;c++)
+	{
+	int a,b;
+	fin>>a>>b;
+	int count=0,temp=0,temp1=0;
+	for(int n=a;n<b;n++)
+	{
+		string s=its(n);
+		for(int i=1;i<s.length();i++)
+		{
+			string t="";
+			temp=0;
+			t=s.substr(i);
+			t=t+s.substr(0,i);
+			temp=atoi(t.c_str());
+			if(temp>n && temp<=b && temp!=temp1)
+			{
+				count++;
+				temp1=temp;
+			}
+		}
+	}
+	fout<<"Case #"<<c<<": "<<count<<"\n";
+	}
+	fout.close();
+	fin.close();
+
+}
+string its(int i)
+{
+    std::stringstream ss;
+    std::string s;
+    ss << i;
+    s = ss.str();
+
+    return s;
+}

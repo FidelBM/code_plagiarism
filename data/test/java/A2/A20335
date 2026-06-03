@@ -1,0 +1,45 @@
+package codejam;
+
+import java.util.*;
+import java.io.*;
+
+public class DancingWithTheGooglers {
+	public static void main(String[] args) throws IOException {
+		BufferedReader in = new BufferedReader(new FileReader("in.txt"));
+		PrintWriter out = new PrintWriter(new File("out.txt"));
+		
+		int T = Integer.parseInt(in.readLine());
+		for (int t = 1; t <= T; ++t) {
+			String[] parts = in.readLine().split("[ ]+");
+			int N = Integer.parseInt(parts[0]);
+			int S = Integer.parseInt(parts[1]);
+			int p = Integer.parseInt(parts[2]);
+			int[] scores = new int[N];
+			
+			for (int i = 0; i < N; ++i)
+				scores[i] = Integer.parseInt(parts[3 + i]);
+			
+			Arrays.sort(scores);
+			int cnt = 0;
+			for (int i = N - 1; i >= N - S; --i) {
+					
+						int mod = scores[i] % 3;
+						int score = scores[i] / 3;
+						if (mod == 1 || mod == 2)
+							++score;
+						if (scores[i] > 1 && (mod == 0 || mod == 2))
+							++score;
+						score = Math.min(score, 10);
+						if (score >= p)
+							++cnt;
+						//System.out.println(score);
+			}
+			
+			out.println("Case #" + t + ": " + cnt);
+		}
+		
+		in.close();
+		out.close();
+		System.exit(0);
+	}
+}

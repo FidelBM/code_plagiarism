@@ -1,0 +1,140 @@
+#include <iostream>
+#include <cstdio>
+#include <fstream>
+#include <cstdlib>
+#include <set>
+using namespace std;
+
+int br;
+
+void check( int n, int A, int B )
+{ 
+  // pravim "i" string chrez itoa(i, string, 10);
+  // mestim otzad napred i za vsqko premestvane pravim string-a v int(cqlo chislo) chrez atoi(string)
+  // proverqvame dali poluchenoto e po-malko ili ravno na B, ako e taka broim go
+  // ako ne, prodyljavame s mesteneto; obsht broi premestvaniq -> kolkoto digits-1 e chisloto
+  // stava slojnost O( abs(A-B)*7 ), t.e. v nai-loshiq sluchai e O( 1000000 * 7 )
+  
+  set <int> s;
+  
+  char S[10];
+  itoa(n, S, 10);
+  int sz = strlen(S);
+  
+  int k = 0;
+  while( k < sz-1 )
+  { 
+    char ch = S[sz-1];
+    for( int j = sz-1; j >= 1; j-- )
+    S[j] = S[j-1];
+    S[0] = ch;
+    
+    int m = atoi(S);
+    if( A <= m && m <= B && n < m )  s.insert(m);
+    
+    k++;
+   }
+  
+  br += s.size();
+}
+
+
+int main()
+{ ofstream fout;
+  int T, A, B;
+  
+  scanf("%d", &T);
+  
+  fout.open("C-small.txt");
+  
+  int k = 1;
+  while( k <= T )
+  { 
+    br = 0;
+    fout << "Case #" << k << ": ";
+    
+    scanf("%d %d", &A, &B);
+    for( int i = A; i <= B; i++ )
+    check(i, A, B);
+    
+    fout << br << endl;
+    
+    k++;
+   }
+  
+  fout.close();
+  
+  //scanf("%d", &T);
+  return 0;
+}
+/*
+102400 bytes
+Input 
+
+Output 
+ 
+4
+1 9
+10 40
+100 500
+1111 2222
+
+Case #1: 0
+Case #2: 3
+Case #3: 156
+Case #4: 287
+
+
+50
+188 924
+128 910
+163 916
+106 925
+145 995
+10 99
+119 998
+788 788
+185 932
+105 976
+118 931
+14 82
+176 963
+187 939
+100 999
+128 992
+23 73
+157 978
+174 911
+162 993
+133 910
+101 986
+111 926
+1 2
+321 321
+117 935
+170 918
+121 923
+179 945
+10 10
+112 929
+5 6
+173 944
+103 952
+185 951
+176 977
+175 930
+141 970
+147 932
+145 961
+306 798
+156 932
+149 957
+387 414
+322 598
+121 974
+187 948
+186 983
+135 944
+133 980
+
+*/

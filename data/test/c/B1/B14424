@@ -1,0 +1,42 @@
+#include <cstdio>
+
+
+
+bool check(int left, int right, int value) {
+  return (value >= left && value <= right);
+} 
+
+int main() {
+  FILE *inf = fopen("input2.in", "r");
+  FILE *outf = fopen("output.out", "w");
+  int num_tests;
+  fscanf(inf, "%d\n", &num_tests);
+
+
+  int A, B;
+  for (int t = 1; t <= num_tests; ++t) {
+    fscanf(inf, "%d %d", &A, &B);
+    int x, y, z, m;
+    int res = 0;
+    for (int i = A; i <= B; ++i) {
+      if (i < 100) {
+        x = i / 10;
+        y = i % 10;
+        m = y * 10 + x;
+        if (check(i + 1, B, m)) ++res;
+      } else {
+        x = i / 100;
+        y = i % 100 / 10;
+        z = i % 10;
+        m = z * 100 + x * 10 + y;
+        if (check(i + 1, B, m)) ++res;
+        m = y * 100 + z * 10 + x;
+        if (check(i + 1, B, m)) ++res;
+      }
+    } 
+    fprintf(outf, "Case #%d: %d\n", t, res);
+  } 
+  fclose(inf);
+  fclose(outf);
+  return 0;
+}

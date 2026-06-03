@@ -1,0 +1,64 @@
+import java.io.File;
+import java.util.*;
+
+public class ProblemCLarge {
+
+	public static void main(String[] args) throws Exception {
+
+		// Scanner sc = new Scanner(new File("C:\\C-Large.in"));
+		Scanner sc = new Scanner(System.in);
+		int cases = Integer.parseInt(sc.nextLine().trim());
+		for (int i = 0; i < cases; i++) {
+			int a = sc.nextInt();
+			int b = sc.nextInt();
+			System.out.println("Case #" + (i + 1) + ": " + solve(a, b));
+		}
+	}
+
+	private static int solve(int a, int b) {
+		int count = 0;
+		int num_digs = ("" + a).length();
+		int[] power = new int[] { 1, 10, 100, 1000, 10000, 100000, 1000000,
+				10000000 };
+
+		for (int i = a; i <= b; i++) {
+			int[] tmp = new int[10];
+			int cnt = 0;
+
+			for (int j = 1; j < num_digs; j++) {
+				boolean found = false;
+				
+				if (i % power[j] > 0) {
+					int tmp1 = (i % power[j]) * power[num_digs - j];
+
+					int tmp2 = (i - (i % power[j])) / power[j];
+
+					int tmp3 = tmp1 + tmp2;
+
+					if (cnt == 0) {
+						tmp[cnt++] = tmp3;
+					} else {
+						for (int k = 0; k < cnt; k++) {
+							if (tmp3 == tmp[k]) {
+								found = true;
+							}
+						}
+						if(!found){
+							tmp[cnt++] = tmp3;
+						}
+					}
+				}
+			}
+
+			for (int tmp4 : tmp) {
+				if (tmp4 >= a && tmp4 <= b && tmp4 != i) {
+					//System.out.println(i + " " + tmp4);
+					count++;
+				}
+			}
+		}
+
+		return count / 2;
+	}
+
+}

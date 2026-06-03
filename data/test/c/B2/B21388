@@ -1,0 +1,64 @@
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cmath>
+#include <fstream>
+#include <iostream>
+
+using namespace std;
+
+#define forn(n) for(int i=0; i<n; i++)
+#define forn2(n) for(int j=0; j<n; j++)
+#define ccs(ii) cout << "Case #" << ii << ": "
+#define cgl(s, n) cin.getline(s, n)
+#define ci cin.ignore()
+
+
+int main() {
+	freopen("input.in", "rt", stdin);
+	freopen("output.txt", "wt", stdout);
+	
+	short T;
+	int res;
+	char A[8], B[8], M[8];
+	int pomBr[200];
+	
+	cin >> T;
+	ci;
+	forn(T) {
+		cin >> A >> B;
+		
+		short w=strlen(A);
+		unsigned int a = atoi(A);
+		unsigned int b = atoi(B);
+		
+		res = 0;
+		for(unsigned int iii=a; iii<b; iii++) {
+			itoa(iii, M, 10);
+			short d = 0;
+			short pb = 0;
+			for(short k=0; k<w; k++) {
+				char pom = M[0];
+				for(short j=1; j<w; j++)
+					M[j-1] = M[j];
+				M[w-1] = pom;
+				if((pomBr[pb++] = atoi(M))>iii && atoi(M)<=b) {
+					bool ok = true;
+					for(short zz2=0; zz2<pb-1; zz2++)
+						if(pomBr[zz2] == atoi(M))
+							ok = false;
+					if(ok)
+						d++;
+				}
+			}
+			res += d;
+		}
+		ccs(i+1) << res << endl;
+	}
+	
+	fclose(stdin);
+	fclose(stdout);
+	return 0;
+}
+
+// hackerma3x (c)

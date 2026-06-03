@@ -1,0 +1,106 @@
+package com.problemC;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+
+class RecyclePair {
+
+	int n, m;
+
+	public RecyclePair(int a, int b) {
+		assert (a < b);
+		n = a;
+		m = b;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof RecyclePair) {
+			RecyclePair o = (RecyclePair) obj;
+			if (this.n == o.n && this.m == o.m)
+				return true;
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return n * m;
+	}
+
+}
+
+public class RecycledNumber {
+
+	private static int A = 1111;
+	private static int B = 2222;
+	public static int count = 0;
+	static Set<RecyclePair> pairs = null;
+
+	public static void main(String[] args) {
+		String[] s;
+		BufferedReader br = null;
+		try {
+			br = new BufferedReader(new FileReader(
+					"src/com/problemC/C-large.in"));
+			// br = new BufferedReader(
+			// new FileReader("src/com/problemC/input.txt"));
+			int caseNo = 1;
+			int T = Integer.parseInt(br.readLine());
+			while (caseNo <= T) {
+				count = 0;
+				pairs = new HashSet<RecyclePair>();
+				s = br.readLine().split(" ");
+				A = Integer.parseInt(s[0]);
+				B = Integer.parseInt(s[1]);
+				for (int i = A; i < B; i++) {
+					rotate(i);
+				}
+				System.out.println("Case #" + caseNo++ + ": " + pairs.size());
+			}
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (br != null) {
+					br.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		}
+	}
+
+	private static void rotate(int num) {
+		int l = (num + "").length(), l2;
+		int toCut = 1;
+		int original = num, newNum;
+		String s = num + "", firstPart, secondPart;
+		// if(num%10==0) return;
+		// System.out.println("");
+		// System.out.println("Original Number in question: " + s);
+		for (toCut = 0; toCut <= l; toCut++) {
+			firstPart = s.substring(0, l - toCut);
+			secondPart = s.substring(l - toCut);
+			newNum = Integer.parseInt(secondPart + firstPart);
+			// System.out.println(firstPart + " " + secondPart + ": " + newNum);
+			l2 = (newNum + "").length();
+			if (l == l2 && (original < newNum && newNum <= B)) {
+				RecyclePair rp = new RecyclePair(original, newNum);
+				if (!pairs.add(rp)) {
+					// System.out.println("NO ***********************************************");
+				}
+				// System.out.println("YES : " + original + " " +
+				// newNum+" "+count);
+				// System.out.println("");
+				count++;
+			}
+		}
+	}
+}

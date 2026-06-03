@@ -1,0 +1,259 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package javaapplication1;
+
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+import java.io.File;
+
+/**
+ *
+ * @author kutub
+ */
+public class rn {
+    public static void main(String args[]) throws FileNotFoundException
+    {
+        File f=new File("C:/Users/kutub/Documents/NetBeansProjects/JavaApplication1/src/javaapplication1/input3.txt");
+        Scanner s=new Scanner(f);
+        int n=0,a=0,b=0,count=0;
+        while(s.hasNext())
+        {
+            n=s.nextInt();
+            
+            for(int i=1;i<=n;i++)
+            {
+                s.nextLine();
+                a=s.nextInt();
+                b=s.nextInt();
+                count=0;
+                
+                for(int j=a;j<=b;j++)
+                {
+                    
+                    if(j>=1000000 && j<=2000000)
+                    {
+                        
+                        int k=j%10;
+                        int l=j/10;
+                        int m=l%10;
+                        int no=l/10;
+                        int ko=no%10;
+                        int lo=no/10;
+                        int ho=lo%10;
+                        int go=lo/10;
+                        int ao=go%10;
+                        int bo=go/10;
+                        int co=bo%10;
+                        int ro=bo/10;
+                                
+                        int mo=k*1000000+l;
+                        
+                        if(mo>j && mo<=b && mo>a)
+                        {
+                            count++;
+                        }
+                        
+                        mo=m*1000000+k*100000+no;
+                        if(mo>j && mo<=b && mo>a)
+                        {
+                            
+                            count++;
+                        }
+                        
+                         mo=ko*1000000+m*100000+k*10000+lo;
+                        if(mo>j && mo<=b && mo>a)
+                        {
+                            
+                            count++;
+                        }
+                        
+                        mo=ho*1000000+ko*100000+m*10000+k*1000+go;
+                        if(mo>j && mo<=b && mo>a)
+                        {
+                            
+                            count++;
+                        }
+                        mo=ao*1000000+ho*100000+ko*10000+m*1000+k*100+bo;
+                        if(mo>j && mo<=b && mo>a)
+                        {
+                            
+                            count++;
+                        }
+                        mo=co*1000000+ao*100000+ho*10000+ko*1000+m*100+k*10+ro;
+                        if(mo>j && mo<=b && mo>a)
+                        {
+                            
+                            count++;
+                        }
+                        
+                    }
+                    
+                    if(j>=100000 && j<=1000000)
+                    {
+                        
+                        int k=j%10;
+                        int l=j/10;
+                        int m=l%10;
+                        int no=l/10;
+                        int ko=no%10;
+                        int lo=no/10;
+                        int ho=lo%10;
+                        int go=lo/10;
+                        int ao=go%10;
+                        int bo=go/10;
+                                
+                        int mo=k*100000+l;
+                        
+                        if(mo>j && mo<=b && mo>a)
+                        {
+                            
+                            count++;
+                        }
+                        
+                        mo=m*100000+k*10000+no;
+                        if(mo>j && mo<=b && mo>a)
+                        {
+                            count++;
+                        }
+                        
+                         mo=ko*100000+m*10000+k*1000+lo;
+                        if(mo>j && mo<=b && mo>a)
+                        {
+                            count++;
+                        }
+                        
+                        mo=ho*100000+ko*10000+m*1000+k*100+go;
+                        if(mo>j && mo<=b && mo>a)
+                        {
+                            count++;
+                        }
+                        mo=ao*100000+ho*10000+ko*1000+m*100+k*10+bo;
+                        if(mo>j && mo<=b && mo>a)
+                        {
+                            count++;
+                        }
+                       
+                        
+                    }
+                    if(j>=10000 && j<=100000)
+                    {
+                        
+                        int k=j%10;
+                        int l=j/10;
+                        int m=l%10;
+                        int no=l/10;
+                        int ko=no%10;
+                        int lo=no/10;
+                        int ho=lo%10;
+                        int go=lo/10;
+                                
+                        int mo=k*10000+l;
+                        
+                        if(mo>j && mo<=b && mo>a)
+                        {
+                            count++;
+                        }
+                        
+                        mo=m*10000+k*1000+no;
+                        if(mo>j && mo<=b && mo>a)
+                        {
+                            count++;
+                        }
+                        
+                         mo=ko*10000+m*1000+k*100+lo;
+                        if(mo>j && mo<=b && mo>a)
+                        {
+                            count++;
+                        }
+                        
+                        mo=ho*10000+ko*1000+m*100+k*10+go;
+                        if(mo>j && mo<=b && mo>a)
+                        {
+                            count++;
+                        }
+                        
+                       
+                        
+                    }
+                    
+                    if(j>1000 && j<=10000)
+                    {
+                        
+                        int k=j%10;
+                        int l=j/10;
+                        int m=l%10;
+                        int no=l/10;
+                        int ko=no%10;
+                        int lo=no/10;
+                                
+                                
+                        int mo=k*1000+l;
+                        
+                        if(mo>j && mo<=b && mo>a)
+                        {
+                            count++;
+                        }
+                        
+                        mo=m*1000+k*100+no;
+                        if(mo>j && mo<=b && mo>a)
+                        {
+                            count++;
+                        }
+                        
+                        mo=ko*1000+m*100+k*10+lo;
+                        if(mo>j && mo<=b && mo>a)
+                        {
+                            count++;
+                        }
+                        
+                       
+                        
+                    }
+                    
+                    if(j<=1000 && j>=100)
+                    {
+                        
+                        int k=j%10;
+                        int l=j/10;
+                        int m=l%10;
+                        int no=l/10;
+                        
+                        int mo=k*100+l;
+                        
+                        if(mo>j && mo<=b && mo>a)
+                        {
+                            
+                            count++;
+                        }
+                        
+                        mo=m*100+k*10+no;
+                        if(mo>j && mo<=b && mo>a)
+                        {
+                            count++;
+                        }
+                    }
+                    else if(j<=100 && j>=10 )
+                    {
+                        
+                        int k=j%10;
+                        int l=j/10;
+                        int m=(k*10)+l;
+                        
+                        
+                        if(m<=b && m>a && m>j)
+                        {
+                            
+                            //System.out.println("j: "+j+"  mo: "+m);
+                            count++;
+                        }
+                            
+                    }
+                }
+                System.out.print("Case #"+i+": ");
+                System.out.println(count);
+            }
+        }
+    }
+}

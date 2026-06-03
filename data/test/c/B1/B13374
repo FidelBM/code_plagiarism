@@ -1,0 +1,42 @@
+#include<iostream>
+int answer;
+char sa[100],sb[100],s[100];
+void check(int a,int b)
+{
+	sprintf(sa,"%d",a);
+	sprintf(sb,"%d",b);
+	int la,lb,i,j;
+	la=strlen(sa);	lb=strlen(sb);
+	if(la!=lb) return;
+	for(i=1;i<la;i++)
+	{
+		for(j=i;j<la;j++)
+			s[j-i]=sb[j];
+		for(j=0;j<i;j++)
+			s[la-i+j]=sb[j];
+		s[la]=NULL;
+		if(a==atoi(s)) 
+		{
+	//		printf("a=%d b=%d | s=%s\n",a,b,s);
+			answer++;
+			break;
+		}
+	}
+}
+int main()
+{
+	int T,a,b,A,B,i;
+	freopen("input.txt","r",stdin);
+	freopen("output.txt","w",stdout);
+	scanf("%d",&T);
+	for(i=1;i<=T;i++)
+	{
+		scanf("%d%d",&A,&B);
+		answer=0;
+		for(a=A;a<=B;a++)
+			for(b=a+1;b<=B;b++)
+				check(a,b);
+		printf("Case #%d: %d\n",i,answer);
+	}
+	return 0;
+}

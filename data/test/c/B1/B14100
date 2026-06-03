@@ -1,0 +1,79 @@
+#include <cstdio>
+#include <set>
+#include <algorithm>
+
+using namespace std;
+
+typedef long long lld;
+
+const int maxn = 2000200;
+
+set<pair<int, int> > done;
+
+void reset(int b) {
+	done.clear();
+}
+
+int digs(int val) {
+	int ct=0;
+	do {
+		ct++;
+	} while (val=val/10);
+	return ct;
+}
+
+int powah(int idx) {
+	int ret = 1;
+	for (int i=0; i<idx; i++) {
+		ret *= 10;
+	}
+	return ret;
+}
+
+bool mid (int a, int b, int c) {
+	return a<=b && b<=c;
+}
+
+#define mp make_pair
+
+lld explore(lld val, int a, int b) {
+	int dig = digs(val);
+	int rev = 1;
+	int add = 0;
+	while (powah(rev) < val) {
+		int cut = powah(rev);
+		if ((val%cut)/powah(rev-1)) {
+			lld reved = val/cut + (val%cut)*powah(dig-rev);
+			if (reved != val && mid(a, reved, b)) {
+				int vi = val, vf = reved;
+				if (vi > vf) swap(vi, vf);
+				if (done.find(mp(vi, vf)) == done.end()) {
+					add++;
+					done.insert(mp(vi, vf));
+					//printf("+%lld %lld\n", val, reved);
+				}
+			}
+		}
+		rev++;
+	}
+	return add;
+}
+		
+
+int main() {
+	freopen("c.in", "r", stdin);
+	freopen("c.out", "w", stdout);
+	int t;
+	scanf("%d", &t);
+	for (int ti=1; ti<=t; ti++) {
+		int a, b;
+		scanf("%d%d", &a, &b);
+		reset(b);
+		lld sum = 0;
+		for (int i=a; i<=b; i++) {
+			sum += explore(i, a, b);
+		}
+		printf("Case #%d: %lld\n", ti, sum);
+	}
+	return 0;
+}

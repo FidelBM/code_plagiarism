@@ -1,0 +1,83 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Competitiopn;
+
+import java.util.Scanner;
+
+
+public class RecycledNumbersLarge2 {
+
+    public void solve() {
+
+        Scanner sc = new Scanner(System.in);
+        int T = sc.nextInt(), t = 0;
+        int count = 0, recy = 0;
+        while (t < T) {
+            int A = sc.nextInt();
+            int B = sc.nextInt();
+
+            int n = A, m = 0;//A ≤ n < m ≤ B
+
+            while (n < B) {
+                String nn = String.valueOf(n);
+                int digits = nn.length();
+                int check[] = new int[digits - 1];
+                int j = 1;
+
+                while (j < digits) {
+                    String mm = nn.substring(digits - j, digits) + nn.substring(0, digits - j);
+                    m = Integer.parseInt(mm);
+
+                    if (m <= B && m > n) {
+
+                        int k = 0;
+                        while (k < check.length) {
+                            if (check[k] == m) {
+                                break;
+                            } else if (check[k] == 0) {
+                                check[k] = m;
+                                break;
+                            }
+
+
+                            ++k;
+                        }
+                    }
+                    ++j;
+                }
+                count = 0;
+                for (int i = 0; i < check.length; ++i) {
+                    if (check[i] != 0) {
+                        count++;
+                    }
+                }
+
+                recy += count;
+
+
+                ++n;
+
+            }
+            System.out.println("Case #" + (t + 1) + ": " + recy);
+            recy = 0;
+
+
+            ++t;
+        }
+
+
+    }
+
+    public static void main(String[] args) {
+
+        new RecycledNumbersLarge2().solve();
+        /*
+         * int n = 12345; int j = 2; String nn = String.valueOf(n); int digits =
+         * nn.length(); String mm = nn.substring(digits - j, digits) +
+         * nn.substring(0, digits - j);
+        System.out.println(mm);
+         */
+    }
+}

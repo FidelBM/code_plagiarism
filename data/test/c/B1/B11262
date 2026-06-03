@@ -1,0 +1,53 @@
+#include <cstdlib>
+#include <iostream>
+#include <vector>
+#include <string>
+#include <cmath>
+
+using namespace std;
+
+vector<int> p10;
+
+int digits(int num) {
+	int d = 0;
+	while(num != 0) {
+		num /= 10;
+		d++;
+	}
+	return d;
+}
+inline int back_to_front(int n, int m){
+	return (n%p10[m])*p10[digits(n)-m]+n/p10[m];
+}
+
+int main(int argc, char *argv[])
+{
+	p10 = vector<int> (7);
+	for (int i = 0; i < 7;  ++i) {
+		p10[i] = pow(10, i);
+	}
+	int T;
+	cin >> T;
+	for (int caso = 1; caso <= T; ++caso) {
+		int a, b;
+		cin >> a >> b;
+		int cont = 0;
+		for (int k = a; k <= b; ++k) {
+			for (int j = k +1; j <= b; ++j) {
+				if (digits(j) > digits(k)) {
+					j =b;
+					break;
+				}
+				for (int d = 1; d < digits(j); ++d) {
+					if (back_to_front(j, d) == k) {
+						cont++;
+						break;
+					}
+				}
+			}
+		}
+		cout << "Case #" << caso << ": " << cont << endl;
+	}
+	return 0;
+    
+}

@@ -1,0 +1,18 @@
+#ifndef DANCE_H
+#define DANCE_H
+
+#include "TestObj.h"
+
+
+class Dance : public TestObj
+{
+    public:
+        Dance();
+        virtual ~Dance();
+    protected:
+        virtual const char* InputFileName() { return "dance.txt"; }
+        virtual void Process(std::ifstream& in, std::ofstream& out);
+    private:
+};
+
+#endif // DANCE_H

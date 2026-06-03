@@ -1,0 +1,99 @@
+#include <iostream>
+#include <cstdio>
+#include <map>
+#include <set>
+#include <string>
+#include <cstring>
+#include <sstream>
+#include <vector>
+#include <queue>
+#include <bitset>
+#include <cmath>
+#include <stack>
+#include <algorithm>
+#include <cctype>
+#include <fstream>
+#include <cassert>
+#include <iomanip>
+using namespace std;
+#define pb push_back
+#define f first
+#define s second
+#define mp make_pair
+#define E 1e-9
+#define FOR(i,ini,fin) for(int i=ini;i<fin;i++)
+
+#define M 1000000000
+#define P 100.0000000
+
+typedef long long L;
+typedef double D;
+typedef pair<int,int>par;
+
+struct triple{
+    int x,y,z, may, sur;
+};
+
+int valor(int x, int y,int  z){
+    return max(abs(x-y),max(abs(x-z),abs(y-z)));
+}
+
+int n,s,p, x[20], l, surp, pos[20], mejor;
+vector<triple>v[32];
+
+void mostrar(triple t){
+    cout<<t.x<<","<<t.y<<","<<t.z<<" si: "<<t.sur<<endl;
+}
+void recursivo(){
+    if(l>=n){
+        //cout<<"llegue"<<endl
+            int c=0, m=0;
+            FOR(i,0,n){
+                if( v[x[i]][pos[i]].may>=p  )c++;
+                if( v[x[i]][pos[i]].sur>0  )m++;
+            }
+            if(c>mejor && m==s){
+                //cout<<"*************************"<<endl;
+                //cout<<m<<" == "<<s<<endl;
+                //FOR(i,0,n)mostrar(v[x[i]][pos[i]]);
+                mejor=max(mejor,c);
+            }
+    }
+    else{
+        FOR(i,0,(int)v[x[l]].size()){
+            pos[l++]=i;
+            recursivo();
+            l--;
+        }
+    }
+}
+
+int main(){
+    triple t;
+    FOR(i,0,11){
+        FOR(j,0,11){
+            FOR(k,0,11){
+                int val=valor(i,j,k);
+                if(val<=2){
+                    t.x=i, t.y=j, t.z=k, t.may=max(i,max(j,k));
+                    if(val>1)t.sur=1;
+                    else t.sur=0;
+                    v[i+j+k].pb(t);
+                }
+            }
+        }
+    }
+
+    int casos;
+    scanf("%d",&casos);
+    FOR(i,0,casos){
+        scanf("%d%d%d",&n,&s,&p);
+        FOR(j,0,n)scanf("%d",&x[j]);
+        l=surp=mejor=0;
+        recursivo();
+        cout<<"Case #"<<i+1<<": "<<mejor<<endl;
+    }
+    return 0;
+}
+
+

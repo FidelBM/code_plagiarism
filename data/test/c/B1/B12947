@@ -1,0 +1,80 @@
+#include <fstream>
+#include <iostream>
+#include <set>
+#include <string>
+
+namespace 
+{
+	double round(const double d)
+	{
+		return floor(d + 0.5);
+	}
+
+	unsigned mypow(unsigned match)
+	{
+		unsigned val = 1;
+		while (match >= 10)
+		{
+			val *= 10;
+			match /= 10;
+		}
+		return val;
+	}
+
+	unsigned rotate(const unsigned input, const unsigned exp, const unsigned revExp)
+	{
+		return (input % exp) * revExp + input / exp;
+	}
+
+	unsigned countRecycled(const unsigned start, const unsigned stop)
+	{
+		unsigned count = 0;
+
+		const unsigned baseRevExp = mypow(start);
+
+		for (unsigned value = start; value <= stop; ++value)
+		{
+			std::set<unsigned> rotations;
+			unsigned exp = 10;
+			unsigned revExp = baseRevExp;
+			while (exp <= value)
+			{
+				unsigned rotated = rotate(value, exp, revExp);
+				if (rotated > value && rotated <= stop)
+				{
+					rotations.insert(rotated);
+				}
+				exp *= 10;
+				revExp /= 10;
+			}
+			count += rotations.size();
+		}
+
+		return count;
+	}
+}
+
+int main(int argc, char** argv)
+{
+	std::ifstream input("recyclinginput.txt");
+	std::ofstream output("recyclingoutput.txt");
+
+	unsigned cases = 0;
+	input >> cases;
+
+	std::string dummy;
+	std::getline(input, dummy);
+
+	for (unsigned caseIndex = 0; caseIndex < cases; ++caseIndex)
+	{
+		unsigned start = 0;
+		input >> start;
+		unsigned stop = 0;
+		input >> stop;
+
+		output << "Case #" << caseIndex + 1 << ": " << countRecycled(start, stop) << std::endl;
+	}
+
+	return 0;
+}
+

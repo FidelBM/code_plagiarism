@@ -1,0 +1,190 @@
+#include "input.h"
+
+Input::Input(std::string const & filename) :
+m_numExamples(0),
+m_filename(filename),
+m_failed(false)
+{
+   if( !parseFile() )
+   {
+      std::cout << "Failed to read file!" << std::endl;
+      m_failed = true;
+   }
+   m_mask.assign(MAX_UPPER_BOUND,1);
+}
+
+bool Input::parseFile()
+{
+   std::ifstream infile(m_filename.c_str());
+
+   // Read the first line, it should be a number
+   std::string temp;
+   std::getline(infile,temp);
+
+   // If there are more than 50, just do the first 50
+
+   m_numExamples = std::atoi(temp.c_str());
+   if( m_numExamples > 50 )
+   {
+	  //std::cout << "Too many examples! Capping at 50" << std::endl;
+	  m_numExamples = 50;
+   }
+   if( m_numExamples < 1 )
+   {
+      std::cout << "Nothing to read!" << std::endl;
+   }
+
+   // Read the corresponding lines
+   for( int i = 0; i < m_numExamples; ++i)
+   {
+	  // Create vectors for the upper and lower bounds
+	  Case newCase;
+
+	  // Read the line
+      temp.clear();
+      std::getline(infile,temp);
+      std::stringstream intStream(temp);
+      size_t spaceCount = 0;
+      // Add each character, one at a time
+      for( size_t j = 0; j < temp.length(); ++j)
+      {
+    	  char tmpChar;
+    	  intStream.get(tmpChar);
+    	  if( tmpChar == ' ' )
+    	  {
+    		  ++spaceCount;
+    		  continue;
+    	  }
+    	  if( spaceCount == 0)
+    	  {
+    		  newCase.lower.push_back(std::atoi(&tmpChar));
+    	  } else newCase.upper.push_back(std::atoi(&tmpChar));
+
+      }
+
+      if( newCase.upper.size() != newCase.lower.size() )
+      {
+         newCase.upper.clear();
+    	 newCase.lower.clear();
+      }
+      m_cases.push_back(newCase);
+
+   }
+   
+   infile.close();
+   return true;
+}
+
+void Input::processCases()
+{
+	caseList::iterator cIter = m_cases.begin();
+    int idx = 1;
+	while( cIter != m_cases.end() )
+	{
+		m_mask.assign(MAX_UPPER_BOUND,1);
+		std::cout << "Case #" << idx << ": " << countRecycled(*cIter) << std::endl;
+		++idx;
+		++cIter;
+	}
+}
+
+int Input::countRecycled(Case const &incase)
+{
+   // First check the array
+   if( incase.upper.empty() || incase.lower.empty() )
+	   return 0;
+
+   // Create a copy of the lower bound
+   std::vector<int> currNum = incase.lower;
+   int count = 0;
+   int minVal = convertToInt(incase.lower);
+   int maxVal = std::min(convertToInt(incase.upper),MAX_UPPER_BOUND);
+   int base = minVal;
+   while( base < maxVal)
+   {
+	   // check the combos
+	   if( m_mask[base-1] == 1){
+	      combos(currNum,base,maxVal,minVal);
+	   }
+	   // Adjust currNum until we find the next good one
+	   ++base;
+#if 0
+	   if( base >= MAX_UPPER_BOUND) break;
+	   while( m_mask[base-1] == 0 )
+	   {
+		   ++base;
+		   if( base >= MAX_UPPER_BOUND )break;
+	   }
+#endif
+	   int tmp = base;
+	   for( size_t i = 0; i < currNum.size(); ++i)
+	   {
+		   currNum[currNum.size() - i - 1] = tmp%10;
+		   tmp /= 10;
+	   }
+
+   }
+
+   // Add up the mask from the range
+   for(int i = minVal-1; i < maxVal-1; ++i)
+   {
+	   count += m_mask[i];
+   }
+   return count;
+}
+
+void Input::combos(std::vector<int> const & in, int const & base, int const & max, int const & min)
+{
+	// Set the base to zero, if we find a match, we will switch it
+	m_mask[base-1] = 0;
+
+	// Get the length
+	size_t npts = in.size();
+
+	std::vector<int> newNum = in;
+    std::vector<int> nums;
+    //std::cout << base << ",";
+	for( size_t shift = 1; shift < npts; ++shift)
+	{
+	   for( size_t i = 0; i < npts; ++i)
+	   {
+		   newNum[i]= in[(i + shift)%npts];
+	   }
+	   int tmp = convertToInt(newNum);
+      // std::cout << tmp << ",";
+	   if( tmp > min && tmp <= max && m_mask[tmp-1] == 1 && newNum[0] != 0){
+		   nums.push_back(tmp);
+		   m_mask[tmp-1] = 0;
+	   }
+	}
+    if( nums.empty() )
+    {
+    	m_mask[base-1] = 0;
+    } else
+    {
+    	m_mask[base-1] = static_cast<int>(nums.size());
+    	for(size_t i = 0; i < nums.size(); ++i)
+    	{
+           for( size_t j = i+1; j < nums.size(); ++j)
+           {
+        	   if( nums[i] <= max && nums[j] <= max) m_mask[base-1]++;
+           }
+    	}
+    }
+    //std::cout << m_mask[base-1] << std::endl;
+
+}
+int Input::convertToInt(std::vector<int> const & in)
+{
+	// Go through the integers starting at the beginning
+	int out = 0;
+	for( size_t i = 0; i < in.size(); ++i )
+	{
+	   int power = 1;
+	   for( size_t j = i; j < in.size()-1; ++j) power *= 10;
+	   out += power*in[i];
+
+	}
+
+	return out;
+}

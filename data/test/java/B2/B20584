@@ -1,0 +1,61 @@
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Problem_C {
+    public static void main(String[] args) throws IOException
+            {
+
+                String fileName = "C-large.in";
+                FileReader reader = new FileReader(fileName);
+                LineNumberReader lnreader = new LineNumberReader(reader);
+                FileWriter writer = new FileWriter("output-C-large.txt");
+                PrintWriter out = new PrintWriter(writer);
+                
+                String line = ""; 
+                line = lnreader.readLine();
+                String line_array[];
+                int A;
+                int B;
+                int length;
+                int recycled;
+                int count = 0;
+				List<Integer> rec_list = new ArrayList<Integer>();
+                int index = 0;
+
+                while ((line = lnreader.readLine()) != null){
+                    count = 0;
+                    line_array = line.split(" ");
+                    length = line_array[0].length();
+					rec_list.clear();
+                    A = Integer.parseInt(line_array[0]);
+                    B = Integer.parseInt(line_array[1]);
+                    for (int k=A;k<B;k++){
+                        recycled = k;
+						rec_list.clear();
+                        for (int j=1;j<length;j++){
+                            recycled = recycle(recycled,length);
+                            if ((recycled > k) && (recycled <= B)){
+                                if (!rec_list.contains(recycled)){
+                                    count++;
+                                    rec_list.add(recycled);
+                                }
+                            }
+                        }
+                    }
+
+                    out.println("Case #" + (lnreader.
+                    getLineNumber()-1) + ": " + count);
+                }
+                out.close();
+
+            }
+
+            private static  int recycle(int a,int length){
+                int r = a%10;
+                int q = a/10;
+                r = r * (int)java.lang.Math.pow(10,length-1);
+                return (r+q);
+            }
+}
+

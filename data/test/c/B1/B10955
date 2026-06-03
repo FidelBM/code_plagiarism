@@ -1,0 +1,55 @@
+#include<iostream>
+#include<vector>
+#include<map>
+#include<algorithm>
+
+using namespace std;
+
+int main()
+{
+    freopen("A4.in","r",stdin);
+    freopen("GCJO3.txt","w",stdout);
+    
+    int t,x=0;
+    cin>>t;
+    while(t--)
+    {
+              int a,b,i,j,k,ans=0;
+              cin>>a>>b;
+              for(i=a;i<=b;i++)
+              {
+                      vector<int> v,w;
+                      map<int,int> m;
+                      j=i;         
+                      while(j)
+                      {
+                           k=j%10;
+                           v.push_back(k);
+                           j/=10;
+                      } 
+                      
+                      for(j=v.size()-1;j>=0;j--)
+                      w.push_back(v[j]);    
+                      
+                    
+                      
+                      m[i]=1;
+                      for(j=1;j<w.size();j++)
+                      {
+                               
+                               int num=0,l;
+                               for(l=0;l<w.size();l++)
+                               {
+                                         num=num*10+w[(j+l)%(w.size())];
+                               }
+                               
+                               if(m[num]==1) continue;
+                               if(num<=i || num>b) continue;
+                                                                               
+                               m[num]=1;
+                               ans++;
+                      }
+              }
+              cout<<"Case #"<<++x<<": "<<ans<<endl;
+    }
+}

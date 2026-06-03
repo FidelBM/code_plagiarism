@@ -1,0 +1,142 @@
+#include <stdio.h>
+#include <iostream>
+#include <string.h>
+#include <stdlib.h>
+
+
+using namespace std;
+
+static int intcmp(const void *p1, const void *p2)
+{   
+	/* The actual arguments to this function are "pointers to
+	   pointers to char", but strcmp(3) arguments are "pointers
+	   to char", hence the following cast plus dereference */
+
+	return ((*(int const *) p1) - *((int const*)p2));
+}
+
+int test(int A,int B,int i,int dh,int dl,int mask,int m){
+	int d;
+	if(B<m*mask/10){
+		return 0;
+	}
+	if(dh<mask){
+		d=dl*mask+dh;
+		if((d>=A)&&(d<=B)&&(d>i)){
+			/*if(show==1){
+				cout<<i<<" = "<<dh<<" "<<dl<<" = "<<d<<endl;
+			}*/
+			return 1;
+		}
+	}
+	return 0;
+}
+
+//cheval type 1: abab:   a bab== aba b
+//cheval type 2: abcabc:  a bcabc == abca bc; ab cabc== abcab c
+//cheval type 3: ababab:  a babab == aba bab == ababa b
+int cheval(int n){
+	if(n%100==n/100){
+		return 1;
+	}
+	if(n%1000==n/1000){
+		return 2;
+	}
+	if(n%10000==n%100){
+		if(n%100==(n/100)%100){
+			return 3;
+		}
+	}
+	return 0;
+}
+
+
+int main(){
+
+	int case_i ;
+	int CasesN;
+	
+	cin>>CasesN;
+
+	int i,j,k;
+	for(case_i=0;case_i<CasesN;case_i++){
+		
+		int A,B;
+		cin>>A>>B;
+
+		int Nrn=0; //Number of recyclable numbers
+
+		int dl,dh,d;
+		//int Bbound = min(B,1000);
+		//for(int i=A;i<=Bbound;i++){
+		for(int i=A;i<=B;i++){
+			int c=cheval(i);//cheval type
+
+//cheval type 1: abab:   a bab== aba b
+//cheval type 2: abcabc:  a bcabc == abca bc; ab cabc== abcab c
+//cheval type 3: ababab:  a babab == aba bab == ababa b
+
+			int m=10;
+
+			dl = i%m;
+			dh = i/m;
+			Nrn+=test(A,B,i,dh,dl,1000000,m);
+			if(c<2){
+				Nrn+=test(A,B,i,dh,dl,100000,m);
+			}
+			Nrn+=test(A,B,i,dh,dl,10000,m);
+			if(c!=1){
+				Nrn+=test(A,B,i,dh,dl,1000,m);
+			}
+			Nrn+=test(A,B,i,dh,dl,100,m);
+			Nrn+=test(A,B,i,dh,dl,10,m);
+
+			m*=10;
+			dl = i%100;
+			dh = i/100;
+			Nrn+=test(A,B,i,dh,dl,100000,100);
+			if(c!=2){
+				Nrn+=test(A,B,i,dh,dl,10000,100);
+			}
+			Nrn+=test(A,B,i,dh,dl,1000,100);
+			Nrn+=test(A,B,i,dh,dl,100,100);
+			Nrn+=test(A,B,i,dh,dl,10,100);
+
+			dl = i%1000;
+			dh = i/1000;
+			Nrn+=test(A,B,i,dh,dl,10000,1000);
+			if(c!=3){
+				Nrn+=test(A,B,i,dh,dl,1000,1000);
+			}
+			Nrn+=test(A,B,i,dh,dl,100,1000);
+			Nrn+=test(A,B,i,dh,dl,10,1000);
+
+			m=10000;
+			dl = i%10000;
+			dh = i/10000;
+			Nrn+=test(A,B,i,dh,dl,1000,m);
+			Nrn+=test(A,B,i,dh,dl,100,m);
+			Nrn+=test(A,B,i,dh,dl,10,m);
+
+			m*=10;
+			dl = i%100000;
+			dh = i/100000;
+			Nrn+=test(A,B,i,dh,dl,100,m);
+			Nrn+=test(A,B,i,dh,dl,10,m);
+			
+			m*=10;
+			dl = i%1000000;
+			dh = i/1000000;
+			Nrn+=test(A,B,i,dh,dl,10,m);
+
+		}
+
+		//Consider more digits
+
+
+		printf("Case #%d: %d\n",case_i+1,Nrn);
+
+	}
+
+	return 0;
+}

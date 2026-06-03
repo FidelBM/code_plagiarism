@@ -1,0 +1,83 @@
+#include "recyclednumber.h"
+
+recycledNumber::recycledNumber()
+{
+}
+
+
+// next_permutation
+#include <iostream>
+#include <algorithm>
+#include <vector>
+
+#include <sstream>
+#include <tr1/unordered_map>
+
+
+using namespace std;
+using namespace std::tr1;
+
+typedef unordered_map<string, string> Dictionnary;
+
+bool circular_permutations2(string word, size_t s, string orig_word, int B, int i, int & nbRecycledPair, Dictionnary & dic)
+{
+		std::string temp;
+		int nb;
+		// The number of circular permutations for a word, equals
+		// with the length of the word. So there is going to be
+		// an amount of word.length() iterations:
+		if (s < word.length())
+		{
+			temp = word[0]; // Place the first letter of the word, into a temp. string
+			word.erase(0, 1); // Erase the first character from word
+			word = word + temp; // Append temp to the end of word
+			nb = atoi(word.c_str());
+
+			if (word != orig_word && nb <= B && i < nb && dic[word]!=word) {
+				//cout << orig_word << "\t" << word << "\n";
+				dic[word]=word;
+				nbRecycledPair++;
+			}
+
+			return circular_permutations2(word, s + 1, orig_word, B, i, nbRecycledPair, dic); // And move on to the next one
+		}
+
+		return false;
+}
+
+int main()
+{
+		int A, B, T;
+		int nbRecycledPair = 0;
+		string number, number_orig;
+		int nb;
+		// créer un flux de sortie
+		std::ostringstream oss;
+
+		cin >> T;
+
+		for (int j=1; j<=T; j++) {
+			nbRecycledPair = 0;
+			cin >> A;
+			cin >> B;
+
+			Dictionnary myDic;
+
+			for (int i=A; i<B; i++) {
+				// écrire un nombre dans le flux
+				oss << i;
+				// récupérer une chaîne de caractères
+				number_orig = oss.str();
+				number = oss.str();
+
+				circular_permutations2(number, 0, number_orig, B, i, nbRecycledPair, myDic);
+				myDic.clear();
+
+				oss.str("" );
+			}
+			cout << "Case #" << j << ": " << nbRecycledPair << endl;
+		}
+
+		return 0;
+}
+

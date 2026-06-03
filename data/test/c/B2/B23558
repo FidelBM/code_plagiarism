@@ -1,0 +1,86 @@
+#include <string>
+using std::string;
+
+#include <iostream>
+using std::cin;
+using std::cout;
+using std::endl;
+
+#include <cstdlib>
+using std::abs;
+
+#include <algorithm>
+using std::max;
+
+#include <set>
+using std::set;
+
+#include <utility>
+using std::pair;
+using std::make_pair;
+
+#include <vector>
+
+//Boost libraries are available at http://www.boost.org/
+#include <boost/lexical_cast.hpp>
+using boost::lexical_cast;
+
+using std::vector;
+int T;
+int A;
+int B;
+
+
+int answer() {
+    size_t len = lexical_cast<string>(A).size();
+
+    int total_pairs = 0;
+    for (int i = A; i <=B; ++i) {
+        string si = lexical_cast<string>(i);
+        si = si + si;
+        set<int> matches;
+        matches.insert(i);
+        for (size_t j = 1; j < len; ++j){
+            int candidate = lexical_cast<int>(si.substr(j, len));
+            //cout << "   " << candidate << " " << B << endl;
+            if (candidate > i && candidate <= B) {
+                matches.insert(candidate);
+                //cout << "       " << matches << endl;
+            }
+            if (candidate >= A && candidate < i) {
+                matches.clear();
+                break;
+            }
+        }
+        // pairs is matches choose 2
+        int pairs = matches.size() * (matches.size() - 1) / 2;
+
+        if (matches.size() > 1 ) {
+            for (set<int>::iterator p = matches.begin();
+                    p != matches.end(); ++p) {
+                
+                //cout << *p << " ";
+            }
+            //cout << "[" << pairs << "]" << endl;
+        }
+        //cout << i << " " << si << " " << pairs << endl;
+        total_pairs += pairs;
+    }
+    return total_pairs;
+    
+    
+
+}
+
+int main(int argc, char** argv)
+{
+
+    cin >> T;
+
+    for (int testcase = 1; testcase <= T; ++testcase) {
+        cin >> A  >> B;
+
+        cout << "Case #" << testcase << ": "
+            << answer() << endl;
+    }
+}

@@ -1,0 +1,100 @@
+/*
+ * p2.cpp
+ *
+ *  Created on: 2012-4-14
+ *      Author: xhd
+ */
+
+#include <iostream>
+#include "parseFile.h"
+
+using namespace std;
+
+int calRecycleTriplePair(int &A, int&B, int& d1, int& d2, int& d3){
+	int count=0;
+
+	//d1d2d3, d2d3d1, d3d1d2:
+	int d1d2d3=d1*100+d2*10+d3;
+	int d2d3d1=d2*100+d3*10+d1;
+	int d3d1d2=d3*100+d1*10+d2;
+	if(d1d2d3>=A){
+		if(d3d1d2<=B && d2d3d1<=B){
+				count+=3;
+		}
+		else if(d3d1d2<=B || d2d3d1<=B)
+			count++;
+	}
+	else if(d3d1d2>=A && d2d3d1>=A){
+		if(d3d1d2<=B && d2d3d1<=B) count++;
+	}
+	return count;
+}
+
+int calRecycleNum(int & A, int& B){
+	int count=0;
+	int d1, d2, d3;
+
+	if(A>=B)return 0;
+
+	if(B<10)count=0;
+	if(A>=10&&B<100){
+		int a1=A/10, a2=A%10;
+		int b1=B/10, b2=B%10;
+
+		for(d1=a1; d1<b1; d1++){
+			for(d2=d1+1; d2<=9; d2++){
+				if(d2*10+d1<=B && (d1>a1 || d2>a2))
+					count++;
+			}
+		}
+	}
+
+	if(A>=100&&B<1000){
+		int a1=A/100, a2=A/10, a3=A%10;
+		int b1=B/100, b2=B/10, b3=B%10;
+
+		for(d1=0; d1<=b1; d1++){
+			for(d2=d1; d2<=9; d2++){
+				for(d3=d2; d3<=9; d3++){
+					if(d1==d2&& d2==d3)
+						continue;
+
+					//d1d2d3, d2d3d1, d3d1d2:
+					count+=calRecycleTriplePair(A, B, d1, d2, d3);
+
+					//d1d3d2, d3d2d1, d2d1d3:
+					if(d1==d2 || d2==d3){continue;} //d1<d2<d3
+					count+=calRecycleTriplePair(A, B, d1, d3, d2);
+				}
+			}
+		}
+
+	}
+
+	return count;
+}
+
+int main(int argc, char** argv){
+	if(argc<2){
+		cout<<"Please input data: "<<endl;
+	}
+
+	int T, A, B;
+	int i=0,j=0,k=0;
+	int count=0, t;
+	bool bSurprise=false;
+
+	parseFile pf(argv[1]);
+	pf.nextLineSStream();
+	pf.os>>T;
+	while(i++<T){
+		pf.nextLineSStream();
+		pf.os>>A>>B;
+
+		count=calRecycleNum(A, B);
+		cout<<"Case #"<<i<<": "<<count<<endl;
+		count=0;
+	}
+
+	return 0;
+}

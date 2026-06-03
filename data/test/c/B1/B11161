@@ -1,0 +1,59 @@
+#include "RecycleNumbers.h"
+
+
+RecycleNumbers::RecycleNumbers(void)
+{
+}
+
+int RecycleNumbers::getAnswer()
+{
+	int iAnswer = 0;
+	for( int iN=m_iMin; iN<=m_iMax; iN++ ) {
+		string sN = int2str( iN );
+
+		vector<string> vHistoryString;
+		for( int j=1; j<sN.length(); j++ ){
+			string sM = sN.substr( j );
+			sM += sN.substr(0, j);
+			if( sM[0] == '0' ) continue;
+			int iM = str2int( sM );
+			if( iM <= m_iMax && iM > iN ){
+				bool bDuplicate = false;;
+				for( int k=0; k<vHistoryString.size(); k++ ){
+					if( vHistoryString[k] == sM ){
+						bDuplicate = true;
+						break;
+					}
+				}
+
+				if( bDuplicate ) continue;
+				vHistoryString.push_back( sM );
+				iAnswer++;
+			}
+		}
+		
+	}
+	return iAnswer;
+}
+
+string RecycleNumbers::int2str( int iNumber )
+{
+	stringstream ss;
+	string str;
+	ss << iNumber;
+	ss >> str;
+	return str;
+}
+
+int RecycleNumbers::str2int( string str )
+{
+	stringstream ss;
+	int iNumber;
+	ss << str;
+	ss >> iNumber;
+	return iNumber;
+}
+
+RecycleNumbers::~RecycleNumbers(void)
+{
+}
