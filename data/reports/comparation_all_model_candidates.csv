@@ -1,0 +1,13 @@
+stage,family,model,accuracy,precision,recall,f1,tn,fp,fn,tp,threshold,source_file,config_idx,hidden_layers,dropout_rate,l2_reg,epochs_trained
+03_baseline_tfidf,TF-IDF clásico,Linear SVM,0.9318181818181818,0.88,1.0,0.9361702127659576,19,3,0,22,,03_baseline_model_results.csv,,,,,
+03_baseline_tfidf,TF-IDF clásico,Logistic Regression,0.9090909090909092,0.875,0.9545454545454546,0.9130434782608696,19,3,1,21,,03_baseline_model_results.csv,,,,,
+04_codebert_embeddings,Embeddings CodeBERT,Embedding Random Forest,0.9090909090909092,0.9090909090909092,0.9090909090909092,0.9090909090909092,20,2,2,20,,04_transformer_embedding_model_results.csv,,,,,
+06_hybrid_embeddings_baseline,Híbrido embeddings + baseline,Hybrid Random Forest,0.9090909090909092,0.9090909090909092,0.9090909090909092,0.9090909090909092,20,2,2,20,,06_hybrid_model_results.csv,,,,,
+07_tfidf_keras_mlp,TF-IDF + Keras,TF-IDF Keras MLP,0.8863636363636364,0.8695652173913043,0.9090909090909092,0.8888888888888888,19,3,2,20,0.5500000000000002,07_tfidf_keras_config_search.csv,7.0,[64],0.2,0.01,80.0
+05_custom_mlp_embeddings,MLP sobre embeddings,Custom MLP threshold 0.40,0.8636363636363636,0.8333333333333334,0.9090909090909092,0.8695652173913043,18,4,2,20,0.4000000000000001,04B_custom_mlp_threshold_results.csv,,,,,
+06_hybrid_embeddings_baseline,Híbrido embeddings + baseline,Hybrid Logistic Regression,0.8636363636363636,0.8333333333333334,0.9090909090909092,0.8695652173913043,18,4,2,20,,06_hybrid_model_results.csv,,,,,
+03_baseline_tfidf,TF-IDF clásico,Random Forest Simple Features,0.8636363636363636,0.8636363636363636,0.8636363636363636,0.8636363636363636,19,3,3,19,,03_baseline_model_results.csv,,,,,
+04_codebert_embeddings,Embeddings CodeBERT,Embedding Logistic Regression,0.8409090909090909,0.8,0.9090909090909092,0.851063829787234,17,5,2,20,,04_transformer_embedding_model_results.csv,,,,,
+04_codebert_embeddings,Embeddings CodeBERT,Embedding Linear SVM,0.8409090909090909,0.8,0.9090909090909092,0.851063829787234,17,5,2,20,,04_transformer_embedding_model_results.csv,,,,,
+06_hybrid_embeddings_baseline,Híbrido embeddings + baseline,Hybrid Linear SVM,0.8409090909090909,0.8,0.9090909090909092,0.851063829787234,17,5,2,20,,06_hybrid_model_results.csv,,,,,
+06_hybrid_embeddings_baseline,Híbrido embeddings + baseline,Hybrid Extra Trees,0.8409090909090909,0.8947368421052632,0.7727272727272727,0.8292682926829268,20,2,5,17,,06_hybrid_model_results.csv,,,,,

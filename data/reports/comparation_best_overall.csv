@@ -1,0 +1,2 @@
+stage,family,model,accuracy,precision,recall,f1,tn,fp,fn,tp,threshold,source_file,config_idx,hidden_layers,dropout_rate,l2_reg,epochs_trained
+03_baseline_tfidf,TF-IDF clásico,Linear SVM,0.9318181818181818,0.88,1.0,0.9361702127659576,19,3,0,22,,03_baseline_model_results.csv,,,,,
