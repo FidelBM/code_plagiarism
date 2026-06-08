@@ -1,0 +1,6 @@
+stage,false_positives,false_negatives,total_errors
+03_baseline_tfidf,3,0,3
+04_codebert_embeddings,2,2,4
+06_hybrid_embeddings_baseline,2,2,4
+05_custom_mlp_embeddings,4,2,6
+07_tfidf_keras_mlp,6,0,6
