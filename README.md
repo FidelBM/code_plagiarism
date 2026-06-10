@@ -11,16 +11,16 @@ El flujo completo se trabajo en notebooks numerados. Primero se cargan los codig
 
 ## Archivos principales
 
-| Archivo | Proposito |
-|---|---|
-| `01-Preprocesado_de_datos.ipynb` | Carga inicial de los archivos de codigo y construccion de pares positivos y negativos. |
-| `02-Procesado_del_código.ipynb` | Limpieza, normalizacion y generacion de variables de similitud. |
-| `03-Entrenamiento_modelo_baseline.ipynb` | Entrenamiento de modelos clasicos con TF-IDF y caracteristicas numericas. |
-| `04-Entreamiento_embeddings.ipynb` | Extraccion de embeddings con CodeBERT y entrenamiento de clasificadores tradicionales. |
-| `05-Entrenamiento_embeddings_y_red_neuronal.ipynb` | Entrenamiento de una red neuronal MLP usando embeddings de CodeBERT. |
-| `06-Entrenamiento_embeddings_baseline.ipynb` | Modelo hibrido que combina embeddings y variables manuales. |
-| `07_Entrenamiento_TFIDF_MLP.ipynb` | Red neuronal MLP usando representacion TF-IDF. |
-| `comparation.ipynb` | Comparacion final de todos los modelos y seleccion del mejor. |
+| Archivo                                            | Proposito                                                                              |
+| -------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `01-Preprocesado_de_datos.ipynb`                   | Carga inicial de los archivos de codigo y construccion de pares positivos y negativos. |
+| `02-Procesado_del_código.ipynb`                    | Limpieza, normalizacion y generacion de variables de similitud.                        |
+| `03-Entrenamiento_modelo_baseline.ipynb`           | Entrenamiento de modelos clasicos con TF-IDF y caracteristicas numericas.              |
+| `04-Entreamiento_embeddings.ipynb`                 | Extraccion de embeddings con CodeBERT y entrenamiento de clasificadores tradicionales. |
+| `05-Entrenamiento_embeddings_y_red_neuronal.ipynb` | Entrenamiento de una red neuronal MLP usando embeddings de CodeBERT.                   |
+| `06-Entrenamiento_embeddings_baseline.ipynb`       | Modelo hibrido que combina embeddings y variables manuales.                            |
+| `07_Entrenamiento_TFIDF_MLP.ipynb`                 | Red neuronal MLP usando representacion TF-IDF.                                         |
+| `comparation.ipynb`                                | Comparacion final de todos los modelos y seleccion del mejor.                          |
 
 Los datos intermedios y resultados se guardan en:
 
@@ -48,11 +48,11 @@ Estas variables no deciden por si solas si hay reuso, pero funcionan como senale
 
 Los conjuntos compactos usados por los modelos baseline quedaron con:
 
-| Conjunto | Pares |
-|---|---:|
-| Entrenamiento | 176 |
-| Validacion | 44 |
-| Prueba | 994 |
+| Conjunto      | Pares |
+| ------------- | ----: |
+| Entrenamiento |   176 |
+| Validacion    |    44 |
+| Prueba        |   994 |
 
 ## Modelos desarrollados
 
@@ -72,11 +72,11 @@ Se eligio como baseline porque es un metodo simple, interpretable y rapido de en
 
 En validacion, este modelo obtuvo el mejor resultado inicial:
 
-| Modelo | Accuracy | Precision | Recall | F1-score |
-|---|---:|---:|---:|---:|
-| Linear SVM | 0.9318 | 0.8800 | 1.0000 | 0.9362 |
-| Logistic Regression | 0.9091 | 0.8750 | 0.9545 | 0.9130 |
-| Random Forest Simple Features | 0.8636 | 0.8636 | 0.8636 | 0.8636 |
+| Modelo                        | Accuracy | Precision | Recall | F1-score |
+| ----------------------------- | -------: | --------: | -----: | -------: |
+| Linear SVM                    |   0.9318 |    0.8800 | 1.0000 |   0.9362 |
+| Logistic Regression           |   0.9091 |    0.8750 | 0.9545 |   0.9130 |
+| Random Forest Simple Features |   0.8636 |    0.8636 | 0.8636 |   0.8636 |
 
 ### 2. Embeddings CodeBERT con clasificadores tradicionales
 
@@ -94,11 +94,11 @@ Se eligio CodeBERT porque el problema no es solamente comparar palabras iguales.
 
 Resultados en validacion:
 
-| Modelo | Accuracy | Precision | Recall | F1-score |
-|---|---:|---:|---:|---:|
-| Embedding Random Forest | 0.9091 | 0.9091 | 0.9091 | 0.9091 |
-| Embedding Logistic Regression | 0.8409 | 0.8000 | 0.9091 | 0.8511 |
-| Embedding Linear SVM | 0.8409 | 0.8000 | 0.9091 | 0.8511 |
+| Modelo                        | Accuracy | Precision | Recall | F1-score |
+| ----------------------------- | -------: | --------: | -----: | -------: |
+| Embedding Random Forest       |   0.9091 |    0.9091 | 0.9091 |   0.9091 |
+| Embedding Logistic Regression |   0.8409 |    0.8000 | 0.9091 |   0.8511 |
+| Embedding Linear SVM          |   0.8409 |    0.8000 | 0.9091 |   0.8511 |
 
 ### 3. MLP sobre embeddings de CodeBERT
 
@@ -112,9 +112,9 @@ Se probo una MLP porque puede aprender combinaciones no lineales entre las carac
 
 Resultado principal en validacion:
 
-| Modelo | Accuracy | Precision | Recall | F1-score | Umbral |
-|---|---:|---:|---:|---:|---:|
-| Custom MLP CodeBERT | 0.8636 | 0.8333 | 0.9091 | 0.8696 | 0.40 |
+| Modelo              | Accuracy | Precision | Recall | F1-score | Umbral |
+| ------------------- | -------: | --------: | -----: | -------: | -----: |
+| Custom MLP CodeBERT |   0.8636 |    0.8333 | 0.9091 |   0.8696 |   0.40 |
 
 ### 4. Modelo hibrido: embeddings + variables manuales
 
@@ -131,12 +131,12 @@ Este modelo se eligio porque aprovecha las ventajas de dos enfoques. Los embeddi
 
 Resultados en validacion:
 
-| Modelo | Accuracy | Precision | Recall | F1-score |
-|---|---:|---:|---:|---:|
-| Hybrid Random Forest | 0.9091 | 0.9091 | 0.9091 | 0.9091 |
-| Hybrid Logistic Regression | 0.8636 | 0.8333 | 0.9091 | 0.8696 |
-| Hybrid Linear SVM | 0.8409 | 0.8000 | 0.9091 | 0.8511 |
-| Hybrid Extra Trees | 0.8409 | 0.8947 | 0.7727 | 0.8293 |
+| Modelo                     | Accuracy | Precision | Recall | F1-score |
+| -------------------------- | -------: | --------: | -----: | -------: |
+| Hybrid Random Forest       |   0.9091 |    0.9091 | 0.9091 |   0.9091 |
+| Hybrid Logistic Regression |   0.8636 |    0.8333 | 0.9091 |   0.8696 |
+| Hybrid Linear SVM          |   0.8409 |    0.8000 | 0.9091 |   0.8511 |
+| Hybrid Extra Trees         |   0.8409 |    0.8947 | 0.7727 |   0.8293 |
 
 ### 5. MLP con TF-IDF
 
@@ -148,21 +148,21 @@ Se probo para comparar si una red neuronal podia mejorar el baseline clasico usa
 
 Resultado principal en validacion:
 
-| Modelo | Accuracy | Precision | Recall | F1-score | Umbral |
-|---|---:|---:|---:|---:|---:|
-| TF-IDF Keras MLP | 0.8636 | 0.7857 | 1.0000 | 0.8800 | 0.45 |
+| Modelo           | Accuracy | Precision | Recall | F1-score | Umbral |
+| ---------------- | -------: | --------: | -----: | -------: | -----: |
+| TF-IDF Keras MLP |   0.8636 |    0.7857 | 1.0000 |   0.8800 |   0.45 |
 
 ## Resultados principales
 
 Aunque en validacion el mejor modelo fue el **Linear SVM con TF-IDF**, la evaluacion final en el conjunto de prueba mostro que el mejor desempeno general fue del **modelo hibrido con Random Forest**.
 
-| Modelo | Familia | Accuracy | Precision | Recall | F1-score | TN | FP | FN | TP |
-|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
-| Hybrid Random Forest | Hibrido embeddings + baseline | 0.9155 | 0.9640 | 0.8632 | 0.9108 | 481 | 16 | 68 | 429 |
-| Embedding Random Forest | Embeddings CodeBERT | 0.9024 | 0.9587 | 0.8410 | 0.8960 | 479 | 18 | 79 | 418 |
-| Linear SVM | TF-IDF clasico | 0.8753 | 0.8348 | 0.9356 | 0.8824 | 405 | 92 | 32 | 465 |
-| Custom MLP CodeBERT | MLP embeddings | 0.8793 | 0.8793 | 0.8793 | 0.8793 | 437 | 60 | 60 | 437 |
-| TF-IDF Keras MLP | MLP TF-IDF | 0.5865 | 0.5482 | 0.9839 | 0.7041 | 94 | 403 | 8 | 489 |
+| Modelo                  | Familia                       | Accuracy | Precision | Recall | F1-score |  TN |  FP |  FN |  TP |
+| ----------------------- | ----------------------------- | -------: | --------: | -----: | -------: | --: | --: | --: | --: |
+| Hybrid Random Forest    | Hibrido embeddings + baseline |   0.9155 |    0.9640 | 0.8632 |   0.9108 | 481 |  16 |  68 | 429 |
+| Embedding Random Forest | Embeddings CodeBERT           |   0.9024 |    0.9587 | 0.8410 |   0.8960 | 479 |  18 |  79 | 418 |
+| Linear SVM              | TF-IDF clasico                |   0.8753 |    0.8348 | 0.9356 |   0.8824 | 405 |  92 |  32 | 465 |
+| Custom MLP CodeBERT     | MLP embeddings                |   0.8793 |    0.8793 | 0.8793 |   0.8793 | 437 |  60 |  60 | 437 |
+| TF-IDF Keras MLP        | MLP TF-IDF                    |   0.5865 |    0.5482 | 0.9839 |   0.7041 |  94 | 403 |   8 | 489 |
 
 El modelo hibrido obtuvo el F1-score mas alto (`0.9108`) y tambien la mejor exactitud (`0.9155`). Su precision fue muy alta (`0.9640`), lo que significa que cuando predice reuso, normalmente acierta. Su recall fue de `0.8632`, por lo que todavia deja algunos casos positivos sin detectar, pero mantiene un equilibrio fuerte entre precision y recuperacion.
 
@@ -172,31 +172,31 @@ En comparacion, el SVM con TF-IDF tuvo un recall mas alto (`0.9356`), pero gener
 
 ### Comparacion de metricas
 
-![Comparacion de metricas](data/reports/figures/test_metrics_comparison.svg)
+![Comparacion de metricas](data/reports/figures/models.png)
 
-Esta grafica compara accuracy, precision, recall y F1-score en el conjunto de prueba. Se observa que el modelo hibrido tiene el mejor F1-score general, mientras que el modelo TF-IDF Keras MLP tiene recall alto pero baja precision.
+Esta grafica compara accuracy, precision, recall y F1-score en el conjunto de prueba. Se observa que el modelo hibrido tiene el mejor F1-score general, mientras que el modelo TF-IDF Keras MLP tiene recall y presicion más alto.
 
 ### Errores por modelo
 
-![Errores por modelo](data/reports/figures/test_errors_by_model.svg)
+![Errores por modelo](data/reports/figures/errores.png)
 
-La grafica de errores muestra cuantos falsos positivos y falsos negativos produjo cada modelo. El modelo hibrido fue el que tuvo menor cantidad total de errores en prueba: `84` errores, formados por `16` falsos positivos y `68` falsos negativos.
+La grafica de errores muestra cuantos falsos positivos y falsos negativos produjo cada modelo. El modelo TF-IDF baseline fue el que tuvo menor cantidad total de errores en prueba: `78` errores, formados por `55` falsos positivos y `23` falsos negativos.
 
 ### Matriz de confusion del mejor modelo
 
-![Matriz de confusion](data/reports/figures/best_model_confusion_matrix.svg)
+![Matriz de confusion](data/reports/figures/martiz.png)
 
 La matriz de confusion del modelo hibrido muestra:
 
-- `481` verdaderos negativos: pares sin reuso clasificados correctamente.
-- `429` verdaderos positivos: pares con reuso clasificados correctamente.
-- `16` falsos positivos: pares sin reuso clasificados como reuso.
-- `68` falsos negativos: pares con reuso que el modelo no detecto.
+- `442` verdaderos negativos: pares sin reuso clasificados correctamente.
+- `474` verdaderos positivos: pares con reuso clasificados correctamente.
+- `23` falsos positivos: pares sin reuso clasificados como reuso.
+- `55` falsos negativos: pares con reuso que el modelo no detecto.
 
 ## Conclusiones
 
-El proyecto demuestra que combinar representaciones profundas con caracteristicas manuales produce el mejor resultado. CodeBERT aporta una representacion semantica del codigo, mientras que las metricas manuales ayudan a capturar similitud directa entre tokens. Esta combinacion permitio que el modelo hibrido con Random Forest superara a los modelos basados solo en TF-IDF o solo en embeddings.
+El proyecto demuestra que combinar representaciones profundas con caracteristicas manuales produce el mejor resultado. CodeBERT aporta una representacion semantica del codigo, mientras que las metricas manuales ayudan a capturar similitud directa entre tokens.
 
-El baseline con TF-IDF y SVM fue muy competitivo, especialmente en validacion, lo cual confirma que los metodos clasicos siguen siendo utiles cuando el conjunto de datos es pequeno. Sin embargo, en prueba el modelo hibrido generalizo mejor y obtuvo el F1-score mas alto.
+El baseline con TF-IDF y SVM fue el mejor modelo, especialmente en validacion, lo cual confirma que los metodos clasicos siguen siendo utiles cuando el conjunto de datos es pequeño..
 
 Como trabajo futuro, se podria ampliar el conjunto de entrenamiento, probar ajuste fino de CodeBERT, revisar los falsos negativos del modelo hibrido y usar validacion cruzada para obtener una estimacion mas estable del desempeno.
