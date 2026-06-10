@@ -1,0 +1,6 @@
+stage,false_positives,false_negatives,total_errors
+06_hybrid_embeddings_baseline,16,68,84
+04_codebert_embeddings,18,79,97
+05_custom_mlp_embeddings,60,60,120
+03_baseline_tfidf,92,32,124
+07_tfidf_keras_mlp,403,8,411

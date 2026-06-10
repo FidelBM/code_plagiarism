@@ -1,0 +1,2 @@
+source_split,stage,family,model,accuracy,precision,recall,f1,tn,fp,fn,tp,threshold
+test,03_baseline_tfidf,TF-IDF clásico,Linear SVM,0.9215291750503019,0.8960302457466919,0.9537223340040242,0.9239766081871345,442,55,23,474,

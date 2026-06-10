@@ -1,0 +1,2 @@
+source_split,stage,family,model,accuracy,precision,recall,f1,tn,fp,fn,tp,threshold
+test,06_hybrid_embeddings_baseline,Híbrido embeddings + baseline,Hybrid Random Forest,0.9154929577464789,0.9640449438202248,0.8631790744466801,0.910828025477707,481,16,68,429,
