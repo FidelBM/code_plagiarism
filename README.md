@@ -20,9 +20,6 @@ El flujo completo se trabajo en notebooks numerados. Primero se cargan los codig
 | `05-Entrenamiento_embeddings_y_red_neuronal.ipynb` | Entrenamiento de una red neuronal MLP usando embeddings de CodeBERT.                   |
 | `06-Entrenamiento_embeddings_baseline.ipynb`       | Modelo hibrido que combina embeddings y variables manuales.                            |
 | `07_Entrenamiento_TFIDF_MLP.ipynb`                 | Red neuronal MLP usando representacion TF-IDF.                                         |
-| `08-Entrenamienito_CodeBERTa.ipynb`                | Red neuronal MLP usando Byte-level Byte-Pair Encoding (BBPE) tokenizer                 |
-| `09-Entrenamiento_CodeGPT.ipynb`                   | Red neuronal MLP usando Byte-level Byte-Pair Encoding (BBPE) tokenizer                 |
-| `10-Entrenamiento_GraphCodeBert.ipynb`             | Red neuronal MLP usando Byte-level Byte-Pair Encoding (BBPE) tokenizer                 |
 | `comparation.ipynb`                                | Comparacion final de todos los modelos y seleccion del mejor.                          |
 
 Los datos intermedios y resultados se guardan en:
@@ -141,97 +138,6 @@ Resultados en validacion:
 | Hybrid Linear SVM          |   0.8409 |    0.8000 | 0.9091 |   0.8511 |
 | Hybrid Extra Trees         |   0.8409 |    0.8947 | 0.7727 |   0.8293 |
 
-### 6. CodeBERTa
-
-**Explicacion del modelo desarrollado:**  
-Este modelo usa una red neuronal MLP implementada con Keras, pero en lugar de embeddings de CodeBERT utiliza vectores TF-IDF. La mejor configuracion registrada uso capas densas con regularizacion y dropout. Tambien se busco un umbral de decision, y el mejor resultado guardado uso umbral `0.45`.
-
-**Razones de seleccion:**  
-Se probo para comparar si una red neuronal podia mejorar el baseline clasico usando la misma representacion TF-IDF. La ventaja esperada era que la MLP pudiera aprender relaciones no lineales. Sin embargo, con pocos datos, el desempeno no supero a los modelos clasicos ni al modelo hibrido.
-
-Resultado principal en validacion:
-
-| Modelo           | Accuracy | Precision | Recall | F1-score | Umbral |
-| ---------------- | -------: | --------: | -----: | -------: | -----: |
-| TF-IDF Keras MLP |   0.8636 |    0.7857 | 1.0000 |   0.8800 |   0.45 |
-
-## Resultados principales
-
-Aunque en validacion el mejor modelo fue el **Linear SVM con TF-IDF**, la evaluacion final en el conjunto de prueba mostro que el mejor desempeno general fue del **modelo hibrido con Random Forest**.
-
-| Modelo                  | Familia                       | Accuracy | Precision | Recall | F1-score |  TN |  FP |  FN |  TP |
-| ----------------------- | ----------------------------- | -------: | --------: | -----: | -------: | --: | --: | --: | --: |
-| Hybrid Random Forest    | Hibrido embeddings + baseline |   0.9155 |    0.9640 | 0.8632 |   0.9108 | 481 |  16 |  68 | 429 |
-| Embedding Random Forest | Embeddings CodeBERT           |   0.9024 |    0.9587 | 0.8410 |   0.8960 | 479 |  18 |  79 | 418 |
-| Linear SVM              | TF-IDF clasico                |   0.8753 |    0.8348 | 0.9356 |   0.8824 | 405 |  92 |  32 | 465 |
-| Custom MLP CodeBERT     | MLP embeddings                |   0.8793 |    0.8793 | 0.8793 |   0.8793 | 437 |  60 |  60 | 437 |
-| TF-IDF Keras MLP        | MLP TF-IDF                    |   0.5865 |    0.5482 | 0.9839 |   0.7041 |  94 | 403 |   8 | 489 |
-
-El modelo hibrido obtuvo el F1-score mas alto (`0.9108`) y tambien la mejor exactitud (`0.9155`). Su precision fue muy alta (`0.9640`), lo que significa que cuando predice reuso, normalmente acierta. Su recall fue de `0.8632`, por lo que todavia deja algunos casos positivos sin detectar, pero mantiene un equilibrio fuerte entre precision y recuperacion.
-
-En comparacion, el SVM con TF-IDF tuvo un recall mas alto (`0.9356`), pero genero mas falsos positivos. Esto significa que detecta muchos casos de reuso, pero tambien clasifica como reuso varios pares que realmente no lo son. Para este problema, el modelo hibrido resulta mas equilibrado porque reduce mucho los falsos positivos sin perder demasiado recall.
-
-
-### 7. CodeGPT
-
-**Explicacion del modelo desarrollado:**  
-Este modelo usa una red neuronal MLP implementada con Keras, pero en lugar de embeddings de CodeBERT utiliza vectores TF-IDF. La mejor configuracion registrada uso capas densas con regularizacion y dropout. Tambien se busco un umbral de decision, y el mejor resultado guardado uso umbral `0.45`.
-
-**Razones de seleccion:**  
-Se probo para comparar si una red neuronal podia mejorar el baseline clasico usando la misma representacion TF-IDF. La ventaja esperada era que la MLP pudiera aprender relaciones no lineales. Sin embargo, con pocos datos, el desempeno no supero a los modelos clasicos ni al modelo hibrido.
-
-Resultado principal en validacion:
-
-| Modelo           | Accuracy | Precision | Recall | F1-score | Umbral |
-| ---------------- | -------: | --------: | -----: | -------: | -----: |
-| TF-IDF Keras MLP |   0.8636 |    0.7857 | 1.0000 |   0.8800 |   0.45 |
-
-## Resultados principales
-
-Aunque en validacion el mejor modelo fue el **Linear SVM con TF-IDF**, la evaluacion final en el conjunto de prueba mostro que el mejor desempeno general fue del **modelo hibrido con Random Forest**.
-
-| Modelo                  | Familia                       | Accuracy | Precision | Recall | F1-score |  TN |  FP |  FN |  TP |
-| ----------------------- | ----------------------------- | -------: | --------: | -----: | -------: | --: | --: | --: | --: |
-| Hybrid Random Forest    | Hibrido embeddings + baseline |   0.9155 |    0.9640 | 0.8632 |   0.9108 | 481 |  16 |  68 | 429 |
-| Embedding Random Forest | Embeddings CodeBERT           |   0.9024 |    0.9587 | 0.8410 |   0.8960 | 479 |  18 |  79 | 418 |
-| Linear SVM              | TF-IDF clasico                |   0.8753 |    0.8348 | 0.9356 |   0.8824 | 405 |  92 |  32 | 465 |
-| Custom MLP CodeBERT     | MLP embeddings                |   0.8793 |    0.8793 | 0.8793 |   0.8793 | 437 |  60 |  60 | 437 |
-| TF-IDF Keras MLP        | MLP TF-IDF                    |   0.5865 |    0.5482 | 0.9839 |   0.7041 |  94 | 403 |   8 | 489 |
-
-El modelo hibrido obtuvo el F1-score mas alto (`0.9108`) y tambien la mejor exactitud (`0.9155`). Su precision fue muy alta (`0.9640`), lo que significa que cuando predice reuso, normalmente acierta. Su recall fue de `0.8632`, por lo que todavia deja algunos casos positivos sin detectar, pero mantiene un equilibrio fuerte entre precision y recuperacion.
-
-En comparacion, el SVM con TF-IDF tuvo un recall mas alto (`0.9356`), pero genero mas falsos positivos. Esto significa que detecta muchos casos de reuso, pero tambien clasifica como reuso varios pares que realmente no lo son. Para este problema, el modelo hibrido resulta mas equilibrado porque reduce mucho los falsos positivos sin perder demasiado recall.
-
-### 8. GraphCodeBert
-
-**Explicacion del modelo desarrollado:**  
-Este modelo usa una red neuronal MLP implementada con Keras, pero en lugar de embeddings de CodeBERT utiliza vectores TF-IDF. La mejor configuracion registrada uso capas densas con regularizacion y dropout. Tambien se busco un umbral de decision, y el mejor resultado guardado uso umbral `0.45`.
-
-**Razones de seleccion:**  
-Se probo para comparar si una red neuronal podia mejorar el baseline clasico usando la misma representacion TF-IDF. La ventaja esperada era que la MLP pudiera aprender relaciones no lineales. Sin embargo, con pocos datos, el desempeno no supero a los modelos clasicos ni al modelo hibrido.
-
-Resultado principal en validacion:
-
-| Modelo           | Accuracy | Precision | Recall | F1-score | Umbral |
-| ---------------- | -------: | --------: | -----: | -------: | -----: |
-| TF-IDF Keras MLP |   0.8636 |    0.7857 | 1.0000 |   0.8800 |   0.45 |
-
-## Resultados principales
-
-Aunque en validacion el mejor modelo fue el **Linear SVM con TF-IDF**, la evaluacion final en el conjunto de prueba mostro que el mejor desempeno general fue del **modelo hibrido con Random Forest**.
-
-| Modelo                  | Familia                       | Accuracy | Precision | Recall | F1-score |  TN |  FP |  FN |  TP |
-| ----------------------- | ----------------------------- | -------: | --------: | -----: | -------: | --: | --: | --: | --: |
-| Hybrid Random Forest    | Hibrido embeddings + baseline |   0.9155 |    0.9640 | 0.8632 |   0.9108 | 481 |  16 |  68 | 429 |
-| Embedding Random Forest | Embeddings CodeBERT           |   0.9024 |    0.9587 | 0.8410 |   0.8960 | 479 |  18 |  79 | 418 |
-| Linear SVM              | TF-IDF clasico                |   0.8753 |    0.8348 | 0.9356 |   0.8824 | 405 |  92 |  32 | 465 |
-| Custom MLP CodeBERT     | MLP embeddings                |   0.8793 |    0.8793 | 0.8793 |   0.8793 | 437 |  60 |  60 | 437 |
-| TF-IDF Keras MLP        | MLP TF-IDF                    |   0.5865 |    0.5482 | 0.9839 |   0.7041 |  94 | 403 |   8 | 489 |
-
-El modelo hibrido obtuvo el F1-score mas alto (`0.9108`) y tambien la mejor exactitud (`0.9155`). Su precision fue muy alta (`0.9640`), lo que significa que cuando predice reuso, normalmente acierta. Su recall fue de `0.8632`, por lo que todavia deja algunos casos positivos sin detectar, pero mantiene un equilibrio fuerte entre precision y recuperacion.
-
-En comparacion, el SVM con TF-IDF tuvo un recall mas alto (`0.9356`), pero genero mas falsos positivos. Esto significa que detecta muchos casos de reuso, pero tambien clasifica como reuso varios pares que realmente no lo son. Para este problema, el modelo hibrido resulta mas equilibrado porque reduce mucho los falsos positivos sin perder demasiado recall.
-
 ### 5. MLP con TF-IDF
 
 **Explicacion del modelo desarrollado:**  
@@ -245,6 +151,36 @@ Resultado principal en validacion:
 | Modelo           | Accuracy | Precision | Recall | F1-score | Umbral |
 | ---------------- | -------: | --------: | -----: | -------: | -----: |
 | TF-IDF Keras MLP |   0.8636 |    0.7857 | 1.0000 |   0.8800 |   0.45 |
+
+### 6. Modelo CodeBERTa
+
+**Explicacion del modelo desarrollado:**  
+- Embeddings de CodeBERTa, usando el tokenizer BPE entrenado y otorgado por Hugging Face.
+- Variables manuales como Jaccard, solapamiento de tokens y diferencia relativa de longitud.
+
+Con esta representacion combinada se entrenaron varios clasificadores. El mejor fue **Embedding Logistic Regression**.
+
+Resultados en validacion:
+| Modelo                        | Accuracy | Precision | Recall | F1-score |
+| ----------------------------- | -------: | --------: | -----: | -------: |
+| Embedding Logistic Regression |   0.9545 |    0.9545 | 0.9545 |   0.9545 |
+| Embedding Linear SVM          |   0.9545 |    0.9545 | 0.9545 |   0.9545 |
+| Embedding Random Forest       |   0.9318 |    0.9524 | 0.9091 |   0.9302 |
+
+### 7. Modelo CodeGPT
+
+**Explicacion del modelo desarrollado:**  
+- Embeddings de CodeGPT, usando el tokenizer BPE entrenado y otorgado por Hugging Face.
+- Variables manuales como Jaccard, solapamiento de tokens y diferencia relativa de longitud.
+
+Con esta representacion combinada se entrenaron varios clasificadores. El mejor fue **Embedding Logistic Regression**.
+
+Resultados en validacion:
+| Modelo                        | Accuracy | Precision | Recall | F1-score |
+| ----------------------------- | -------: | --------: | -----: | -------: |
+| Embedding Logistic Regression |   0.8409 |    0.8261 | 0.8636 |   0.8444 |
+| Embedding Linear SVM          |   0.8182 |    0.7917 | 0.8636 |   0.8261 |
+| Embedding Random Forest       |   0.8182 |    0.7917 | 0.8636 |   0.8261 |
 
 ## Resultados principales
 
@@ -278,7 +214,7 @@ La grafica de errores muestra cuantos falsos positivos y falsos negativos produj
 
 ### Matriz de confusion del mejor modelo
 
-![Matriz de confusion](data/reports/figures/martiz.png)
+![Matriz de confusion](data/reports/figures/matriz.png)
 
 La matriz de confusion del modelo hibrido muestra:
 
