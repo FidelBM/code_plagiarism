@@ -1,6 +1,8 @@
 stage,false_positives,false_negatives,total_errors
 03_baseline_tfidf,55,23,78
+08_CodeBERTa_mlp,26,60,86
 06_hybrid_embeddings_baseline,28,62,90
 04_codebert_embeddings,30,79,109
 05_custom_mlp_embeddings,56,60,116
 07_tfidf_keras_mlp,77,244,321
+09_CodeGPT_mlp,76,397,473

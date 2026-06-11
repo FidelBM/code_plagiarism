@@ -152,6 +152,36 @@ Resultado principal en validacion:
 | ---------------- | -------: | --------: | -----: | -------: | -----: |
 | TF-IDF Keras MLP |   0.8636 |    0.7857 | 1.0000 |   0.8800 |   0.45 |
 
+### 6. Modelo CodeBERTa
+
+**Explicacion del modelo desarrollado:**  
+- Embeddings de CodeBERTa, usando el tokenizer BPE entrenado y otorgado por Hugging Face.
+- Variables manuales como Jaccard, solapamiento de tokens y diferencia relativa de longitud.
+
+Con esta representacion combinada se entrenaron varios clasificadores. El mejor fue **Embedding Logistic Regression**.
+
+Resultados en validacion:
+| Modelo                        | Accuracy | Precision | Recall | F1-score |
+| ----------------------------- | -------: | --------: | -----: | -------: |
+| Embedding Logistic Regression |   0.9545 |    0.9545 | 0.9545 |   0.9545 |
+| Embedding Linear SVM          |   0.9545 |    0.9545 | 0.9545 |   0.9545 |
+| Embedding Random Forest       |   0.9318 |    0.9524 | 0.9091 |   0.9302 |
+
+### 7. Modelo CodeGPT
+
+**Explicacion del modelo desarrollado:**  
+- Embeddings de CodeGPT, usando el tokenizer BPE entrenado y otorgado por Hugging Face.
+- Variables manuales como Jaccard, solapamiento de tokens y diferencia relativa de longitud.
+
+Con esta representacion combinada se entrenaron varios clasificadores. El mejor fue **Embedding Logistic Regression**.
+
+Resultados en validacion:
+| Modelo                        | Accuracy | Precision | Recall | F1-score |
+| ----------------------------- | -------: | --------: | -----: | -------: |
+| Embedding Logistic Regression |   0.8409 |    0.8261 | 0.8636 |   0.8444 |
+| Embedding Linear SVM          |   0.8182 |    0.7917 | 0.8636 |   0.8261 |
+| Embedding Random Forest       |   0.8182 |    0.7917 | 0.8636 |   0.8261 |
+
 ## Resultados principales
 
 Aunque en validacion el mejor modelo fue el **Linear SVM con TF-IDF**, la evaluacion final en el conjunto de prueba mostro que el mejor desempeno general fue del **modelo hibrido con Random Forest**.
@@ -184,7 +214,7 @@ La grafica de errores muestra cuantos falsos positivos y falsos negativos produj
 
 ### Matriz de confusion del mejor modelo
 
-![Matriz de confusion](data/reports/figures/martiz.png)
+![Matriz de confusion](data/reports/figures/matriz.png)
 
 La matriz de confusion del modelo hibrido muestra:
 
@@ -197,6 +227,6 @@ La matriz de confusion del modelo hibrido muestra:
 
 El proyecto demuestra que combinar representaciones profundas con caracteristicas manuales produce el mejor resultado. CodeBERT aporta una representacion semantica del codigo, mientras que las metricas manuales ayudan a capturar similitud directa entre tokens.
 
-El baseline con TF-IDF y SVM fue el mejor modelo, especialmente en validacion, lo cual confirma que los metodos clasicos siguen siendo utiles cuando el conjunto de datos es pequeño..
+El baseline con TF-IDF y SVM fue el mejor modelo, especialmente en validacion, lo cual confirma que los metodos clasicos siguen siendo utiles cuando el conjunto de datos es pequeño...
 
 Como trabajo futuro, se podria ampliar el conjunto de entrenamiento, probar ajuste fino de CodeBERT, revisar los falsos negativos del modelo hibrido y usar validacion cruzada para obtener una estimacion mas estable del desempeno.
