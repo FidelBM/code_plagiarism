@@ -3,4 +3,7 @@ test,03_baseline_tfidf,TF-IDF clásico,Linear SVM,0.9215291750503019,0.896030245
 test,06_hybrid_embeddings_baseline,Híbrido embeddings + baseline,Hybrid Random Forest,0.9094567404426559,0.9395248380129589,0.8752515090543259,0.90625,469,28,62,435,
 test,04_codebert_embeddings,Embeddings CodeBERT,Embedding Random Forest,0.8903420523138833,0.9330357142857143,0.8410462776659959,0.8846560846560847,467,30,79,418,
 test,05_custom_mlp_embeddings,MLP sobre embeddings,Custom MLP,0.8832997987927566,0.8864097363083164,0.8792756539235412,0.8828282828282829,441,56,60,437,0.40000000000000013
+test,10_GraphCodeBert_embeddings,Embeddings GraphCodeBert,Embedding Random Forest,0.506036217303823,0.5030364372469636,1.0,0.6693602693602694,6,491,0,497,
+test,08_CodeBERTa_embeddings,Embeddings CodeBERTa,Embedding Logistic Regression,0.5,0.5,1.0,0.6666666666666666,0,497,0,497,
 test,07_tfidf_keras_mlp,MLP Keras sobre TF-IDF,TF-IDF Keras MLP,0.6770623742454729,0.7666666666666667,0.5090543259557344,0.6118500604594922,420,77,244,253,0.45000000000000007
+test,09_CodeGPT_embeddings,Embeddings CodeGPT,Embedding Logistic Regression,0.5,0.0,0.0,0.0,497,0,497,0,
