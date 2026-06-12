@@ -227,6 +227,6 @@ La matriz de confusion del modelo hibrido muestra:
 
 El proyecto demuestra que combinar representaciones profundas con caracteristicas manuales produce el mejor resultado. CodeBERT aporta una representacion semantica del codigo, mientras que las metricas manuales ayudan a capturar similitud directa entre tokens.
 
-El baseline con TF-IDF y SVM fue el mejor modelo, especialmente en validacion, lo cual confirma que los metodos clasicos siguen siendo utiles cuando el conjunto de datos es pequeño..
+El baseline con TF-IDF y SVM fue el mejor modelo, especialmente en validacion, lo cual confirma que los metodos clasicos siguen siendo utiles cuando el conjunto de datos es pequeño...
 
 Como trabajo futuro, se podria ampliar el conjunto de entrenamiento, probar ajuste fino de CodeBERT, revisar los falsos negativos del modelo hibrido y usar validacion cruzada para obtener una estimacion mas estable del desempeno.
